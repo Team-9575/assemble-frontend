@@ -1,7 +1,10 @@
+@import url('./fonts.css');
+
 html,
 body {
   padding: 0 !important;
   scroll-behavior: smooth;
+  font-family: Pretendard;
 }
 
 a {
