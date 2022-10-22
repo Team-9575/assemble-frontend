@@ -39,7 +39,7 @@ const PartyCard = ({ title, isLunch = false }: PartyCardProps) => {
   )
 }
 
-const Container = styled.div<{ isLunch: boolean }>`
+const Container = styled.button<{ isLunch: boolean }>`
   border-left: 4px solid ${({ isLunch }) => (isLunch ? '#ff6868' : '#3909C2')}; // TODO: theme
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); // TODO: theme
   border-radius: 0px 20px 20px 0px;

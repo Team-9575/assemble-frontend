@@ -32,7 +32,7 @@ const Home: NextPage = () => {
 }
 const Container = styled.header`
   position: relative;
-  margin: 0 0 8.125rem 0;
+  padding: 0 0 9rem 0;
 `
 const Footer = styled.footer`
   position: fixed;

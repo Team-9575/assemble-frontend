@@ -14,12 +14,10 @@ const PartyList = () => {
       </MyPartyContainer>
       <PartyListContainer>
         <HStack gap="1rem">
-          <div>
-            <SelectedTab id="lunch" href="#lunch">
-              점심 구해요
-            </SelectedTab>
+          <SelectedTab id="lunch" href="#lunch">
+            점심 구해요
             <Underline isLunch />
-          </div>
+          </SelectedTab>
           <DefaultTab href="#dinner">저녁 구해요</DefaultTab>
         </HStack>
         <VStack margin="1rem 0 2rem 0" gap="0.75rem">
@@ -29,12 +27,10 @@ const PartyList = () => {
         </VStack>
         <HStack gap="1rem">
           <DefaultTab href="#lunch">점심 구해요</DefaultTab>
-          <div>
-            <SelectedTab id="dinner" href="#dinner">
-              저녁 구해요
-            </SelectedTab>
+          <SelectedTab id="dinner" href="#dinner">
+            저녁 구해요
             <Underline />
-          </div>
+          </SelectedTab>
         </HStack>
         <VStack margin="1rem 0 2rem 0" gap="0.75rem">
           <PartyCard title="저녁메뉴 추천 받습니다" />
@@ -65,18 +61,20 @@ const Description = styled.div`
   margin: 0.25rem 0 0.75rem 0;
 `
 const PartyListContainer = styled.section`
-  padding: 1.5rem 1rem;
+  padding: 0rem 1rem;
 `
 const SelectedTab = styled.a`
   font-weight: bold;
   font-size: 18px; // TODO: theme
   letter-spacing: -0.6px;
+  padding-top: 1.5rem;
 `
 const DefaultTab = styled.a`
   font-weight: bold;
   font-size: 18px; // TODO: theme
   letter-spacing: -0.6px;
   color: #a8a8a8; // TODO: theme
+  padding-top: 1.5rem;
 `
 const Underline = styled.hr<{ isLunch?: boolean }>`
   background-color: ${({ isLunch }) =>
