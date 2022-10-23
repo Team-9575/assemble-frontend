@@ -6,29 +6,46 @@ import Image from 'next/image'
 import HStack from '@components/common/HStack'
 import BaseLayout from '@components/common/BaseLayout'
 import { theme } from '@styles/theme'
+import NewPartyModal from '@components/party/NewPartyModal'
+import { useState } from 'react'
 
 const Home: NextPage = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false)
+
   return (
-    <BaseLayout>
-      <Container>
-        <PartyList />
-        <Footer>
-          <HStack padding="0.25rem 0" justifyContent="center">
-            <ImageWrapper>
-              <Image src="/images/profile.jpg" alt="profile" layout="fill" />
-            </ImageWrapper>
-            <ImageWrapper>
-              <Image src="/images/profile.jpg" alt="profile" layout="fill" />
-            </ImageWrapper>
-            <ImageWrapper>
-              <Image src="/images/profile.jpg" alt="profile" layout="fill" />
-            </ImageWrapper>
-          </HStack>
-          <Description>현재 8명이 파티를 고민하고 있어요</Description>
-          <Button text="방 만들기" onClick={() => {}} />
-        </Footer>
-      </Container>
-    </BaseLayout>
+    <>
+      <BaseLayout>
+        <Container>
+          <PartyList />
+          <Footer>
+            <HStack padding="0.25rem 0" justifyContent="center">
+              <ImageWrapper>
+                <Image src="/images/profile.jpg" alt="profile" layout="fill" />
+              </ImageWrapper>
+              <ImageWrapper>
+                <Image src="/images/profile.jpg" alt="profile" layout="fill" />
+              </ImageWrapper>
+              <ImageWrapper>
+                <Image src="/images/profile.jpg" alt="profile" layout="fill" />
+              </ImageWrapper>
+            </HStack>
+            <Description>현재 8명이 파티를 고민하고 있어요</Description>
+            <Button
+              text="방 만들기"
+              onClick={() => {
+                setIsModalOpen(true)
+              }}
+            />
+          </Footer>
+        </Container>
+      </BaseLayout>
+      <NewPartyModal
+        isOpen={isModalOpen}
+        onClose={() => {
+          setIsModalOpen(false)
+        }}
+      />
+    </>
   )
 }
 const Container = styled.header`
