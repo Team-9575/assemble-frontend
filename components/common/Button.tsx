@@ -10,9 +10,9 @@ const Button = ({ text, onClick }: ButtonProps) => {
 }
 
 const Container = styled.button`
-  background-color: #262626; // TODO: theme
+  background-color: ${({ theme }) => theme.background.footerButton};
   font-weight: 600;
-  color: #f2f3fa; // TODO: theme
+  color: ${({ theme }) => theme.text.footerButton};
   width: 100%;
   padding: 1rem;
   border-radius: 100px;

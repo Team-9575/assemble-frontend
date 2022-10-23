@@ -1,6 +1,7 @@
 import HStack from '@components/common/HStack'
 import VStack from '@components/common/VStack'
 import styled from '@emotion/styled'
+import { theme } from '@styles/theme'
 import PartyCard from './Card'
 
 const PartyList = () => {
@@ -47,16 +48,18 @@ const Container = styled.div`
 const MyPartyContainer = styled.section`
   padding: 0.75rem 1rem;
   border-radius: 0px 0px 30px 0px;
-  box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.1); // TODO: theme
+  box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.1);
+  background-color: ${({ theme }) => theme.background.primary};
 `
 const Title = styled.div`
   font-weight: bold;
-  font-size: 20px; // TODO: theme
+  font-size: ${theme.fontSize.xl};
   letter-spacing: -0.2px;
+  color: ${({ theme }) => theme.text.primary};
 `
 const Description = styled.div`
-  color: #757575; // TODO: theme
-  font-size: 14px; // TODO: theme
+  color: ${({ theme }) => theme.text.secondary};
+  font-size: ${theme.fontSize.sm};
   letter-spacing: -0.2px;
   margin: 0.25rem 0 0.75rem 0;
 `
@@ -65,20 +68,21 @@ const PartyListContainer = styled.section`
 `
 const SelectedTab = styled.a`
   font-weight: bold;
-  font-size: 18px; // TODO: theme
+  font-size: ${theme.fontSize.lg};
   letter-spacing: -0.6px;
   padding-top: 1.5rem;
+  color: ${({ theme }) => theme.text.primary};
 `
 const DefaultTab = styled.a`
   font-weight: bold;
-  font-size: 18px; // TODO: theme
+  font-size: ${theme.fontSize.lg};
   letter-spacing: -0.6px;
-  color: #a8a8a8; // TODO: theme
+  color: ${({ theme }) => theme.text.unselected};
   padding-top: 1.5rem;
 `
 const Underline = styled.hr<{ isLunch?: boolean }>`
-  background-color: ${({ isLunch }) =>
-    isLunch ? '#ff6868' : '#3909C2'}; // TODO: theme
+  background-color: ${({ isLunch, theme }) =>
+    isLunch ? theme.background.lunch : theme.background.dinner};
   height: 0.25rem;
   border: none;
 `

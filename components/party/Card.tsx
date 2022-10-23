@@ -1,6 +1,7 @@
 import HStack from '@components/common/HStack'
 import VStack from '@components/common/VStack'
 import styled from '@emotion/styled'
+import { theme } from '@styles/theme'
 import Image from 'next/image'
 
 interface PartyCardProps {
@@ -40,19 +41,23 @@ const PartyCard = ({ title, isLunch = false }: PartyCardProps) => {
 }
 
 const Container = styled.button<{ isLunch: boolean }>`
-  border-left: 4px solid ${({ isLunch }) => (isLunch ? '#ff6868' : '#3909C2')}; // TODO: theme
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); // TODO: theme
+  border-left: 4px solid
+    ${({ isLunch, theme }) =>
+      isLunch ? theme.background.lunch : theme.background.dinner};
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
   border-radius: 0px 20px 20px 0px;
   padding: 1rem 0.75rem;
   width: 100%;
+  background-color: ${({ theme }) => theme.background.primary};
 `
 const Title = styled.p`
   font-weight: bold;
   letter-spacing: -0.2px;
+  color: ${({ theme }) => theme.text.primary};
 `
 const Member = styled.p`
-  font-size: 12px; // TODO: theme
-  color: #424242; // TODO: theme
+  font-size: ${theme.fontSize.xs};
+  color: ${({ theme }) => theme.text.count};
   margin-left: 0.25rem;
 `
 const ImageWrapper = styled.div<{ size: string }>`
@@ -63,14 +68,14 @@ const ImageWrapper = styled.div<{ size: string }>`
   overflow: hidden;
 `
 const Keyword = styled.p`
-  background-color: #f5f5f580; // TODO: theme
-  color: #757575; // TODO: theme
+  background-color: ${({ theme }) => theme.background.keyword};
+  color: ${({ theme }) => theme.text.secondary};
   border-radius: 10px;
-  font-size: 12px; // TODO: theme
+  font-size: ${theme.fontSize.xs};
 `
 const EndTime = styled.p`
-  color: #757575; // TODO: theme
-  font-size: 12px; // TODO: theme
+  color: ${({ theme }) => theme.text.secondary};
+  font-size: ${theme.fontSize.xs};
 `
 
 export default PartyCard

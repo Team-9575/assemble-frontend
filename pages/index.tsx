@@ -5,6 +5,7 @@ import Button from '@components/common/Button'
 import Image from 'next/image'
 import HStack from '@components/common/HStack'
 import BaseLayout from '@components/common/BaseLayout'
+import { theme } from '@styles/theme'
 
 const Home: NextPage = () => {
   return (
@@ -39,15 +40,16 @@ const Footer = styled.footer`
   padding: 0 1rem 1.5rem;
   bottom: 0;
   width: 100%;
-  background-color: white; // TODO: theme
+  background-color: ${({ theme }) => theme.background.primary};
   box-shadow: 0px -2px 8px rgba(0, 0, 0, 0.2);
-  max-width: 40rem; // TODO: theme
+  max-width: ${theme.maxWidth};
 `
 const Description = styled.p`
-  font-size: 14px; // TODO: theme
+  font-size: ${theme.fontSize.sm};
   text-align: center;
   margin-bottom: 0.5rem;
   letter-spacing: -0.3px;
+  color: ${({ theme }) => theme.text.primary};
 `
 const ImageWrapper = styled.div`
   height: 1.375rem;
