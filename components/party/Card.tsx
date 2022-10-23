@@ -72,6 +72,7 @@ const Keyword = styled.p`
   color: ${({ theme }) => theme.text.secondary};
   border-radius: 10px;
   font-size: ${theme.fontSize.xs};
+  padding: 0.25rem 0.375rem;
 `
 const EndTime = styled.p`
   color: ${({ theme }) => theme.text.secondary};
