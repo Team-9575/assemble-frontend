@@ -1,5 +1,6 @@
 import styled from '@emotion/styled'
 import { Modal } from '@mui/material'
+import useTheme from '@hooks/context/useTheme'
 
 interface BaseModalProps {
   isOpen: boolean
@@ -17,6 +18,7 @@ const BaseModal = ({
   width = '24rem',
   height = '16rem',
 }: BaseModalProps) => {
+  const { themeName } = useTheme()
   return (
     <Modal open={isOpen} onClose={onClose}>
       <Container width={width} height={height}>
