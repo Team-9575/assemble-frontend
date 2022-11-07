@@ -4,8 +4,8 @@ html,
 body {
   padding: 0 !important;
   scroll-behavior: smooth;
-  font-family: Pretendard;
   background-color: #F2F2F2;
+  scrollbar-gutter: stable;
 }
 
 a {
@@ -26,6 +26,7 @@ button {
 }
 
 * {
+  font-family: Pretendard;
   padding: 0;
   margin: 0;
   box-sizing: border-box;

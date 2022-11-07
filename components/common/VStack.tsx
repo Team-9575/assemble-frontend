@@ -50,5 +50,7 @@ const Container = styled.div<{
   gap: ${({ gap }) => gap};
   padding: ${({ padding }) => padding};
   margin: ${({ margin }) => margin};
+  height: 100%;
+  width: 100%;
 `
 export default VStack
