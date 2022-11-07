@@ -1,35 +1,24 @@
 import type { NextPage } from 'next'
 import styled from '@emotion/styled'
-import PartyList from '@components/party'
 import Button from '@components/common/Button'
-import Image from 'next/image'
-import HStack from '@components/common/HStack'
 import BaseLayout from '@components/common/BaseLayout'
 import { theme } from '@styles/theme'
 import NewPartyModal from '@components/party/NewPartyModal'
 import { useEffect, useState } from 'react'
 import { useMsal } from '@azure/msal-react'
-import { loginRequest } from '../config/auth'
-import { useRouter } from 'next/router'
 import { useIsAuthenticated } from '@azure/msal-react'
 
-const Home: NextPage = () => {
-  const router = useRouter()
+const LogoutPage: NextPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const { instance } = useMsal()
   const isAuthenticated = useIsAuthenticated()
   const [isAuth, setIsAuth] = useState(false)
   useEffect(() => setIsAuth(isAuthenticated), [isAuthenticated])
 
-  const handleLogin = (loginType: any) => {
-    if (loginType === 'popup') {
-      instance.loginPopup(loginRequest).catch((e) => {
-        console.log(e)
-      })
-    }
-    if (loginType === 'redirect') {
-      instance.loginRedirect(loginRequest).catch((e) => {
-        console.log(e)
+  const handleLogout = (logoutType: any) => {
+    if (logoutType === 'redirect') {
+      instance.logoutRedirect({
+        postLogoutRedirectUri: '/',
       })
     }
   }
@@ -37,31 +26,12 @@ const Home: NextPage = () => {
   return (
     <BaseLayout>
       <Container>
-        <PartyList />
         <Footer>
-          <HStack padding="0.25rem 0" justifyContent="center">
-            <ImageWrapper
-              onClick={() => {
-                router.push('/logout')
-              }}
-            >
-              <Image src="/images/profile.jpg" alt="profile" layout="fill" />
-            </ImageWrapper>
-            <ImageWrapper>
-              <Image src="/images/profile.jpg" alt="profile" layout="fill" />
-            </ImageWrapper>
-            <ImageWrapper>
-              <Image src="/images/profile.jpg" alt="profile" layout="fill" />
-            </ImageWrapper>
-          </HStack>
-          {isAuth && (
-            <Description>현재 8명이 파티를 고민하고 있어요</Description>
-          )}
           <Button
-            text="방 만들기"
+            text={isAuth ? 'logout' : 'login'}
             onClick={() => {
               // setIsModalOpen(true)
-              handleLogin('redirect')
+              handleLogout('redirect')
             }}
           />
           {isModalOpen && (
@@ -104,4 +74,4 @@ const ImageWrapper = styled.div`
   border-radius: 50px;
   overflow: hidden;
 `
-export default Home
+export default LogoutPage
