@@ -1,10 +1,23 @@
+import Button from '@components/common/Button'
 import HStack from '@components/common/HStack'
 import VStack from '@components/common/VStack'
 import styled from '@emotion/styled'
+import useAuth from '@hooks/context/useAuth'
 import { theme } from '@styles/theme'
 import PartyCard from './Card'
+import { loginRequest } from '@config/auth'
+import { useMsal } from '@azure/msal-react'
 
 const PartyList = () => {
+  const { isAuthenticated } = useAuth()
+  const { instance } = useMsal()
+
+  const handleLogin = () => {
+    instance.loginRedirect(loginRequest).catch((e) => {
+      console.log(e)
+    })
+  }
+
   return (
     <Container>
       <MyPartyContainer>
@@ -12,6 +25,9 @@ const PartyList = () => {
         <Description>
           방을 직접 만드시거나, 마음에 드는 방에 참여해보세요!
         </Description>
+        {!isAuthenticated && (
+          <Button text="Teams 로그인" onClick={() => handleLogin()} />
+        )}
       </MyPartyContainer>
       <PartyListContainer>
         <HStack gap="1rem">

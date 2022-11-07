@@ -1,7 +1,13 @@
 import '../styles/globals.css'
 import type { AppProps } from 'next/app'
-import useTheme, { ThemeProvider } from '@hooks/context/useTheme'
+import { ThemeProvider } from '@hooks/context/useTheme'
 import { ThemeProvider as MUIThemeProvider, createTheme } from '@mui/material'
+import { PublicClientApplication } from '@azure/msal-browser'
+import { MsalProvider } from '@azure/msal-react'
+import { msalConfig } from '@config/auth'
+import { AuthProvider } from '@hooks/context/useAuth'
+
+export const msalInstance = new PublicClientApplication(msalConfig)
 
 function MyApp({ Component, pageProps }: AppProps) {
   const muiTheme = createTheme({
@@ -10,11 +16,15 @@ function MyApp({ Component, pageProps }: AppProps) {
     },
   })
   return (
-    <ThemeProvider>
-      <MUIThemeProvider theme={muiTheme}>
-        <Component {...pageProps} />
-      </MUIThemeProvider>
-    </ThemeProvider>
+    <MsalProvider instance={msalInstance}>
+      <AuthProvider>
+        <ThemeProvider>
+          <MUIThemeProvider theme={muiTheme}>
+            <Component {...pageProps} />
+          </MUIThemeProvider>
+        </ThemeProvider>
+      </AuthProvider>
+    </MsalProvider>
   )
 }
 
