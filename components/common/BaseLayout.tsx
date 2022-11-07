@@ -18,10 +18,11 @@ const BaseLayout = ({ children }: { children: JSX.Element }) => {
     </EmotionThemeProvider>
   )
 }
-const Container = styled.header`
+const Container = styled.div`
   position: relative;
   margin: 0 0 8.125rem 0;
   max-width: ${theme.maxWidth};
+  min-width: 15.625rem;
   background-color: ${({ theme }) => theme.background.secondary};
   margin: 0 auto;
 `
