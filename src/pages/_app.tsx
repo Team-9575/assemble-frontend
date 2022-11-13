@@ -7,6 +7,7 @@ import { MsalProvider } from '@azure/msal-react'
 import { msalConfig } from '@config/auth'
 import { AuthProvider } from '@hooks/context/useAuth'
 import { QueryClient, QueryClientProvider } from 'react-query'
+import Head from 'next/head'
 
 export const msalInstance = new PublicClientApplication(msalConfig)
 
@@ -25,17 +26,22 @@ function MyApp({ Component, pageProps }: AppProps) {
   })
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <MsalProvider instance={msalInstance}>
-        <AuthProvider>
-          <ThemeProvider>
-            <MUIThemeProvider theme={muiTheme}>
-              <Component {...pageProps} />
-            </MUIThemeProvider>
-          </ThemeProvider>
-        </AuthProvider>
-      </MsalProvider>
-    </QueryClientProvider>
+    <>
+      <Head>
+        <title>Assembler</title>
+      </Head>
+      <QueryClientProvider client={queryClient}>
+        <MsalProvider instance={msalInstance}>
+          <AuthProvider>
+            <ThemeProvider>
+              <MUIThemeProvider theme={muiTheme}>
+                <Component {...pageProps} />
+              </MUIThemeProvider>
+            </ThemeProvider>
+          </AuthProvider>
+        </MsalProvider>
+      </QueryClientProvider>
+    </>
   )
 }
 
