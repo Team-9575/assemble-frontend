@@ -1,44 +1,52 @@
 import styled from '@emotion/styled'
+import useAuth from '@hooks/context/useAuth'
 import useTheme from '@hooks/context/useTheme'
 import { Drawer, IconButton } from '@mui/material'
 import { useState } from 'react'
 import Navigation from './Navigation'
 
 const Header = () => {
+  const { user } = useAuth()
   const [isDrawerOpen, setDrawerOpen] = useState(false)
 
   return (
     <Container>
       <ButtonWrapper>
-        <IconButton
-          aria-label="navigation"
-          onClick={() => {
-            setDrawerOpen(true)
-          }}
+        {user.isReady && user.isAuthenticated && (
+          <IconButton
+            aria-label="navigation"
+            onClick={() => {
+              setDrawerOpen(true)
+            }}
+            sx={{
+              display: { xs: 'inline-flex', md: 'none' },
+            }}
+          >
+            <MenuIcon className="material-symbols-outlined md-16">
+              menu
+            </MenuIcon>
+          </IconButton>
+        )}
+      </ButtonWrapper>
+      {user.isReady && user.isAuthenticated && (
+        <Drawer
+          anchor="right"
+          variant="persistent"
+          open
           sx={{
-            display: { xs: 'inline-flex', md: 'none' },
+            display: { xs: 'none', md: 'block' },
+            '& .MuiDrawer-paper': {
+              boxSizing: 'border-box',
+              width: 'calc(50vw - 20rem)',
+              minWidth: '10rem',
+            },
           }}
         >
-          <MenuIcon className="material-symbols-outlined md-16">menu</MenuIcon>
-        </IconButton>
-      </ButtonWrapper>
-      <Drawer
-        anchor="right"
-        variant="persistent"
-        open
-        sx={{
-          display: { xs: 'none', md: 'block' },
-          '& .MuiDrawer-paper': {
-            boxSizing: 'border-box',
-            width: 'calc(50vw - 20rem)',
-            minWidth: '10rem',
-          },
-        }}
-      >
-        <NavigationContainer>
-          <Navigation width="calc(50vw - 22rem)" maxWidth="16rem" />
-        </NavigationContainer>
-      </Drawer>
+          <NavigationContainer>
+            <Navigation width="calc(50vw - 22rem)" maxWidth="16rem" />
+          </NavigationContainer>
+        </Drawer>
+      )}
       <Drawer
         anchor="right"
         open={isDrawerOpen}

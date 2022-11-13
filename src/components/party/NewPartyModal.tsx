@@ -104,6 +104,10 @@ const ModalFooter = styled.div`
   display: flex;
   gap: 0.5rem;
   padding: 1.5rem 1rem;
+  position: fixed;
+  width: 100%;
+  max-width: ${theme.maxWidth};
+  bottom: 0;
 `
 export const Title = styled.p`
   color: black; // TODO: theme
