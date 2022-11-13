@@ -12,13 +12,13 @@ import useAuth from '@hooks/context/useAuth'
 
 const Home: NextPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const { isAuthenticated } = useAuth()
+  const { user } = useAuth()
 
   return (
     <BaseLayout>
-      <Container hasFooter={isAuthenticated}>
+      <Container hasFooter={user.isAuthenticated}>
         <PartyList />
-        {isAuthenticated && (
+        {user.isAuthenticated && (
           <Footer>
             <HStack padding="0.25rem 0" justifyContent="center">
               <ImageWrapper>

@@ -9,7 +9,7 @@ import { loginRequest } from '@config/auth'
 import { useMsal } from '@azure/msal-react'
 
 const PartyList = () => {
-  const { isAuthenticated } = useAuth()
+  const { user } = useAuth()
   const { instance } = useMsal()
 
   const handleLogin = () => {
@@ -25,7 +25,7 @@ const PartyList = () => {
         <Description>
           방을 직접 만드시거나, 마음에 드는 방에 참여해보세요!
         </Description>
-        {!isAuthenticated && (
+        {user.isReady && !user.isAuthenticated && (
           <Button text="Teams 로그인" onClick={() => handleLogin()} />
         )}
       </MyPartyContainer>
