@@ -1,6 +1,5 @@
 import styled from '@emotion/styled'
 import useAuth from '@hooks/context/useAuth'
-import useTheme from '@hooks/context/useTheme'
 import { Drawer, IconButton } from '@mui/material'
 import { useState } from 'react'
 import Navigation from './Navigation'
@@ -37,7 +36,7 @@ const Header = () => {
             display: { xs: 'none', md: 'block' },
             '& .MuiDrawer-paper': {
               boxSizing: 'border-box',
-              width: 'calc(50vw - 20rem)',
+              width: 'calc(50vw - 20.5rem)',
               minWidth: '10rem',
             },
           }}
