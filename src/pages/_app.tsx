@@ -1,4 +1,4 @@
-import '../styles/globals.css'
+import '@styles/globals.css'
 import type { AppProps } from 'next/app'
 import { ThemeProvider } from '@hooks/context/useTheme'
 import { ThemeProvider as MUIThemeProvider, createTheme } from '@mui/material'
