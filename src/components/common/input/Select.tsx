@@ -1,33 +1,28 @@
-import {
-  FormControl,
-  MenuItem,
-  Select as MuiSelect,
-  SelectChangeEvent,
-} from '@mui/material'
+import { FormControl, MenuItem, Select as MuiSelect } from '@mui/material'
 
-const partyTitle = [
-  '같이 점심 드실 분?',
-  '같이 저녁 드실 분?',
-  '제목',
-  '직접입력',
-]
+export interface ISelectOption {
+  name: string
+  value: string | number
+}
 
-const Select = () => {
-  const handleChange = (event: SelectChangeEvent) => {
-    console.log(event.target.value)
-  }
+interface ISelectProps {
+  value: string
+  onChange: (value: string) => void
+  options: ISelectOption[]
+}
 
+const Select = ({ value, options, onChange }: ISelectProps) => {
   return (
     <FormControl sx={{ minWidth: 120, width: '100%' }} size="small">
       <MuiSelect
-        value={partyTitle[0]}
-        onChange={handleChange}
+        value={value}
+        onChange={(event) => onChange(event.target.value)}
         displayEmpty
         sx={{ borderRadius: '10px' }}
       >
-        {partyTitle.map((title) => (
-          <MenuItem key={title} value={title}>
-            {title}
+        {options.map((option) => (
+          <MenuItem key={option.value} value={option.value}>
+            {option.name}
           </MenuItem>
         ))}
       </MuiSelect>

@@ -6,7 +6,7 @@ import Image from 'next/image'
 import HStack from '@components/common/stack/HStack'
 import BaseLayout from '@components/common/base-layout'
 import { theme } from '@styles/theme'
-import NewPartyModal from '@components/party/NewPartyModal'
+import NewPartyModal from '@components/party/modal'
 import { useState } from 'react'
 import useAuth from '@hooks/context/useAuth'
 
