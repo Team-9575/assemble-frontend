@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import Header from '@components/common/Header'
+import Header from '@components/common/base-layout/Header'
 import useTheme from '@hooks/context/useTheme'
 import { ThemeProvider as EmotionThemeProvider } from '@emotion/react'
 import { darkTheme } from '@styles/theme/dark'

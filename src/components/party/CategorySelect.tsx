@@ -1,4 +1,4 @@
-import Button from '@components/common/Button'
+import Button from '@components/common/button'
 import styled from '@emotion/styled'
 import { theme } from '@styles/theme'
 import { Dispatch, SetStateAction } from 'react'

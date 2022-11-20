@@ -1,4 +1,4 @@
-import BaseModal from '@components/common/BaseModal'
+import BaseModal from '@components/common/base-modal'
 import styled from '@emotion/styled'
 import { theme } from '@styles/theme'
 import { useState } from 'react'
@@ -88,11 +88,13 @@ export const ModalFooter = styled.div`
 `
 export const Title = styled.p`
   color: black; // TODO: theme
+  margin: 1.5rem 0 0.5rem 0;
 `
 export const ModalContainer = styled.div`
   font-weight: 600;
   letter-spacing: -0.2px;
-  padding: 1.5rem;
+  padding: 0 1.5rem;
+  position: relative;
 `
 
 export default NewPartyModal

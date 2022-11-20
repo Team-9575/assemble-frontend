@@ -1,7 +1,7 @@
-import Button from '@components/common/Button'
-import styled from '@emotion/styled'
+import Button from '@components/common/button'
 import { ModalContainer, ModalFooter, Step, Title } from './NewPartyModal'
 import { Dispatch, SetStateAction } from 'react'
+import Select from '@components/common/input/Select'
 
 interface IRequiredInputsProps {
   setCurrentStep: Dispatch<SetStateAction<Step>>

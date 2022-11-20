@@ -1,5 +1,5 @@
-import HStack from '@components/common/HStack'
-import VStack from '@components/common/VStack'
+import HStack from '@components/common/stack/HStack'
+import VStack from '@components/common/stack/VStack'
 import styled from '@emotion/styled'
 import { theme } from '@styles/theme'
 import Image from 'next/image'
