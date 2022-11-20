@@ -1,5 +1,5 @@
-import { ISelectOption } from '@components/common/input/Select'
-import { IToggleButton } from '@components/common/input/ToggleButton'
+import { ISelectOption } from '@components/common/select'
+import { IToggleButton } from '@components/toggle-button'
 
 export const PartyNameOptions: ISelectOption[] = [
   { name: '같이 점심 드실 분?', value: '같이 점심 드실 분?' },

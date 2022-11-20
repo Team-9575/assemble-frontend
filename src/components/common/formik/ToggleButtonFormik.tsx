@@ -1,5 +1,5 @@
 import { Field, FieldProps } from 'formik'
-import ToggleButton, { IToggleButton } from '../input/ToggleButton'
+import ToggleButton, { IToggleButton } from '../../toggle-button'
 
 interface IToggleButtonFormikProps {
   name: string

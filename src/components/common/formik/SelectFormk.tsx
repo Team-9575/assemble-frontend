@@ -1,5 +1,5 @@
 import { Field, FieldProps } from 'formik'
-import Select, { ISelectOption } from '../input/Select'
+import Select, { ISelectOption } from '../select'
 
 interface ISelectFormikProps {
   name: string

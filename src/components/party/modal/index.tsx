@@ -3,7 +3,7 @@ import styled from '@emotion/styled'
 import { theme } from '@styles/theme'
 import { useState } from 'react'
 import CategorySelect from './CategorySelect'
-import OptionalInputs from './OptionalInputs'
+import OptionalInputs, { IOptionalInputs } from './OptionalInputs'
 import RequiredInputs, { IRequiredInputs, MealType } from './RequiredInputs'
 
 interface NewPartyModalProps {
@@ -21,11 +21,18 @@ const NewPartyModal = ({ isOpen, onClose }: NewPartyModalProps) => {
   const [currentStep, setCurrentStep] = useState<Step>(Step.Category)
   const [requiredValues, setRequiredValues] = useState<IRequiredInputs>({
     name: '같이 점심 드실 분?',
+    customName: '',
     mealType: MealType.Lunch,
     gatherClosedAt: '1시간 뒤', // TODO: fix
     customGatherClosedAt: '',
     maxUserCount: 0, // Infinite = 0
     isPrivate: false,
+  })
+
+  const [optionalValues, setOptionalValues] = useState<IOptionalInputs>({
+    keyword1: '',
+    keyword2: '',
+    restaurantLink: '',
   })
 
   return (
@@ -53,7 +60,11 @@ const NewPartyModal = ({ isOpen, onClose }: NewPartyModalProps) => {
             />
           )}
           {currentStep === Step.Optional && (
-            <OptionalInputs setCurrentStep={setCurrentStep} onClose={onClose} />
+            <OptionalInputs
+              initialOptionalValues={optionalValues}
+              setCurrentStep={setCurrentStep}
+              onClose={onClose}
+            />
           )}
         </ModalBody>
       </Container>
@@ -111,6 +122,7 @@ export const ModalContainer = styled.div`
   letter-spacing: -0.2px;
   padding: 0 1.5rem;
   position: relative;
+  margin-bottom: 6rem;
 `
 
 export default NewPartyModal
