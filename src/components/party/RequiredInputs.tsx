@@ -12,9 +12,12 @@ const RequiredInputs = ({ setCurrentStep }: IRequiredInputsProps) => {
     <>
       <ModalContainer>
         <Title>*제목을 선택해주세요.</Title>
+        <Select />
         <Title>*식사 시간을 선택해주세요.</Title>
         <Title>*모집 종료시간을 선택해주세요.</Title>
+        <Select />
         <Title>*최대 인원을 설정해주세요.</Title>
+        <Select />
         <Title>*공개 여부를 선택해주세요.</Title>
       </ModalContainer>
       <ModalFooter>
