@@ -1,10 +1,10 @@
 import styled from '@emotion/styled'
-import VStack from './VStack'
 import Button from '@mui/material/Button'
 import Image from 'next/image'
-import HStack from './HStack'
+import HStack from '../stack/HStack'
 import { theme } from '@styles/theme'
 import { useMsal } from '@azure/msal-react'
+import VStack from '../stack/VStack'
 
 interface INavigationProps {
   width: string

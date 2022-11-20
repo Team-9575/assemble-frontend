@@ -7,21 +7,18 @@ import {
 } from 'react'
 import { useIsAuthenticated, useMsal } from '@azure/msal-react'
 import { useAuthMutation } from '@hooks/query/auth/useAuthMutation'
-import { loginRequest } from '@config/auth'
 import apiClient from 'src/api'
 
 interface IAuthProps {
   children: ReactNode
 }
 interface IUserInfo {
-  accessToken: string
   name: string
   isAuthenticated: boolean
   isReady: boolean
 }
 
 const initialUserInfo = {
-  accessToken: '',
   name: '',
   isAuthenticated: false,
   isReady: false,
@@ -38,15 +35,14 @@ const AuthContext = createContext(initialState)
 
 export const AuthProvider = ({ children }: IAuthProps) => {
   const isMSAuthenticated = useIsAuthenticated()
-  const { instance, accounts, inProgress } = useMsal()
-  const [MSAccessToken, setMSAccessToken] = useState<any>(null)
+  const { accounts, inProgress } = useMsal()
+  const [MSRefreshToken, setMSRefreshToken] = useState<string | null>(null)
   const [user, setUser] = useState<IUserInfo>(initialUserInfo)
   const { mutateAsync, isLoading } = useAuthMutation({
     onSuccess: ({ accessToken }) => {
       setUser({
-        accessToken: accessToken,
         name: accounts[0]?.name || '',
-        isAuthenticated: !!accessToken,
+        isAuthenticated: true,
         isReady: true,
       })
       apiClient.defaults.headers.common.Authorization = `Bearer ${accessToken}`
@@ -57,31 +53,26 @@ export const AuthProvider = ({ children }: IAuthProps) => {
   })
 
   useEffect(() => {
-    const requestAccessToken = () => {
+    const requestMSToken = () => {
       if (!isMSAuthenticated) {
         setUser({ ...initialUserInfo, isReady: true })
         return
       }
-      const request = { ...loginRequest, account: accounts[0] }
-      instance
-        .acquireTokenSilent(request)
-        .then((response) => {
-          setMSAccessToken(response.accessToken)
-        })
-        .catch((e) => {
-          instance.acquireTokenPopup(request).then((response) => {
-            setMSAccessToken(response.accessToken)
-          })
-        })
+      if (accounts.length) {
+        const { homeAccountId, environment, idTokenClaims } = accounts[0]
+        const sessionKey = `${homeAccountId}-${environment}-refreshtoken-${idTokenClaims?.aud}----`
+        const sessionValue = sessionStorage.getItem(sessionKey)
+        setMSRefreshToken(sessionValue && JSON.parse(sessionValue).secret)
+      }
     }
-    requestAccessToken()
-  }, [mutateAsync, accounts, instance, MSAccessToken, isMSAuthenticated])
+    requestMSToken()
+  }, [accounts, MSRefreshToken, isMSAuthenticated])
 
   useEffect(() => {
-    if (!!MSAccessToken) {
-      mutateAsync({ token: MSAccessToken })
+    if (!!MSRefreshToken) {
+      mutateAsync({ token: MSRefreshToken })
     }
-  }, [MSAccessToken, mutateAsync])
+  }, [MSRefreshToken, mutateAsync])
 
   return (
     <AuthContext.Provider value={{ user, setUser }}>
