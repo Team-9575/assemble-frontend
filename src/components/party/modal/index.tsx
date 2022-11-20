@@ -4,7 +4,7 @@ import { theme } from '@styles/theme'
 import { useState } from 'react'
 import CategorySelect from './CategorySelect'
 import OptionalInputs from './OptionalInputs'
-import RequiredInputs from './RequiredInputs'
+import RequiredInputs, { IRequiredInputs, MealType } from './RequiredInputs'
 
 interface NewPartyModalProps {
   isOpen: boolean
@@ -19,6 +19,14 @@ export enum Step {
 
 const NewPartyModal = ({ isOpen, onClose }: NewPartyModalProps) => {
   const [currentStep, setCurrentStep] = useState<Step>(Step.Category)
+  const [requiredValues, setRequiredValues] = useState<IRequiredInputs>({
+    name: '같이 점심 드실 분?',
+    mealType: MealType.Lunch,
+    gatherClosedAt: '1시간 뒤', // TODO: fix
+    customGatherClosedAt: '',
+    maxUserCount: 0, // Infinite = 0
+    isPrivate: false,
+  })
 
   return (
     <BaseModal
@@ -39,7 +47,10 @@ const NewPartyModal = ({ isOpen, onClose }: NewPartyModalProps) => {
             <CategorySelect setCurrentStep={setCurrentStep} />
           )}
           {currentStep === Step.Required && (
-            <RequiredInputs setCurrentStep={setCurrentStep} />
+            <RequiredInputs
+              setCurrentStep={setCurrentStep}
+              initialRequiredValues={requiredValues}
+            />
           )}
           {currentStep === Step.Optional && (
             <OptionalInputs setCurrentStep={setCurrentStep} onClose={onClose} />
@@ -89,6 +100,11 @@ export const ModalFooter = styled.div`
 export const Title = styled.p`
   color: black; // TODO: theme
   margin: 1.5rem 0 0.5rem 0;
+`
+export const Description = styled.p`
+  color: #757575; // TODO: theme
+  font-size: ${theme.fontSize.sm};
+  margin: 0.5rem 0;
 `
 export const ModalContainer = styled.div`
   font-weight: 600;

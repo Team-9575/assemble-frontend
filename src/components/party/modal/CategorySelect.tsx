@@ -2,7 +2,7 @@ import Button from '@components/common/button'
 import styled from '@emotion/styled'
 import { theme } from '@styles/theme'
 import { Dispatch, SetStateAction } from 'react'
-import { ModalContainer, ModalFooter, Step, Title } from './NewPartyModal'
+import { ModalContainer, ModalFooter, Step, Title } from '.'
 
 interface ICategorySelectProps {
   setCurrentStep: Dispatch<SetStateAction<Step>>

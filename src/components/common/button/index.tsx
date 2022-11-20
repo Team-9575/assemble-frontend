@@ -4,6 +4,7 @@ interface ButtonProps {
   text: string
   variant?: 'contained' | 'outlined'
   isDisabled?: boolean
+  type?: 'button' | 'reset' | 'submit'
   onClick: () => void
 }
 
@@ -12,11 +13,17 @@ const Button = ({
   variant = 'contained',
   isDisabled = false,
   onClick,
+  type = 'button',
 }: ButtonProps) => {
   return isDisabled ? (
     <DisabledButton>{text}</DisabledButton>
   ) : (
-    <EnabledButton onClick={onClick} variant={variant} disabled={isDisabled}>
+    <EnabledButton
+      onClick={onClick}
+      type={type}
+      variant={variant}
+      disabled={isDisabled}
+    >
       {text}
     </EnabledButton>
   )
