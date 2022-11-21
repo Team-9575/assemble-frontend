@@ -4,6 +4,7 @@ import { theme } from '@styles/theme'
 import { useState } from 'react'
 import CategorySelect from './CategorySelect'
 import OptionalInputs, { IOptionalInputs } from './OptionalInputs'
+import { GatherClosedOptions, PartyNameOptions } from './Options'
 import RequiredInputs, { IRequiredInputs, MealType } from './RequiredInputs'
 
 interface NewPartyModalProps {
@@ -20,10 +21,10 @@ export enum Step {
 const NewPartyModal = ({ isOpen, onClose }: NewPartyModalProps) => {
   const [currentStep, setCurrentStep] = useState<Step>(Step.Category)
   const [requiredValues, setRequiredValues] = useState<IRequiredInputs>({
-    name: '같이 점심 드실 분?',
+    name: PartyNameOptions[0].value as string,
     customName: '',
     mealType: MealType.Lunch,
-    gatherClosedAt: '1시간 뒤', // TODO: fix
+    gatherClosedHour: GatherClosedOptions[0].value as number,
     customGatherClosedAt: '',
     maxUserCount: 0, // Infinite = 0
     isPrivate: false,
@@ -122,7 +123,7 @@ export const ModalContainer = styled.div`
   letter-spacing: -0.2px;
   padding: 0 1.5rem;
   position: relative;
-  margin-bottom: 6rem;
+  margin-bottom: 8rem;
 `
 
 export default NewPartyModal
