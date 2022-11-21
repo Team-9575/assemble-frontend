@@ -1,5 +1,6 @@
 import { ISelectOption } from '@components/common/select'
 import { IToggleButton } from '@components/toggle-button'
+import { add, format } from 'date-fns'
 
 export const PartyNameOptions: ISelectOption[] = [
   { name: '같이 점심 드실 분?', value: '같이 점심 드실 분?' },
@@ -9,12 +10,14 @@ export const PartyNameOptions: ISelectOption[] = [
   { name: '직접입력', value: '직접입력' },
 ]
 
+const addHour = (hours: number) => add(new Date(), { hours })
+
 export const GatherClosedOptions: ISelectOption[] = [
-  { name: '1시간 뒤', value: '1시간 뒤' },
-  { name: '2시간 뒤', value: '2시간 뒤' },
-  { name: '3시간 뒤', value: '3시간 뒤' },
-  { name: '4시간 뒤', value: '4시간 뒤' },
-  { name: '직접입력', value: '직접입력' },
+  { name: '1시간 뒤', value: 1 },
+  { name: '2시간 뒤', value: 2 },
+  { name: '3시간 뒤', value: 3 },
+  { name: '4시간 뒤', value: 4 },
+  { name: '직접입력', value: 0 },
 ]
 
 export const MaxUserCountOptions: ISelectOption[] = [

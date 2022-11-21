@@ -13,9 +13,9 @@ import {
 } from './Options'
 import styled from '@emotion/styled'
 import ToggleButtonFormik from '@components/common/formik/ToggleButtonFormik'
-import Input from '@components/common/input'
 import VStack from '@components/common/stack/VStack'
 import InputFormik from '@components/common/formik/InputFormik'
+import { add, format } from 'date-fns'
 
 export enum MealType {
   Breakfast,
@@ -27,7 +27,7 @@ export interface IRequiredInputs {
   name: string
   customName?: string
   mealType: MealType
-  gatherClosedAt: string
+  gatherClosedHour: number
   customGatherClosedAt?: string
   maxUserCount: number // Infinite = 0
   isPrivate: boolean
@@ -38,6 +38,14 @@ interface IRequiredInputsProps {
   initialRequiredValues: IRequiredInputs
 }
 
+const validationSchema = Yup.object({
+  customName: Yup.string().test(
+    'custom name',
+    'custom name is required!',
+    (value, context) => context.parent.name !== '직접입력' || !!value
+  ),
+})
+
 const RequiredInputs = ({
   setCurrentStep,
   initialRequiredValues,
@@ -45,15 +53,21 @@ const RequiredInputs = ({
   return (
     <Formik
       initialValues={initialRequiredValues}
-      validationSchema={Yup.object({})}
+      validationSchema={validationSchema}
       onSubmit={(values) => {}}
     >
-      {({ errors, touched, values }) => (
+      {({ errors, touched, values, isValid, setFieldValue }) => (
         <Form>
           <ModalContainer>
             <Title>*제목을 선택해주세요.</Title>
             <VStack gap="0.5rem">
-              <SelectFormik name="name" options={PartyNameOptions} />
+              <SelectFormik
+                name="name"
+                options={PartyNameOptions}
+                onChange={() => {
+                  setFieldValue('customName', '')
+                }}
+              />
               {values.name === '직접입력' && (
                 <InputFormik label="제목을 입력해 주세요." name="customName" />
               )}
@@ -61,7 +75,10 @@ const RequiredInputs = ({
             <Title>*식사 시간을 선택해주세요.</Title>
             <ToggleButtonFormik name="mealType" options={MealTypeOptions} />
             <Title>*모집 종료시간을 선택해주세요.</Title>
-            <SelectFormik name="gatherClosedAt" options={GatherClosedOptions} />
+            <SelectFormik
+              name="gatherClosedHour"
+              options={GatherClosedOptions}
+            />
             <Description>*모집 종료시간은 당일까지만 가능해요!</Description>
             <Title>*최대 인원을 설정해주세요.</Title>
             <MaxUserContainer>
@@ -83,6 +100,7 @@ const RequiredInputs = ({
             />
             <Button
               text="다음"
+              isDisabled={!isValid}
               onClick={() => {
                 setCurrentStep(Step.Optional)
               }}
