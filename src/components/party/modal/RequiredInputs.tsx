@@ -14,7 +14,6 @@ import styled from '@emotion/styled'
 import ToggleButtonFormik from '@components/common/formik/ToggleButtonFormik'
 import VStack from '@components/common/stack/VStack'
 import InputFormik from '@components/common/formik/InputFormik'
-import { add, format } from 'date-fns'
 import TimePicker from '@components/common/time-picker'
 
 export enum MealType {
@@ -35,6 +34,7 @@ export interface IRequiredInputs {
 interface IRequiredInputsProps {
   setCurrentStep: Dispatch<SetStateAction<Step>>
   initialRequiredValues: IRequiredInputs
+  setRequiredValues: Dispatch<SetStateAction<IRequiredInputs>>
 }
 
 const validationSchema = Yup.object({
@@ -48,6 +48,7 @@ const validationSchema = Yup.object({
 const RequiredInputs = ({
   setCurrentStep,
   initialRequiredValues,
+  setRequiredValues,
 }: IRequiredInputsProps) => {
   return (
     <Formik
@@ -97,6 +98,7 @@ const RequiredInputs = ({
               variant="outlined"
               onClick={() => {
                 setCurrentStep(Step.Category)
+                setRequiredValues(values)
               }}
             />
             <Button
@@ -104,6 +106,7 @@ const RequiredInputs = ({
               isDisabled={!isValid}
               onClick={() => {
                 setCurrentStep(Step.Optional)
+                setRequiredValues(values)
               }}
             />
           </ModalFooter>

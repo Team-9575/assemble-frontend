@@ -15,13 +15,15 @@ export interface IOptionalInputs {
 interface IOptionalInputsProps {
   setCurrentStep: Dispatch<SetStateAction<Step>>
   initialOptionalValues: IOptionalInputs
-  onClose: () => void
+  setOptionalValues: Dispatch<SetStateAction<IOptionalInputs>>
+  handleComplete: (values: IOptionalInputs) => void
 }
 
 const OptionalInputs = ({
   setCurrentStep,
-  onClose,
   initialOptionalValues,
+  setOptionalValues,
+  handleComplete,
 }: IOptionalInputsProps) => {
   return (
     <Formik
@@ -48,12 +50,13 @@ const OptionalInputs = ({
               variant="outlined"
               onClick={() => {
                 setCurrentStep(Step.Required)
+                setOptionalValues(values)
               }}
             />
             <Button
               text="완료"
               onClick={() => {
-                onClose()
+                handleComplete(values)
               }}
             />
           </ModalFooter>
