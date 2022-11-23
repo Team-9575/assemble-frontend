@@ -5,7 +5,6 @@ import { Form, Formik } from 'formik'
 import * as Yup from 'yup'
 import SelectFormik from '@components/common/formik/SelectFormk'
 import {
-  GatherClosedOptions,
   MaxUserCountOptions,
   MealTypeOptions,
   PartyNameOptions,
@@ -16,6 +15,7 @@ import ToggleButtonFormik from '@components/common/formik/ToggleButtonFormik'
 import VStack from '@components/common/stack/VStack'
 import InputFormik from '@components/common/formik/InputFormik'
 import { add, format } from 'date-fns'
+import TimePicker from '@components/common/time-picker'
 
 export enum MealType {
   Breakfast,
@@ -27,8 +27,7 @@ export interface IRequiredInputs {
   name: string
   customName?: string
   mealType: MealType
-  gatherClosedHour: number
-  customGatherClosedAt?: string
+  gatherClosedAt: Date
   maxUserCount: number // Infinite = 0
   isPrivate: boolean
 }
@@ -75,9 +74,11 @@ const RequiredInputs = ({
             <Title>*식사 시간을 선택해주세요.</Title>
             <ToggleButtonFormik name="mealType" options={MealTypeOptions} />
             <Title>*모집 종료시간을 선택해주세요.</Title>
-            <SelectFormik
-              name="gatherClosedHour"
-              options={GatherClosedOptions}
+            <TimePicker
+              value={values.gatherClosedAt}
+              onChange={(value) => {
+                setFieldValue('gatherClosedAt', value)
+              }}
             />
             <Description>*모집 종료시간은 당일까지만 가능해요!</Description>
             <Title>*최대 인원을 설정해주세요.</Title>
