@@ -1,6 +1,7 @@
 import BaseModal from '@components/common/base-modal'
 import styled from '@emotion/styled'
 import { theme } from '@styles/theme'
+import { add, endOfDay } from 'date-fns'
 import { useState } from 'react'
 import CategorySelect from './CategorySelect'
 import OptionalInputs, { IOptionalInputs } from './OptionalInputs'
@@ -19,13 +20,14 @@ export enum Step {
 }
 
 const NewPartyModal = ({ isOpen, onClose }: NewPartyModalProps) => {
+  const afterOneHour = add(new Date(), { hours: 1 })
+  const endOfToday = endOfDay(new Date())
   const [currentStep, setCurrentStep] = useState<Step>(Step.Category)
   const [requiredValues, setRequiredValues] = useState<IRequiredInputs>({
     name: PartyNameOptions[0].value as string,
     customName: '',
     mealType: MealType.Lunch,
-    gatherClosedHour: GatherClosedOptions[0].value as number,
-    customGatherClosedAt: '',
+    gatherClosedAt: afterOneHour > endOfToday ? endOfToday : afterOneHour,
     maxUserCount: 0, // Infinite = 0
     isPrivate: false,
   })
