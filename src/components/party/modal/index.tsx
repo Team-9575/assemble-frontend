@@ -1,11 +1,12 @@
 import BaseModal from '@components/common/base-modal'
 import styled from '@emotion/styled'
+import { useNuwPartyMutation } from '@hooks/query/party/useNewPartyMutations'
 import { theme } from '@styles/theme'
-import { add, endOfDay } from 'date-fns'
+import { add, endOfDay, format } from 'date-fns'
 import { useState } from 'react'
 import CategorySelect from './CategorySelect'
 import OptionalInputs, { IOptionalInputs } from './OptionalInputs'
-import { GatherClosedOptions, PartyNameOptions } from './Options'
+import { PartyNameOptions } from './Options'
 import RequiredInputs, { IRequiredInputs, MealType } from './RequiredInputs'
 
 interface NewPartyModalProps {
@@ -23,6 +24,7 @@ const NewPartyModal = ({ isOpen, onClose }: NewPartyModalProps) => {
   const afterOneHour = add(new Date(), { hours: 1 })
   const endOfToday = endOfDay(new Date())
   const [currentStep, setCurrentStep] = useState<Step>(Step.Category)
+  const { mutateAsync } = useNuwPartyMutation()
   const [requiredValues, setRequiredValues] = useState<IRequiredInputs>({
     name: PartyNameOptions[0].value as string,
     customName: '',
@@ -60,13 +62,42 @@ const NewPartyModal = ({ isOpen, onClose }: NewPartyModalProps) => {
             <RequiredInputs
               setCurrentStep={setCurrentStep}
               initialRequiredValues={requiredValues}
+              setRequiredValues={setRequiredValues}
             />
           )}
           {currentStep === Step.Optional && (
             <OptionalInputs
               initialOptionalValues={optionalValues}
               setCurrentStep={setCurrentStep}
-              onClose={onClose}
+              setOptionalValues={setOptionalValues}
+              handleComplete={async (values) => {
+                const {
+                  name,
+                  customName,
+                  maxUserCount,
+                  mealType,
+                  gatherClosedAt,
+                  isPrivate,
+                } = requiredValues
+                const { restaurantLink, keyword1, keyword2 } = values
+                const tags = []
+                if (!!keyword1) tags.push(keyword1)
+                if (!!keyword2) tags.push(keyword2)
+                const payload = {
+                  name:
+                    name === '직접입력' ? customName?.toString() || '' : name,
+                  maxUserCount,
+                  mealType,
+                  gatherClosedAt: format(gatherClosedAt, 'yyyy-MM-dd*hh:mm:ss')
+                    .split('*')
+                    .join('T'),
+                  restaurantLink,
+                  tags,
+                  isPrivate,
+                }
+                await mutateAsync(payload)
+                onClose()
+              }}
             />
           )}
         </ModalBody>
