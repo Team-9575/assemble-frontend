@@ -5,14 +5,21 @@ import { ThemeProvider as EmotionThemeProvider } from '@emotion/react'
 import { darkTheme } from '@styles/theme/dark'
 import { lightTheme } from '@styles/theme/light'
 import { theme } from '@styles/theme'
+import useAuth from '@hooks/context/useAuth'
 
-const BaseLayout = ({ children }: { children: JSX.Element }) => {
+interface IBaseLayoutProps {
+  children: JSX.Element
+  title?: string
+}
+
+const BaseLayout = ({ children, title }: IBaseLayoutProps) => {
   const { themeName } = useTheme()
+  const { user } = useAuth()
 
   return (
     <EmotionThemeProvider theme={themeName === 'dark' ? darkTheme : lightTheme}>
       <Container>
-        <Header />
+        <Header title={title} />
         {children}
       </Container>
     </EmotionThemeProvider>
@@ -20,9 +27,9 @@ const BaseLayout = ({ children }: { children: JSX.Element }) => {
 }
 const Container = styled.div`
   position: relative;
-  margin: 0 0 8.125rem 0;
   max-width: ${theme.maxWidth};
   min-width: 15.625rem;
+  min-height: 100vh;
   background-color: ${({ theme }) => theme.background.secondary};
   margin: 0 auto;
 `

@@ -4,12 +4,17 @@ import { Drawer, IconButton } from '@mui/material'
 import { useState } from 'react'
 import Navigation from './Navigation'
 
-const Header = () => {
+interface IHeaderProps {
+  title?: string
+}
+
+const Header = ({ title = '' }: IHeaderProps) => {
   const { user } = useAuth()
   const [isDrawerOpen, setDrawerOpen] = useState(false)
 
   return (
     <Container>
+      <span>{title}</span>
       <ButtonWrapper>
         {user.isReady && user.isAuthenticated && (
           <IconButton
@@ -68,11 +73,15 @@ const Header = () => {
 
 const Container = styled.div`
   display: flex;
-  justify-content: right;
+  justify-content: center;
+  align-items: center;
   padding: 0.75rem 1.25rem;
   width: 100%;
   z-index: 10;
   background-color: ${({ theme }) => theme.background.primary};
+  position: relative;
+  height: 3.5rem;
+  font-weight: 600;
 `
 const MenuIcon = styled.span`
   color: ${({ theme }) => theme.icon.primary};
@@ -83,5 +92,8 @@ const NavigationContainer = styled.div`
 `
 const ButtonWrapper = styled.div`
   height: 2rem;
+  position: absolute;
+  right: 1rem;
+  top: 0.75rem;
 `
 export default Header
