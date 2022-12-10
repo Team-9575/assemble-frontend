@@ -1,4 +1,4 @@
-import type { NextPage } from 'next'
+import type { GetServerSideProps, NextPage } from 'next'
 import styled from '@emotion/styled'
 import PartyList from '@components/party'
 import Button from '@components/common/button'
@@ -9,10 +9,21 @@ import { theme } from '@styles/theme'
 import NewPartyModal from '@components/party/modal'
 import { useState } from 'react'
 import useAuth from '@hooks/context/useAuth'
+import { useQuery } from 'react-query'
+import Cookies from 'js-cookie'
+import apiClient from 'src/api'
 
 const Home: NextPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const { user } = useAuth()
+  const csrf = Cookies.get('csrftoken')
+  const { data } = useQuery({
+    queryKey: [csrf],
+    enabled: !!csrf,
+    queryFn: async () => {
+      await apiClient.get('/users/me')
+    },
+  })
 
   return (
     <BaseLayout>
@@ -79,4 +90,5 @@ const ImageWrapper = styled.div`
   border-radius: 50px;
   overflow: hidden;
 `
+
 export default Home
