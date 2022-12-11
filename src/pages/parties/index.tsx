@@ -27,7 +27,7 @@ const MyPartiesPage = () => {
             <PartyCard title="치킨 같이 드실 분!" />
           </VStack>
         ) : (
-          <EmptyText>참여했던 파티가 없습니다.</EmptyText>
+          <EmptyText>만들었던 파티가 없습니다.</EmptyText>
         )}
       </>
     </BaseLayout>
