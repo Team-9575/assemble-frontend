@@ -1,22 +1,42 @@
 import styled from '@emotion/styled'
 import useAuth from '@hooks/context/useAuth'
 import { Drawer, IconButton } from '@mui/material'
+import { useRouter } from 'next/router'
 import { useState } from 'react'
 import Navigation from './Navigation'
 
 interface IHeaderProps {
   title: string
+  hasHamburgerButton: boolean
+  hasBackButton: boolean
 }
 
-const Header = ({ title }: IHeaderProps) => {
+const Header = ({ title, hasHamburgerButton, hasBackButton }: IHeaderProps) => {
   const { user } = useAuth()
+  const router = useRouter()
   const [isDrawerOpen, setDrawerOpen] = useState(false)
 
   return (
     <Container>
       <Title>{title}</Title>
       <ButtonWrapper>
-        {user.isReady && user.isAuthenticated && (
+        {hasBackButton && (
+          <IconButton
+            aria-label="navigation"
+            onClick={() => {
+              router.back()
+            }}
+            sx={{
+              position: 'absolute',
+              left: '0.5rem',
+            }}
+          >
+            <Icon className="material-symbols-outlined md-16">
+              arrow_back_ios
+            </Icon>
+          </IconButton>
+        )}
+        {hasHamburgerButton && user.isReady && user.isAuthenticated && (
           <IconButton
             aria-label="navigation"
             onClick={() => {
@@ -28,9 +48,7 @@ const Header = ({ title }: IHeaderProps) => {
               right: '0.5rem',
             }}
           >
-            <MenuIcon className="material-symbols-outlined md-16">
-              menu
-            </MenuIcon>
+            <Icon className="material-symbols-outlined md-16">menu</Icon>
           </IconButton>
         )}
       </ButtonWrapper>
@@ -82,7 +100,7 @@ const Container = styled.div`
   z-index: 10;
   background-color: ${({ theme }) => theme.background.primary};
 `
-const MenuIcon = styled.span`
+const Icon = styled.span`
   color: ${({ theme }) => theme.icon.primary};
 `
 const NavigationContainer = styled.div`
