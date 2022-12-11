@@ -4,12 +4,17 @@ import { Drawer, IconButton } from '@mui/material'
 import { useState } from 'react'
 import Navigation from './Navigation'
 
-const Header = () => {
+interface IHeaderProps {
+  title: string
+}
+
+const Header = ({ title }: IHeaderProps) => {
   const { user } = useAuth()
   const [isDrawerOpen, setDrawerOpen] = useState(false)
 
   return (
     <Container>
+      <span>{title}</span>
       <ButtonWrapper>
         {user.isReady && user.isAuthenticated && (
           <IconButton
@@ -19,6 +24,8 @@ const Header = () => {
             }}
             sx={{
               display: { xs: 'inline-flex', md: 'none' },
+              position: 'absolute',
+              right: '0.5rem',
             }}
           >
             <MenuIcon className="material-symbols-outlined md-16">
@@ -68,7 +75,8 @@ const Header = () => {
 
 const Container = styled.div`
   display: flex;
-  justify-content: right;
+  justify-content: center;
+  align-items: center;
   padding: 0.75rem 1.25rem;
   width: 100%;
   z-index: 10;
