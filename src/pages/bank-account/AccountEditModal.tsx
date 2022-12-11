@@ -40,15 +40,15 @@ const AccountEditModal = ({ isOpen, onClose }: AccountEditModalProps) => {
             close
           </CloseButton>
         </ModalHeader>
-        <ModalBody>
-          <Formik
-            initialValues={initialValues}
-            validationSchema={validationSchema}
-            onSubmit={(values) => {}}
-          >
-            {({ errors, touched, values, isValid, setFieldValue }) => (
-              <Form>
-                <>
+        <Formik
+          initialValues={initialValues}
+          validationSchema={validationSchema}
+          onSubmit={(values) => {}}
+        >
+          {({ errors, touched, values, isValid, setFieldValue }) => (
+            <Form>
+              <>
+                <ModalBody>
                   <Title>계좌 정보를 입력해주세요.</Title>
                   <VStack gap="0.5rem">
                     <SelectFormik
@@ -65,14 +65,14 @@ const AccountEditModal = ({ isOpen, onClose }: AccountEditModalProps) => {
                   </VStack>
                   <Title>예금주명을 입력해주세요.</Title>
                   <InputFormik label="ex.홍길동" name="name" />
-                  <ModalFooter>
-                    <Button text="완료" onClick={onClose} />
-                  </ModalFooter>
-                </>
-              </Form>
-            )}
-          </Formik>
-        </ModalBody>
+                </ModalBody>
+                <ModalFooter>
+                  <Button text="완료" onClick={onClose} />
+                </ModalFooter>
+              </>
+            </Form>
+          )}
+        </Formik>
       </Container>
     </BaseModal>
   )
