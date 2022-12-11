@@ -9,15 +9,26 @@ import { theme } from '@styles/theme'
 interface IBaseLayoutProps {
   title?: string
   children: JSX.Element
+  hasHambergerButton?: boolean
+  hasBackButton?: boolean
 }
 
-const BaseLayout = ({ title = '', children }: IBaseLayoutProps) => {
+const BaseLayout = ({
+  title = '',
+  children,
+  hasHambergerButton = true,
+  hasBackButton = false,
+}: IBaseLayoutProps) => {
   const { themeName } = useTheme()
 
   return (
     <EmotionThemeProvider theme={themeName === 'dark' ? darkTheme : lightTheme}>
       <Container>
-        <Header title={title} />
+        <Header
+          title={title}
+          hasHamburgerButton={hasHambergerButton}
+          hasBackButton={hasBackButton}
+        />
         {children}
       </Container>
     </EmotionThemeProvider>
