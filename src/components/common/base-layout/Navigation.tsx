@@ -40,7 +40,7 @@ const Navigation = ({ width, maxWidth }: INavigationProps) => {
     <Container width={width} maxWidth={maxWidth}>
       <VStack justifyContent="space-between">
         <VStack>
-          <HStack alignItems="center" gap="0.5rem">
+          <HStack alignItems="center" gap="0.5rem" padding="0 1rem">
             <CircleImage src="/images/coffee.jpg" alt="party" />
             <Name>Sally Lee</Name>
           </HStack>
@@ -76,7 +76,7 @@ const Container = styled.div<{ width: string; maxWidth: string }>`
   height: 100vh;
   width: ${({ width }) => width};
   max-width: ${({ maxWidth }) => maxWidth};
-  padding: 4rem 1rem 6rem;
+  padding: 4rem 0 6rem;
 `
 const Name = styled.span`
   font-size: ${theme.fontSize.lg};
@@ -88,7 +88,7 @@ const Menu = styled.button`
   display: block;
   width: 100%;
   text-align: left;
-  padding-left: 1rem;
+  padding-left: 2rem;
   :hover {
     background-color: #3909c210; // TODO:: theme
   }
