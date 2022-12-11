@@ -3,36 +3,47 @@ import Button from '@components/common/button'
 import styled from '@emotion/styled'
 import { theme } from '@styles/theme'
 import { useState } from 'react'
+import AccountEditModal from './AccountEditModal'
 
 const MyBankAccountPage = () => {
   const hasAccount = false // TODO: change
   const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false)
   return (
     <BaseLayout title="나의 계좌">
-      {hasAccount ? (
-        <Container hasFooter>
-          <AccountText>현재 등록된 계좌</AccountText>
-          <BankAccount>토스 1234512345 name</BankAccount>
-          <Footer>
+      <>
+        {hasAccount ? (
+          <Container hasFooter>
+            <AccountText>현재 등록된 계좌</AccountText>
+            <BankAccount>토스 1234512345 name</BankAccount>
+            <Footer>
+              <Button
+                text="계좌 변경하기"
+                onClick={() => {
+                  setIsEditModalOpen(true)
+                }}
+              />
+            </Footer>
+          </Container>
+        ) : (
+          <Container>
+            <EmptyText>등록된 계좌가 없습니다!</EmptyText>
             <Button
-              text="계좌 변경하기"
+              text="계좌 등록하기"
               onClick={() => {
                 setIsEditModalOpen(true)
               }}
             />
-          </Footer>
-        </Container>
-      ) : (
-        <Container>
-          <EmptyText>등록된 계좌가 없습니다!</EmptyText>
-          <Button
-            text="계좌 등록하기"
-            onClick={() => {
-              setIsEditModalOpen(true)
+          </Container>
+        )}
+        {isEditModalOpen && (
+          <AccountEditModal
+            isOpen={isEditModalOpen}
+            onClose={() => {
+              setIsEditModalOpen(false)
             }}
           />
-        </Container>
-      )}
+        )}
+      </>
     </BaseLayout>
   )
 }
