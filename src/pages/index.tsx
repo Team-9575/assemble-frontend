@@ -12,6 +12,7 @@ import useAuth from '@hooks/context/useAuth'
 import { useQuery } from 'react-query'
 import Cookies from 'js-cookie'
 import apiClient from 'src/api'
+import CircleImage from '@components/common/circle-image'
 
 const Home: NextPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -33,15 +34,21 @@ const Home: NextPage = () => {
         {user.isAuthenticated && (
           <Footer>
             <HStack padding="0.25rem 0" justifyContent="center">
-              <ImageWrapper>
-                <Image src="/images/profile.jpg" alt="profile" layout="fill" />
-              </ImageWrapper>
-              <ImageWrapper>
-                <Image src="/images/profile.jpg" alt="profile" layout="fill" />
-              </ImageWrapper>
-              <ImageWrapper>
-                <Image src="/images/profile.jpg" alt="profile" layout="fill" />
-              </ImageWrapper>
+              <CircleImage
+                src="/images/profile.jpg"
+                alt="profile"
+                size="1.375rem"
+              />
+              <CircleImage
+                src="/images/profile.jpg"
+                alt="profile"
+                size="1.375rem"
+              />
+              <CircleImage
+                src="/images/profile.jpg"
+                alt="profile"
+                size="1.375rem"
+              />
             </HStack>
             <Description>현재 8명이 파티를 고민하고 있어요</Description>
             <Button
@@ -83,13 +90,6 @@ const Description = styled.p`
   margin-bottom: 0.5rem;
   letter-spacing: -0.3px;
   color: ${({ theme }) => theme.text.primary};
-`
-const ImageWrapper = styled.div`
-  height: 1.375rem;
-  width: 1.375rem;
-  position: relative;
-  border-radius: 50px;
-  overflow: hidden;
 `
 
 export default Home

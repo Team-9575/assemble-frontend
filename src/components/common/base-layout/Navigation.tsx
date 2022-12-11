@@ -1,12 +1,12 @@
 import styled from '@emotion/styled'
 import Button from '@mui/material/Button'
-import Image from 'next/image'
 import HStack from '../stack/HStack'
 import { theme } from '@styles/theme'
 import { useMsal } from '@azure/msal-react'
 import VStack from '../stack/VStack'
 import route from 'src/constants/route'
 import { useRouter } from 'next/router'
+import CircleImage from '../circle-image'
 
 interface INavigationProps {
   width: string
@@ -41,9 +41,7 @@ const Navigation = ({ width, maxWidth }: INavigationProps) => {
       <VStack justifyContent="space-between">
         <VStack>
           <HStack alignItems="center" gap="0.5rem">
-            <ImageWrapper>
-              <Image src="/images/coffee.jpg" alt="party" layout="fill" />
-            </ImageWrapper>
+            <CircleImage src="/images/coffee.jpg" alt="party" />
             <Name>Sally Lee</Name>
           </HStack>
           <VStack margin="1rem 0 0">
@@ -78,15 +76,7 @@ const Container = styled.div<{ width: string; maxWidth: string }>`
   height: 100vh;
   width: ${({ width }) => width};
   max-width: ${({ maxWidth }) => maxWidth};
-  padding: 4rem 0 6rem;
-`
-const ImageWrapper = styled.div`
-  height: 2.5rem;
-  width: 2.5rem;
-  position: relative;
-  border-radius: 50px;
-  overflow: hidden;
-  margin-left: 1rem;
+  padding: 4rem 1rem 6rem;
 `
 const Name = styled.span`
   font-size: ${theme.fontSize.lg};
@@ -98,7 +88,7 @@ const Menu = styled.button`
   display: block;
   width: 100%;
   text-align: left;
-  padding-left: 2rem;
+  padding-left: 1rem;
   :hover {
     background-color: #3909c210; // TODO:: theme
   }

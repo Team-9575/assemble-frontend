@@ -2,7 +2,7 @@ import BaseLayout from '@components/common/base-layout'
 
 const MyPartiesPage = () => {
   return (
-    <BaseLayout title="파티이름 여기에">
+    <BaseLayout title="지나간 파티 보기">
       <div>parties</div>
     </BaseLayout>
   )

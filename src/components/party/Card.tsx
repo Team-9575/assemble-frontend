@@ -1,3 +1,4 @@
+import CircleImage from '@components/common/circle-image'
 import HStack from '@components/common/stack/HStack'
 import VStack from '@components/common/stack/VStack'
 import styled from '@emotion/styled'
@@ -13,18 +14,20 @@ const PartyCard = ({ title, isLunch = false }: PartyCardProps) => {
   return (
     <Container isLunch={isLunch}>
       <HStack gap="0.5rem">
-        <ImageWrapper size="2.5rem">
-          <Image src="/images/coffee.jpg" alt="party" layout="fill" />
-        </ImageWrapper>
+        <CircleImage src="/images/coffee.jpg" alt="party" />
         <VStack gap="0.5rem">
           <Title>{title}</Title>
           <HStack>
-            <ImageWrapper size="1.125rem">
-              <Image src="/images/profile.jpg" alt="profile" layout="fill" />
-            </ImageWrapper>
-            <ImageWrapper size="1.125rem">
-              <Image src="/images/profile.jpg" alt="profile" layout="fill" />
-            </ImageWrapper>
+            <CircleImage
+              src="/images/profile.jpg"
+              alt="profile"
+              size="1.125rem"
+            />
+            <CircleImage
+              src="/images/profile.jpg"
+              alt="profile"
+              size="1.125rem"
+            />
             <Member>5명 참여 중</Member>
           </HStack>
         </VStack>
@@ -59,13 +62,6 @@ const Member = styled.p`
   font-size: ${theme.fontSize.xs};
   color: ${({ theme }) => theme.text.count};
   margin-left: 0.25rem;
-`
-const ImageWrapper = styled.div<{ size: string }>`
-  height: ${({ size }) => size};
-  width: ${({ size }) => size};
-  position: relative;
-  border-radius: 50px;
-  overflow: hidden;
 `
 const Keyword = styled.p`
   background-color: ${({ theme }) => theme.background.keyword};
