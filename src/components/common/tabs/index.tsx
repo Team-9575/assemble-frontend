@@ -1,27 +1,37 @@
-import Tabs from '@mui/material/Tabs'
-import Tab from '@mui/material/Tab'
-import { useState } from 'react'
+import { Tab, Tabs as MuiTabs } from '@mui/material'
+import { Dispatch, SetStateAction } from 'react'
 
-const BaseTabs = () => {
-  // TODO: refactor
-  const [value, setValue] = useState<number>(0)
+interface ITabsProps {
+  tabIndex: number
+  setTabIndex: Dispatch<SetStateAction<number>>
+  labels: string[]
+}
+
+const Tabs = ({ tabIndex, setTabIndex, labels }: ITabsProps) => {
   return (
-    <Tabs
-      value={value}
+    <MuiTabs
+      value={tabIndex}
       onChange={(event, newValue) => {
-        setValue(newValue)
+        setTabIndex(newValue)
       }}
       TabIndicatorProps={{
         style: {
           backgroundColor: '#000000',
         },
       }}
-      sx={{ backgroundColor: '#ffffff' }}
+      sx={{
+        backgroundColor: '#ffffff',
+        '& .Mui-selected': {
+          color: '#000000',
+          fontWeight: 'bold',
+        },
+      }}
     >
-      <Tab label="참여한 파티" sx={{ width: '50%' }} />
-      <Tab label="내가 만든 파티" sx={{ width: '50%' }} />
-    </Tabs>
+      {labels.map((label) => (
+        <Tab key={label} label={label} sx={{ width: '50%' }} />
+      ))}
+    </MuiTabs>
   )
 }
 
-export default BaseTabs
+export default Tabs
