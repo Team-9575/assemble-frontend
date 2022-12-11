@@ -14,7 +14,7 @@ const Header = ({ title }: IHeaderProps) => {
 
   return (
     <Container>
-      <span>{title}</span>
+      <Title>{title}</Title>
       <ButtonWrapper>
         {user.isReady && user.isAuthenticated && (
           <IconButton
@@ -91,5 +91,8 @@ const NavigationContainer = styled.div`
 `
 const ButtonWrapper = styled.div`
   height: 2rem;
+`
+const Title = styled.span`
+  font-weight: 600;
 `
 export default Header

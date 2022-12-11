@@ -30,6 +30,7 @@ const Container = styled.div`
   min-width: 15.625rem;
   background-color: ${({ theme }) => theme.background.secondary};
   margin: 0 auto;
+  min-height: 100vh;
 `
 
 export default BaseLayout
