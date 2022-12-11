@@ -5,6 +5,8 @@ import HStack from '../stack/HStack'
 import { theme } from '@styles/theme'
 import { useMsal } from '@azure/msal-react'
 import VStack from '../stack/VStack'
+import route from 'src/constants/route'
+import { useRouter } from 'next/router'
 
 interface INavigationProps {
   width: string
@@ -14,19 +16,20 @@ interface INavigationProps {
 const menuItem = [
   {
     name: '지나간 파티 보기',
-    path: '/',
+    path: route.myParties,
   },
   {
     name: '나의 계좌',
-    path: '/',
+    path: route.myBankAccount,
   },
   {
     name: '나의 리뷰',
-    path: '/',
+    path: route.myReview,
   },
 ]
 
 const Navigation = ({ width, maxWidth }: INavigationProps) => {
+  const router = useRouter()
   const { instance } = useMsal()
   const handleLogout = () => {
     instance.logoutRedirect({
@@ -45,7 +48,14 @@ const Navigation = ({ width, maxWidth }: INavigationProps) => {
           </HStack>
           <VStack margin="1rem 0 0">
             {menuItem.map((menu) => (
-              <Menu key={menu.name}>{menu.name}</Menu>
+              <Menu
+                key={menu.name}
+                onClick={() => {
+                  router.push(menu.path)
+                }}
+              >
+                {menu.name}
+              </Menu>
             ))}
           </VStack>
         </VStack>

@@ -6,13 +6,18 @@ import { darkTheme } from '@styles/theme/dark'
 import { lightTheme } from '@styles/theme/light'
 import { theme } from '@styles/theme'
 
-const BaseLayout = ({ children }: { children: JSX.Element }) => {
+interface IBaseLayoutProps {
+  title?: string
+  children: JSX.Element
+}
+
+const BaseLayout = ({ title = '', children }: IBaseLayoutProps) => {
   const { themeName } = useTheme()
 
   return (
     <EmotionThemeProvider theme={themeName === 'dark' ? darkTheme : lightTheme}>
       <Container>
-        <Header />
+        <Header title={title} />
         {children}
       </Container>
     </EmotionThemeProvider>
