@@ -1,7 +1,6 @@
 import { useMutation } from 'react-query'
 import apiClient from 'src/api'
 import { AxiosError } from 'axios'
-import endpoints from 'src/constants/endpoints'
 
 export type AuthResponseType = {
   accessToken: string
@@ -15,7 +14,7 @@ export type AuthRequestType = {
 const tryLogin = async (accountInfo: AuthRequestType) => {
   try {
     const { data } = await apiClient.post<AuthResponseType>(
-      endpoints.token,
+      '/token/ms',
       accountInfo
     )
     return data

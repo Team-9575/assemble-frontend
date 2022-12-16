@@ -1,7 +1,6 @@
 import { useMutation } from 'react-query'
 import apiClient from 'src/api'
 import { AxiosError } from 'axios'
-import endpoints from 'src/constants/endpoints'
 import { MealType } from '@components/party/modal/Options'
 
 export interface INewPartyResponse {
@@ -21,7 +20,7 @@ export interface INewPartyRequest {
 const postNewParty = async (newPartyInfo: INewPartyRequest) => {
   try {
     const { data } = await apiClient.post<INewPartyResponse>(
-      endpoints.parties,
+      '/parties',
       newPartyInfo
     )
     return data
@@ -30,6 +29,6 @@ const postNewParty = async (newPartyInfo: INewPartyRequest) => {
   }
 }
 
-export const useNuwPartyMutation = () => {
+export const useNewPartyMutation = () => {
   return useMutation('new-party', postNewParty, {})
 }

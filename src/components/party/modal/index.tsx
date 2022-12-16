@@ -1,6 +1,6 @@
 import BaseModal from '@components/common/base-modal'
 import styled from '@emotion/styled'
-import { useNuwPartyMutation } from '@hooks/query/party/useNewPartyMutations'
+import { useNewPartyMutation } from '@hooks/query/party/useNewPartyMutations'
 import { theme } from '@styles/theme'
 import { add, endOfDay, format } from 'date-fns'
 import { useState } from 'react'
@@ -24,7 +24,7 @@ const NewPartyModal = ({ isOpen, onClose }: NewPartyModalProps) => {
   const afterOneHour = add(new Date(), { hours: 1 })
   const endOfToday = endOfDay(new Date())
   const [currentStep, setCurrentStep] = useState<Step>(Step.Category)
-  const { mutateAsync } = useNuwPartyMutation()
+  const { mutateAsync } = useNewPartyMutation()
   const [requiredValues, setRequiredValues] = useState<IRequiredInputs>({
     name: PartyNameOptions[0].value as string,
     customName: '',

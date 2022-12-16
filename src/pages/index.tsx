@@ -17,15 +17,6 @@ import CircleImage from '@components/common/circle-image'
 const Home: NextPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const { user } = useAuth()
-  const csrf = Cookies.get('csrftoken')
-  // TODO: remove
-  const { data } = useQuery({
-    queryKey: [csrf],
-    enabled: !!csrf,
-    queryFn: async () => {
-      await apiClient.get('/users/me')
-    },
-  })
 
   return (
     <BaseLayout>
