@@ -7,11 +7,13 @@ import { theme } from '@styles/theme'
 import PartyCard from './Card'
 import { loginRequest } from '@config/auth'
 import { useMsal } from '@azure/msal-react'
+import { usePartyListQuery } from '@hooks/query/party/usePartyListQuery'
+import { MealType } from './modal/Options'
 
 const PartyList = () => {
   const { user } = useAuth()
   const { instance } = useMsal()
-
+  const { data: partyList, isLoading } = usePartyListQuery()
   const handleLogin = () => {
     instance.loginRedirect(loginRequest).catch((e) => {
       console.log(e)
@@ -29,31 +31,54 @@ const PartyList = () => {
           <Button text="Teams 로그인" onClick={() => handleLogin()} />
         )}
       </MyPartyContainer>
-      <PartyListContainer>
-        <HStack gap="1rem">
-          <SelectedTab id="lunch" href="#lunch">
-            점심 구해요
-            <Underline isLunch />
-          </SelectedTab>
-          <DefaultTab href="#dinner">저녁 구해요</DefaultTab>
-        </HStack>
-        <VStack margin="1rem 0 2rem 0" gap="0.75rem">
-          <PartyCard isLunch title="햄버거 같이 드실 분!" />
-          <PartyCard isLunch title="피자 같이 드실 분!" />
-          <PartyCard isLunch title="서브웨이 같이 드실 분?" />
-        </VStack>
-        <HStack gap="1rem">
-          <DefaultTab href="#lunch">점심 구해요</DefaultTab>
-          <SelectedTab id="dinner" href="#dinner">
-            저녁 구해요
-            <Underline />
-          </SelectedTab>
-        </HStack>
-        <VStack margin="1rem 0 2rem 0" gap="0.75rem">
-          <PartyCard title="저녁메뉴 추천 받습니다" />
-          <PartyCard title="옥상팟 구합니다." />
-        </VStack>
-      </PartyListContainer>
+      {!isLoading && partyList?.length && (
+        <PartyListContainer>
+          <HStack gap="1rem">
+            <SelectedTab id="lunch" href="#lunch">
+              점심 구해요
+              <Underline isLunch />
+            </SelectedTab>
+            <DefaultTab href="#dinner">저녁 구해요</DefaultTab>
+          </HStack>
+          <VStack margin="1rem 0 2rem 0" gap="0.75rem">
+            {isLoading
+              ? [1, 2, 3].map((index) => (
+                  <PartyCard key={`lunch-loading-${index}`} isLoading isLunch />
+                ))
+              : partyList
+                  ?.filter((party) => party.mealType === MealType.Lunch)
+                  .map((party, index) => (
+                    <PartyCard key={`lunch-${index}`} party={party} isLunch />
+                  ))}
+          </VStack>
+          <HStack gap="1rem">
+            <DefaultTab href="#lunch">점심 구해요</DefaultTab>
+            <SelectedTab id="dinner" href="#dinner">
+              저녁 구해요
+              <Underline />
+            </SelectedTab>
+          </HStack>
+          <VStack margin="1rem 0 2rem 0" gap="0.75rem">
+            {isLoading
+              ? [1, 2, 3].map((index) => (
+                  <PartyCard key={`dinner-loading-${index}`} isLoading />
+                ))
+              : partyList
+                  ?.filter((party) => party.mealType === MealType.Dinner)
+                  .map((party, index) => (
+                    <PartyCard key={`dinner-${index}`} party={party} />
+                  ))}
+          </VStack>
+        </PartyListContainer>
+      )}
+      {!isLoading && !partyList?.length && (
+        // TODO: style
+        <div>
+          아직 만들어진 방이 없어요!
+          <br />
+          먼저 만들어보시는 것은 어떨까요?
+        </div>
+      )}
     </Container>
   )
 }

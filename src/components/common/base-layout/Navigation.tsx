@@ -7,7 +7,7 @@ import VStack from '../stack/VStack'
 import route from 'src/constants/route'
 import { useRouter } from 'next/router'
 import CircleImage from '../circle-image'
-import { useUserInfo } from '@hooks/query/user/useUserInfo'
+import { useUserQuery } from '@hooks/query/user/useUserQuery'
 
 interface INavigationProps {
   width: string
@@ -32,7 +32,7 @@ const menuItem = [
 const Navigation = ({ width, maxWidth }: INavigationProps) => {
   const router = useRouter()
   const { instance } = useMsal()
-  const { data: user } = useUserInfo()
+  const { data: user } = useUserQuery()
   const handleLogout = () => {
     instance.logoutRedirect({
       postLogoutRedirectUri: '/',

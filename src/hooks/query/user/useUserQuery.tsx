@@ -22,7 +22,7 @@ const fetchUserInfo = async () => {
   }
 }
 
-export const useUserInfo = () => {
+export const useUserQuery = () => {
   const csrf = Cookies.get('csrftoken')
   return useQuery({
     queryKey: ['user', csrf],

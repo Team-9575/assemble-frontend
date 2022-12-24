@@ -1,20 +1,17 @@
-import type { GetServerSideProps, NextPage } from 'next'
+import type { GetServerSideProps } from 'next'
 import styled from '@emotion/styled'
 import PartyList from '@components/party'
 import Button from '@components/common/button'
-import Image from 'next/image'
 import HStack from '@components/common/stack/HStack'
 import BaseLayout from '@components/common/base-layout'
 import { theme } from '@styles/theme'
 import NewPartyModal from '@components/party/modal'
 import { useState } from 'react'
 import useAuth from '@hooks/context/useAuth'
-import { useQuery } from 'react-query'
-import Cookies from 'js-cookie'
-import apiClient from 'src/api'
 import CircleImage from '@components/common/circle-image'
+import { usePartyListQuery } from '@hooks/query/party/usePartyListQuery'
 
-const Home: NextPage = () => {
+const Home = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const { user } = useAuth()
 
