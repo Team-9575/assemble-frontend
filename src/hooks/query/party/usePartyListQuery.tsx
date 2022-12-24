@@ -9,7 +9,7 @@ export interface IParty {
   maxUserCount: number // 0 은 무제한
   mealType: MealType // 아침:0, 점심:1, 저녁:2
   gatherClosedAt: string
-  tags: string[]
+  tags: { id: number; name: string }[]
   currentUserCount: number
   host: number
   isJoined: boolean

@@ -51,7 +51,9 @@ const PartyCard = ({ party, isLoading, isLunch = false }: PartyCardProps) => {
               <Skeleton width="3rem" />
             </>
           ) : (
-            party?.tags.map((tag) => <Keyword key={tag}>#{tag}</Keyword>)
+            party?.tags.map((tag) => (
+              <Keyword key={tag.id}>#{tag.name}</Keyword>
+            ))
           )}
         </HStack>
         <EndTime>
