@@ -2,42 +2,68 @@ import CircleImage from '@components/common/circle-image'
 import HStack from '@components/common/stack/HStack'
 import VStack from '@components/common/stack/VStack'
 import styled from '@emotion/styled'
+import { IParty } from '@hooks/query/party/usePartyListQuery'
+import { Skeleton } from '@mui/material'
 import { theme } from '@styles/theme'
-import Image from 'next/image'
+import { format, sub } from 'date-fns'
 
 interface PartyCardProps {
+  party?: IParty
+  isLoading?: boolean
   isLunch?: boolean
-  title: string
 }
 
-const PartyCard = ({ title, isLunch = false }: PartyCardProps) => {
+const PartyCard = ({ party, isLoading, isLunch = false }: PartyCardProps) => {
   return (
     <Container isLunch={isLunch}>
       <HStack gap="0.5rem">
-        <CircleImage src="/images/coffee.jpg" alt="party" />
+        <CircleImage
+          src="/images/coffee.jpg"
+          alt="party"
+          isLoading={isLoading}
+        />
         <VStack gap="0.5rem">
-          <Title>{title}</Title>
+          <Title>
+            {isLoading ? <Skeleton width="10rem" height="1rem" /> : party?.name}
+          </Title>
           <HStack>
             <CircleImage
               src="/images/profile.jpg"
               alt="profile"
               size="1.125rem"
+              isLoading={isLoading}
             />
-            <CircleImage
-              src="/images/profile.jpg"
-              alt="profile"
-              size="1.125rem"
-            />
-            <Member>5명 참여 중</Member>
+            <Member>
+              {isLoading ? (
+                <Skeleton width="6rem" />
+              ) : (
+                `${party?.currentUserCount}명 참여 중`
+              )}
+            </Member>
           </HStack>
         </VStack>
       </HStack>
       <HStack margin="1.25rem 0 0 0" justifyContent="space-between">
         <HStack gap="0.25rem">
-          <Keyword>#간단히먹어요</Keyword>
-          <Keyword>#배달예정</Keyword>
+          {isLoading ? (
+            <>
+              <Skeleton width="3rem" />
+              <Skeleton width="3rem" />
+            </>
+          ) : (
+            party?.tags.map((tag) => <Keyword key={tag}>#{tag}</Keyword>)
+          )}
         </HStack>
-        <EndTime>AM 11:30까지</EndTime>
+        <EndTime>
+          {isLoading || !party?.gatherClosedAt ? (
+            <Skeleton width="6rem" />
+          ) : (
+            format(
+              sub(new Date(party?.gatherClosedAt), { hours: 9 }),
+              'b hh:mm까지'
+            )
+          )}
+        </EndTime>
       </HStack>
     </Container>
   )

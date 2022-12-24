@@ -88,7 +88,7 @@ const NewPartyModal = ({ isOpen, onClose }: NewPartyModalProps) => {
                     name === '직접입력' ? customName?.toString() || '' : name,
                   maxUserCount,
                   mealType,
-                  gatherClosedAt: format(gatherClosedAt, 'yyyy-MM-dd*hh:mm:ss')
+                  gatherClosedAt: format(gatherClosedAt, 'yyyy-MM-dd*kk:mm:ss')
                     .split('*')
                     .join('T'),
                   restaurantLink,
