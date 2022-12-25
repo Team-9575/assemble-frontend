@@ -31,53 +31,59 @@ const PartyList = () => {
           <Button text="Teams 로그인" onClick={() => handleLogin()} />
         )}
       </MyPartyContainer>
-      {!isLoading && partyList?.length && (
-        <PartyListContainer>
-          <HStack gap="1rem">
-            <SelectedTab id="lunch" href="#lunch">
-              점심 구해요
-              <Underline isLunch />
-            </SelectedTab>
-            <DefaultTab href="#dinner">저녁 구해요</DefaultTab>
-          </HStack>
-          <VStack margin="1rem 0 2rem 0" gap="0.75rem">
-            {isLoading
-              ? [1, 2, 3].map((index) => (
-                  <PartyCard key={`lunch-loading-${index}`} isLoading isLunch />
-                ))
-              : partyList
-                  ?.filter((party) => party.mealType === MealType.Lunch)
-                  .map((party, index) => (
-                    <PartyCard key={`lunch-${index}`} party={party} isLunch />
-                  ))}
-          </VStack>
-          <HStack gap="1rem">
-            <DefaultTab href="#lunch">점심 구해요</DefaultTab>
-            <SelectedTab id="dinner" href="#dinner">
-              저녁 구해요
-              <Underline />
-            </SelectedTab>
-          </HStack>
-          <VStack margin="1rem 0 2rem 0" gap="0.75rem">
-            {isLoading
-              ? [1, 2, 3].map((index) => (
-                  <PartyCard key={`dinner-loading-${index}`} isLoading />
-                ))
-              : partyList
-                  ?.filter((party) => party.mealType === MealType.Dinner)
-                  .map((party, index) => (
-                    <PartyCard key={`dinner-${index}`} party={party} />
-                  ))}
-          </VStack>
-        </PartyListContainer>
-      )}
+      <PartyListContainer>
+        {!isLoading &&
+          !!partyList?.filter((party) => party.mealType === MealType.Lunch)
+            .length && (
+            <HStack gap="1rem">
+              <SelectedTab id="lunch" href="#lunch">
+                점심 구해요
+                <Underline isLunch />
+              </SelectedTab>
+              <DefaultTab href="#dinner">저녁 구해요</DefaultTab>
+            </HStack>
+          )}
+        <VStack margin="1rem 0 2rem 0" gap="0.75rem">
+          {isLoading
+            ? [1, 2, 3].map((index) => (
+                <PartyCard key={`lunch-loading-${index}`} isLoading isLunch />
+              ))
+            : partyList
+                ?.filter((party) => party.mealType === MealType.Lunch)
+                .map((party, index) => (
+                  <PartyCard key={`lunch-${index}`} party={party} isLunch />
+                ))}
+        </VStack>
+        {!isLoading &&
+          !!partyList?.filter((party) => party.mealType === MealType.Dinner)
+            .length && (
+            <HStack gap="1rem">
+              <DefaultTab href="#lunch">점심 구해요</DefaultTab>
+              <SelectedTab id="dinner" href="#dinner">
+                저녁 구해요
+                <Underline />
+              </SelectedTab>
+            </HStack>
+          )}
+        <VStack margin="1rem 0 2rem 0" gap="0.75rem">
+          {isLoading
+            ? [1, 2, 3].map((index) => (
+                <PartyCard key={`dinner-loading-${index}`} isLoading />
+              ))
+            : partyList
+                ?.filter((party) => party.mealType === MealType.Dinner)
+                .map((party, index) => (
+                  <PartyCard key={`dinner-${index}`} party={party} />
+                ))}
+        </VStack>
+      </PartyListContainer>
       {!isLoading && !partyList?.length && (
         // TODO: style
-        <div>
+        <NoPartyText>
           아직 만들어진 방이 없어요!
           <br />
           먼저 만들어보시는 것은 어떨까요?
-        </div>
+        </NoPartyText>
       )}
     </Container>
   )
@@ -126,5 +132,14 @@ const Underline = styled.hr<{ isLunch?: boolean }>`
     isLunch ? theme.background.lunch : theme.background.dinner};
   height: 0.25rem;
   border: none;
+`
+const NoPartyText = styled.p`
+  color: #757575;
+  text-align: center;
+  font-size: ${theme.fontSize.sm};
+  height: 30vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `
 export default PartyList
