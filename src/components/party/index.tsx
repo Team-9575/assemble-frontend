@@ -43,17 +43,21 @@ const PartyList = () => {
               <DefaultTab href="#dinner">저녁 구해요</DefaultTab>
             </HStack>
           )}
-        <VStack margin="1rem 0 2rem 0" gap="0.75rem">
-          {isLoading
-            ? [1, 2, 3].map((index) => (
-                <PartyCard key={`lunch-loading-${index}`} isLoading isLunch />
-              ))
-            : partyList
-                ?.filter((party) => party.mealType === MealType.Lunch)
-                .map((party, index) => (
-                  <PartyCard key={`lunch-${index}`} party={party} isLunch />
-                ))}
-        </VStack>
+        {isLoading ? (
+          <VStack margin="1rem 0 0rem 0" gap="0.75rem">
+            {[1, 2, 3].map((index) => (
+              <PartyCard key={`lunch-loading-${index}`} isLoading isLunch />
+            ))}
+          </VStack>
+        ) : (
+          <VStack margin="1rem 0 0rem 0" gap="0.75rem">
+            {partyList
+              ?.filter((party) => party.mealType === MealType.Lunch)
+              .map((party, index) => (
+                <PartyCard key={`lunch-${index}`} party={party} isLunch />
+              ))}
+          </VStack>
+        )}
         {!isLoading &&
           !!partyList?.filter((party) => party.mealType === MealType.Dinner)
             .length && (
@@ -65,17 +69,21 @@ const PartyList = () => {
               </SelectedTab>
             </HStack>
           )}
-        <VStack margin="1rem 0 2rem 0" gap="0.75rem">
-          {isLoading
-            ? [1, 2, 3].map((index) => (
-                <PartyCard key={`dinner-loading-${index}`} isLoading />
-              ))
-            : partyList
-                ?.filter((party) => party.mealType === MealType.Dinner)
-                .map((party, index) => (
-                  <PartyCard key={`dinner-${index}`} party={party} />
-                ))}
-        </VStack>
+        {isLoading ? (
+          <VStack margin="1rem 0 2rem 0" gap="0.75rem">
+            {[1, 2, 3].map((index) => (
+              <PartyCard key={`dinner-loading-${index}`} isLoading />
+            ))}
+          </VStack>
+        ) : (
+          <VStack margin="1rem 0 2rem 0" gap="0.75rem">
+            {partyList
+              ?.filter((party) => party.mealType === MealType.Dinner)
+              .map((party, index) => (
+                <PartyCard key={`dinner-${index}`} party={party} />
+              ))}
+          </VStack>
+        )}
       </PartyListContainer>
       {!isLoading && !partyList?.length && (
         // TODO: style
