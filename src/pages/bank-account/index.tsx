@@ -1,40 +1,47 @@
 import BaseLayout from '@components/common/base-layout'
 import Button from '@components/common/button'
 import styled from '@emotion/styled'
+import { useUserQuery } from '@hooks/query/user/useUserQuery'
 import { theme } from '@styles/theme'
 import { useState } from 'react'
 import AccountEditModal from './AccountEditModal'
 
 const MyBankAccountPage = () => {
-  const hasAccount = false // TODO: change
   const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false)
+  const { data: userInfo, isFetched } = useUserQuery()
   return (
     <BaseLayout title="나의 계좌">
-      <>
-        {hasAccount ? (
-          <Container hasFooter>
-            <AccountText>현재 등록된 계좌</AccountText>
-            <BankAccount>토스 1234512345 name</BankAccount>
-            <Footer>
-              <Button
-                text="계좌 변경하기"
-                onClick={() => {
-                  setIsEditModalOpen(true)
-                }}
-              />
-            </Footer>
-          </Container>
-        ) : (
-          <Container>
-            <EmptyText>등록된 계좌가 없습니다!</EmptyText>
-            <Button
-              text="계좌 등록하기"
-              onClick={() => {
-                setIsEditModalOpen(true)
-              }}
-            />
-          </Container>
-        )}
+      <div>
+        <Container hasFooter={!userInfo?.bankAccount}>
+          {!!userInfo?.bankAccount ? (
+            <>
+              <AccountText>현재 등록된 계좌</AccountText>
+              <BankAccount>토스 1234512345 name</BankAccount>
+              <Footer>
+                <Button
+                  text="계좌 변경하기"
+                  onClick={() => {
+                    setIsEditModalOpen(true)
+                  }}
+                />
+              </Footer>
+            </>
+          ) : (
+            <>
+              <EmptyText>
+                {isFetched ? '등록된 계좌가 없습니다!' : 'Loading...'}
+              </EmptyText>
+              {isFetched && (
+                <Button
+                  text="계좌 등록하기"
+                  onClick={() => {
+                    setIsEditModalOpen(true)
+                  }}
+                />
+              )}
+            </>
+          )}
+        </Container>
         {isEditModalOpen && (
           <AccountEditModal
             isOpen={isEditModalOpen}
@@ -43,7 +50,7 @@ const MyBankAccountPage = () => {
             }}
           />
         )}
-      </>
+      </div>
     </BaseLayout>
   )
 }

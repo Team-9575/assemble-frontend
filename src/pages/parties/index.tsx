@@ -3,6 +3,7 @@ import VStack from '@components/common/stack/VStack'
 import Tabs from '@components/common/tabs'
 import PartyCard from '@components/party/Card'
 import styled from '@emotion/styled'
+import { useClosedPartiesQuery } from '@hooks/query/party/useClosedPartiesQuery'
 import { useState } from 'react'
 
 enum Tab {
@@ -12,6 +13,7 @@ enum Tab {
 
 const MyPartiesPage = () => {
   const [tabIndex, setTabIndex] = useState<number>(Tab.Join)
+  const { data } = useClosedPartiesQuery()
   return (
     <BaseLayout title="지나간 파티 보기" hasBackButton>
       <>

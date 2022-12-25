@@ -6,6 +6,7 @@ import VStack from '@components/common/stack/VStack'
 import styled from '@emotion/styled'
 import { theme } from '@styles/theme'
 import { Form, Formik } from 'formik'
+import { bankList } from 'src/data/bank-list'
 import * as Yup from 'yup'
 
 interface AccountEditModalProps {
@@ -55,7 +56,9 @@ const AccountEditModal = ({ isOpen, onClose }: AccountEditModalProps) => {
                       name="bank"
                       options={[
                         { value: '', name: '은행' },
-                        { value: 'toss', name: 'toss' },
+                        ...bankList.map((bank) => {
+                          return { value: bank, name: bank }
+                        }),
                       ]}
                     />
                     <InputFormik
