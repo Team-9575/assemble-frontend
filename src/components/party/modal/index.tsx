@@ -4,6 +4,7 @@ import { useNewPartyMutation } from '@hooks/query/party/useNewPartyMutations'
 import { theme } from '@styles/theme'
 import { add, endOfDay, format } from 'date-fns'
 import { useState } from 'react'
+import { useQueryClient } from 'react-query'
 import CategorySelect from './CategorySelect'
 import OptionalInputs, { IOptionalInputs } from './OptionalInputs'
 import { PartyNameOptions } from './Options'
@@ -25,6 +26,7 @@ const NewPartyModal = ({ isOpen, onClose }: NewPartyModalProps) => {
   const endOfToday = endOfDay(new Date())
   const [currentStep, setCurrentStep] = useState<Step>(Step.Category)
   const { mutateAsync } = useNewPartyMutation()
+  const queryClient = useQueryClient()
   const [requiredValues, setRequiredValues] = useState<IRequiredInputs>({
     name: PartyNameOptions[0].value as string,
     customName: '',
@@ -96,6 +98,9 @@ const NewPartyModal = ({ isOpen, onClose }: NewPartyModalProps) => {
                   isPrivate,
                 }
                 await mutateAsync(payload)
+                queryClient.invalidateQueries({
+                  queryKey: ['partyList'],
+                })
                 onClose()
               }}
             />
