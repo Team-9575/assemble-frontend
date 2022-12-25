@@ -53,5 +53,6 @@ const DisabledButton = styled.button`
   border-radius: 100px;
   box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2); // TODO: theme
   cursor: not-allowed;
+  padding: 1rem;
 `
 export default Button
