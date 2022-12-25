@@ -3,13 +3,17 @@ import Button from '@components/common/button'
 import VStack from '@components/common/stack/VStack'
 import Members from '@components/party-detail/Members'
 import MenuCard from '@components/party-detail/MenuCard'
+import MenuDrawer from '@components/party-detail/MenuDrawer'
 import styled from '@emotion/styled'
 import { usePartyDetailQuery } from '@hooks/query/party/usePartyDetailQuery'
+import { Drawer } from '@mui/material'
 import { theme } from '@styles/theme'
 import { GetServerSideProps } from 'next'
+import { useState } from 'react'
 
 const PartyDetailPage = () => {
   const { data, isLoading } = usePartyDetailQuery()
+  const [isMenuDrawerOpen, setIsMenuDrawerOpen] = useState(false)
   return (
     <BaseLayout title="파티이름 여기에">
       <>
@@ -21,8 +25,18 @@ const PartyDetailPage = () => {
           <MenuCard />
         </VStack>
         <ButtonContainer>
-          <Button text="파티 참가하기" onClick={() => {}} />
+          {/* <Button text="파티 참가하기" onClick={() => {}} /> */}
+          <Button
+            text="메뉴 추가하기"
+            variant="outlined"
+            onClick={() => {
+              setIsMenuDrawerOpen(true)
+            }}
+          />
         </ButtonContainer>
+        {isMenuDrawerOpen && (
+          <MenuDrawer onClose={() => setIsMenuDrawerOpen(false)} />
+        )}
       </>
     </BaseLayout>
   )
