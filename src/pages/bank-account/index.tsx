@@ -16,7 +16,10 @@ const MyBankAccountPage = () => {
           {!!userInfo?.bankAccount ? (
             <>
               <AccountText>현재 등록된 계좌</AccountText>
-              <BankAccount>토스 1234512345 name</BankAccount>
+              <BankAccount>
+                {userInfo?.bankName} {userInfo?.bankAccount}{' '}
+                {userInfo?.bankHolder}
+              </BankAccount>
               <Footer>
                 <Button
                   text="계좌 변경하기"

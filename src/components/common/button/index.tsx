@@ -16,7 +16,7 @@ const Button = ({
   type = 'button',
 }: ButtonProps) => {
   return isDisabled ? (
-    <DisabledButton>{text}</DisabledButton>
+    <DisabledButton type={type}>{text}</DisabledButton>
   ) : (
     <EnabledButton
       onClick={onClick}

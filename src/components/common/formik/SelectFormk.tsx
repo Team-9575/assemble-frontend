@@ -14,13 +14,13 @@ const SelectFormik = ({
 }: ISelectFormikProps) => {
   return (
     <Field name={name}>
-      {({ form: { values, setFieldValue } }: FieldProps) => (
+      {({ form: { values, setFieldValue }, meta: { value } }: FieldProps) => (
         <Select
-          value={values[name]}
+          value={value}
           options={options}
-          onChange={(value) => {
-            onChange(value)
-            setFieldValue(name, value)
+          onChange={(newValue) => {
+            onChange(newValue)
+            setFieldValue(name, newValue)
           }}
         />
       )}
