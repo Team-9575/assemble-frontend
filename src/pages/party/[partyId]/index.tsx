@@ -4,9 +4,12 @@ import VStack from '@components/common/stack/VStack'
 import Members from '@components/party-detail/Members'
 import MenuCard from '@components/party-detail/MenuCard'
 import styled from '@emotion/styled'
+import { usePartyDetailQuery } from '@hooks/query/party/usePartyDetailQuery'
 import { theme } from '@styles/theme'
+import { GetServerSideProps } from 'next'
 
 const PartyDetailPage = () => {
+  const { data, isLoading } = usePartyDetailQuery()
   return (
     <BaseLayout title="파티이름 여기에">
       <>
@@ -18,7 +21,7 @@ const PartyDetailPage = () => {
           <MenuCard />
         </VStack>
         <ButtonContainer>
-          <Button text="방 만들기" onClick={() => {}} />
+          <Button text="파티 참가하기" onClick={() => {}} />
         </ButtonContainer>
       </>
     </BaseLayout>
@@ -34,4 +37,9 @@ const ButtonContainer = styled.div`
   box-shadow: 0px -2px 8px rgba(0, 0, 0, 0.2);
   max-width: ${theme.maxWidth};
 `
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const { query } = context
+  return { props: { query } }
+}
+
 export default PartyDetailPage
