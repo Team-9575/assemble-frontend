@@ -6,6 +6,8 @@ import { IParty } from '@hooks/query/party/usePartyListQuery'
 import { Skeleton } from '@mui/material'
 import { theme } from '@styles/theme'
 import { format, sub } from 'date-fns'
+import { useRouter } from 'next/router'
+import route from 'src/constants/route'
 
 interface PartyCardProps {
   party?: IParty
@@ -14,8 +16,14 @@ interface PartyCardProps {
 }
 
 const PartyCard = ({ party, isLoading, isLunch = false }: PartyCardProps) => {
+  const router = useRouter()
   return (
-    <Container isLunch={isLunch}>
+    <Container
+      isLunch={isLunch}
+      onClick={() => {
+        router.push(route.partyDetail(party?.id || 0))
+      }}
+    >
       <HStack gap="0.5rem">
         <CircleImage
           src="/images/coffee.jpg"

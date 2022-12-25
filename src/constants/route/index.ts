@@ -1,5 +1,6 @@
 const route = {
   main: '/',
+  partyDetail: (id: number) => `/party/${id}`,
   myParties: '/parties',
   myBankAccount: '/bank-account',
   myReview: '/review',
