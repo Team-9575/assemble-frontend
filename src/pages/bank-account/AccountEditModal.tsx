@@ -4,8 +4,10 @@ import InputFormik from '@components/common/formik/InputFormik'
 import SelectFormik from '@components/common/formik/SelectFormk'
 import VStack from '@components/common/stack/VStack'
 import styled from '@emotion/styled'
+import { useUserMutation } from '@hooks/query/user/useUserMutation'
 import { theme } from '@styles/theme'
 import { Form, Formik } from 'formik'
+import { useQueryClient } from 'react-query'
 import { bankList } from 'src/data/bank-list'
 import * as Yup from 'yup'
 
@@ -15,18 +17,21 @@ interface AccountEditModalProps {
 }
 
 const initialValues = {
-  bank: '',
-  accountNumber: '',
-  name: '',
+  bankName: '',
+  bankAccount: '',
+  bankHolder: '',
 }
 
 const validationSchema = Yup.object({
-  bank: Yup.string().required(),
-  accountNumber: Yup.string().required(),
-  name: Yup.string().required(),
+  bankName: Yup.string().required('required'),
+  bankAccount: Yup.string().required('required'),
+  bankHolder: Yup.string().required('required'),
 })
 
 const AccountEditModal = ({ isOpen, onClose }: AccountEditModalProps) => {
+  const { mutateAsync } = useUserMutation()
+  const queryClient = useQueryClient()
+
   return (
     <BaseModal
       isOpen={isOpen}
@@ -45,6 +50,9 @@ const AccountEditModal = ({ isOpen, onClose }: AccountEditModalProps) => {
           initialValues={initialValues}
           validationSchema={validationSchema}
           onSubmit={(values) => {}}
+          validateOnChange
+          validateOnBlur
+          validateOnMount
         >
           {({ errors, touched, values, isValid, setFieldValue }) => (
             <Form>
@@ -53,7 +61,7 @@ const AccountEditModal = ({ isOpen, onClose }: AccountEditModalProps) => {
                   <Title>계좌 정보를 입력해주세요.</Title>
                   <VStack gap="0.5rem">
                     <SelectFormik
-                      name="bank"
+                      name="bankName"
                       options={[
                         { value: '', name: '은행' },
                         ...bankList.map((bank) => {
@@ -64,13 +72,23 @@ const AccountEditModal = ({ isOpen, onClose }: AccountEditModalProps) => {
                     <InputFormik
                       label="계좌번호를 입력해 주세요"
                       name="bankAccount"
+                      isNumber
                     />
                   </VStack>
                   <Title>예금주명을 입력해주세요.</Title>
-                  <InputFormik label="ex.홍길동" name="name" />
+                  <InputFormik label="ex.홍길동" name="bankHolder" />
                 </ModalBody>
                 <ModalFooter>
-                  <Button text="완료" onClick={onClose} />
+                  <Button
+                    text="완료"
+                    isDisabled={!isValid || !touched}
+                    onClick={async () => {
+                      await mutateAsync(values)
+                      queryClient.invalidateQueries({ queryKey: ['user'] })
+                      onClose()
+                    }}
+                    type="submit"
+                  />
                 </ModalFooter>
               </>
             </Form>
