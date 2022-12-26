@@ -11,6 +11,7 @@ interface IBaseLayoutProps {
   children: JSX.Element
   hasHambergerButton?: boolean
   hasBackButton?: boolean
+  hasLogo?: boolean
 }
 
 const BaseLayout = ({
@@ -18,6 +19,7 @@ const BaseLayout = ({
   children,
   hasHambergerButton = true,
   hasBackButton = false,
+  hasLogo = true,
 }: IBaseLayoutProps) => {
   const { themeName } = useTheme()
 
@@ -28,6 +30,7 @@ const BaseLayout = ({
           title={title}
           hasHamburgerButton={hasHambergerButton}
           hasBackButton={hasBackButton}
+          hasLogo={hasLogo}
         />
         {children}
       </Container>
