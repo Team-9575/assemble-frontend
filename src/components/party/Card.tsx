@@ -21,7 +21,7 @@ const PartyCard = ({ party, isLoading, isLunch = false }: PartyCardProps) => {
     <Container
       isLunch={isLunch}
       onClick={() => {
-        router.push(route.partyDetail(party?.id || 0))
+        if (!!party?.id) router.push(route.partyDetail(party.id))
       }}
     >
       <HStack gap="0.5rem">

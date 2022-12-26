@@ -9,9 +9,15 @@ interface IHeaderProps {
   title: string
   hasHamburgerButton: boolean
   hasBackButton: boolean
+  hasLogo: boolean
 }
 
-const Header = ({ title, hasHamburgerButton, hasBackButton }: IHeaderProps) => {
+const Header = ({
+  title,
+  hasHamburgerButton,
+  hasBackButton,
+  hasLogo,
+}: IHeaderProps) => {
   const { user } = useAuth()
   const router = useRouter()
   const [isDrawerOpen, setDrawerOpen] = useState(false)
@@ -19,6 +25,19 @@ const Header = ({ title, hasHamburgerButton, hasBackButton }: IHeaderProps) => {
   return (
     <Container>
       <Title>{title}</Title>
+      {hasLogo && (
+        <IconButton
+          onClick={() => {
+            router.push('/')
+          }}
+          sx={{
+            position: 'absolute',
+            left: '0.5rem',
+          }}
+        >
+          <Icon className="material-symbols-outlined md-16">groups_3</Icon>
+        </IconButton>
+      )}
       <ButtonWrapper>
         {hasBackButton && (
           <IconButton

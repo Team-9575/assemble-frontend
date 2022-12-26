@@ -15,7 +15,7 @@ const MyPartiesPage = () => {
   const [tabIndex, setTabIndex] = useState<number>(Tab.Join)
   const { data } = useClosedPartiesQuery()
   return (
-    <BaseLayout title="지나간 파티 보기" hasBackButton>
+    <BaseLayout title="지나간 파티 보기" hasBackButton hasLogo={false}>
       <>
         <Tabs
           tabIndex={tabIndex}
