@@ -5,11 +5,17 @@ import {
   useState,
   useEffect,
 } from 'react'
-import { useIsAuthenticated, useMsal } from '@azure/msal-react'
+import {
+  useIsAuthenticated,
+  useMsal,
+  useMsalAuthentication,
+} from '@azure/msal-react'
 import { useAuthMutation } from '@hooks/query/auth/useAuthMutation'
 import Cookies from 'js-cookie'
 import { useRouter } from 'next/router'
 import { add } from 'date-fns'
+import { loginRequest } from '@config/auth'
+import { InteractionStatus, InteractionType } from '@azure/msal-browser'
 
 interface IAuthProps {
   children: ReactNode
@@ -38,9 +44,20 @@ const AuthContext = createContext(initialState)
 export const AuthProvider = ({ children }: IAuthProps) => {
   const router = useRouter()
   const isMSAuthenticated = useIsAuthenticated()
-  const { accounts, inProgress } = useMsal()
+  const { instance, accounts, inProgress } = useMsal()
   const [MSRefreshToken, setMSRefreshToken] = useState<string | null>(null)
   const [user, setUser] = useState<IUserInfo>(initialUserInfo)
+  const { login, result, error } = useMsalAuthentication(
+    InteractionType.Silent,
+    loginRequest
+  )
+
+  useEffect(() => {
+    if (inProgress === InteractionStatus.None && !isMSAuthenticated) {
+      login()
+    }
+  }, [inProgress, instance, login, isMSAuthenticated])
+
   const { mutateAsync, isLoading } = useAuthMutation({
     onSuccess: () => {
       setUser({
