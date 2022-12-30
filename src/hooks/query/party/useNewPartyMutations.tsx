@@ -25,7 +25,7 @@ const postNewParty = async (newPartyInfo: INewPartyRequest) => {
     )
     return data
   } catch (error) {
-    return Promise.reject((error as AxiosError).message)
+    return Promise.reject(error as AxiosError)
   }
 }
 
