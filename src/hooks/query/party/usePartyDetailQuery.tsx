@@ -20,7 +20,7 @@ const fetchPartyDetail = async (id: number) => {
     const { data } = await apiClient.get<IPartyDetail>(`/parties/${id}`)
     return data
   } catch (error) {
-    return Promise.reject((error as AxiosError).message)
+    return Promise.reject(error as AxiosError)
   }
 }
 

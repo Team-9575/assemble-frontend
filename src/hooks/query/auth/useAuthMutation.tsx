@@ -19,7 +19,7 @@ const tryLogin = async (accountInfo: AuthRequestType) => {
     )
     return data
   } catch (error) {
-    return Promise.reject((error as AxiosError).message)
+    return Promise.reject(error as AxiosError)
   }
 }
 

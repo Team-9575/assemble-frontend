@@ -10,7 +10,6 @@ import { useAuthMutation } from '@hooks/query/auth/useAuthMutation'
 import Cookies from 'js-cookie'
 import { useRouter } from 'next/router'
 import { add } from 'date-fns'
-import apiClient from 'src/api'
 
 interface IAuthProps {
   children: ReactNode
@@ -55,8 +54,6 @@ export const AuthProvider = ({ children }: IAuthProps) => {
           expires: add(new Date(), { days: 1 }),
         })
       }
-      apiClient.defaults.headers.common['X-CSRFTOKEN'] =
-        Cookies.get('csrftoken') || ''
     },
     onError: () => {
       setUser({ ...initialUserInfo, isReady: true, isAuthenticated: false })
@@ -85,9 +82,7 @@ export const AuthProvider = ({ children }: IAuthProps) => {
 
   useEffect(() => {
     const csrftoken = Cookies.get('csrftoken')
-    if (csrftoken) {
-      apiClient.defaults.headers.common['X-CSRFTOKEN'] = csrftoken || ''
-    } else if (!!MSRefreshToken) {
+    if (!csrftoken && !!MSRefreshToken) {
       mutateAsync({ token: MSRefreshToken })
     }
   }, [MSRefreshToken, mutateAsync, router])
