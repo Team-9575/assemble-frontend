@@ -32,13 +32,13 @@ function MyApp({ Component, pageProps }: AppProps) {
       </Head>
       <QueryClientProvider client={queryClient}>
         <MsalProvider instance={msalInstance}>
-          <AuthProvider>
-            <ThemeProvider>
-              <MUIThemeProvider theme={muiTheme}>
+          <ThemeProvider>
+            <MUIThemeProvider theme={muiTheme}>
+              <AuthProvider>
                 <Component {...pageProps} />
-              </MUIThemeProvider>
-            </ThemeProvider>
-          </AuthProvider>
+              </AuthProvider>
+            </MUIThemeProvider>
+          </ThemeProvider>
         </MsalProvider>
       </QueryClientProvider>
     </>
