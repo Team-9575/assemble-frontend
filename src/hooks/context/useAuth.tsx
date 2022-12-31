@@ -53,10 +53,14 @@ export const AuthProvider = ({ children }: IAuthProps) => {
   )
 
   useEffect(() => {
-    if (inProgress === InteractionStatus.None && !isMSAuthenticated) {
+    if (
+      inProgress === InteractionStatus.None &&
+      !isMSAuthenticated &&
+      !!result
+    ) {
       login()
     }
-  }, [inProgress, instance, login, isMSAuthenticated])
+  }, [inProgress, login, isMSAuthenticated, result])
 
   const { mutateAsync, isLoading } = useAuthMutation({
     onSuccess: () => {
@@ -100,8 +104,15 @@ export const AuthProvider = ({ children }: IAuthProps) => {
 
   useEffect(() => {
     const csrftoken = Cookies.get('csrftoken')
-    if (!csrftoken && !!MSRefreshToken) {
+    if (!!csrftoken) return
+    if (!!MSRefreshToken) {
       mutateAsync({ token: MSRefreshToken })
+    } else {
+      setUser({
+        name: '',
+        isAuthenticated: false,
+        isReady: true,
+      })
     }
   }, [MSRefreshToken, mutateAsync, router])
 
