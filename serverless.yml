@@ -1,0 +1,12 @@
+assemble:
+  component: '@sls-next/serverless-component@3.6.0'
+  inputs:
+    roleArn: arn:aws:iam::494890851710:role/hcdw59l-fyyttb
+    bucketName: assemble-frontend
+    removeOldLambdaVersions: true
+    name:
+      defaultLambda: assemble-default
+      apiLambda: assemble-api
+      imageLambda: assemble-image
+    cloudfront:
+      distributionId: E10E6QS61E1NZC
