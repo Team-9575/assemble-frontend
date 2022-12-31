@@ -81,6 +81,7 @@ export const AuthProvider = ({ children }: IAuthProps) => {
     const requestMSToken = () => {
       if (!isMSAuthenticated) {
         Cookies.remove('csrftoken')
+        // logout
         setUser({ ...initialUserInfo, isReady: true, isAuthenticated: false })
         return
       }
