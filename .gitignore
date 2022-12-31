@@ -39,4 +39,3 @@ next-env.d.ts
 # serverless
 .serverless/*
 .serverless_nextjs/*
-serverless.yml
