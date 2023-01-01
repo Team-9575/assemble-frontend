@@ -7,13 +7,14 @@ import VStack from '../stack/VStack'
 import route from 'src/constants/route'
 import { useRouter } from 'next/router'
 import CircleImage from '../circle-image'
-import { useUserQuery } from '@hooks/query/user/useUserQuery'
+import { IUserResponse } from '@hooks/query/user/useUserQuery'
 import { logout } from 'src/pages/_app'
 import Cookies from 'js-cookie'
 
 interface INavigationProps {
   width: string
   maxWidth: string
+  user?: IUserResponse
 }
 
 const menuItem = [
@@ -31,10 +32,9 @@ const menuItem = [
   },
 ]
 
-const Navigation = ({ width, maxWidth }: INavigationProps) => {
+const Navigation = ({ width, maxWidth, user }: INavigationProps) => {
   const router = useRouter()
   const { instance } = useMsal()
-  const { data: user } = useUserQuery()
   const handleMsLogout = async () => {
     await logout()
     console.log('logout - user logout button')
