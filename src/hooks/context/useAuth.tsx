@@ -14,13 +14,13 @@ import { useAuthMutation } from '@hooks/query/auth/useAuthMutation'
 import Cookies from 'js-cookie'
 import { useRouter } from 'next/router'
 import { add } from 'date-fns'
-import { loginRequest } from '@config/auth'
 import { InteractionStatus, InteractionType } from '@azure/msal-browser'
+import { loginRequest } from '@config/auth'
 
 interface IAuthProps {
   children: ReactNode
 }
-interface IUserInfo {
+interface IAuth {
   name: string
   isAuthenticated: boolean
   isReady: boolean
@@ -33,8 +33,8 @@ const initialUserInfo = {
 }
 
 const initialState = {
-  user: initialUserInfo,
-  setUser: (value: IUserInfo) => {
+  auth: initialUserInfo,
+  setAuth: (value: IAuth) => {
     return
   },
 }
@@ -44,27 +44,14 @@ const AuthContext = createContext(initialState)
 export const AuthProvider = ({ children }: IAuthProps) => {
   const router = useRouter()
   const isMSAuthenticated = useIsAuthenticated()
-  const { instance, accounts, inProgress } = useMsal()
+  const { accounts, inProgress } = useMsal()
   const [MSRefreshToken, setMSRefreshToken] = useState<string | null>(null)
-  const [user, setUser] = useState<IUserInfo>(initialUserInfo)
-  const { login, result, error } = useMsalAuthentication(
-    InteractionType.Silent,
-    loginRequest
-  )
-
-  useEffect(() => {
-    if (
-      inProgress === InteractionStatus.None &&
-      !isMSAuthenticated &&
-      !!result
-    ) {
-      login()
-    }
-  }, [inProgress, login, isMSAuthenticated, result])
+  const [auth, setAuth] = useState<IAuth>(initialUserInfo)
+  useMsalAuthentication(InteractionType.Silent, loginRequest)
 
   const { mutateAsync, isLoading } = useAuthMutation({
     onSuccess: () => {
-      setUser({
+      setAuth({
         name: accounts[0]?.name || '',
         isAuthenticated: true,
         isReady: true,
@@ -77,16 +64,13 @@ export const AuthProvider = ({ children }: IAuthProps) => {
       }
     },
     onError: () => {
-      setUser({ ...initialUserInfo, isReady: true, isAuthenticated: false })
+      setAuth({ ...initialUserInfo, isReady: true, isAuthenticated: false })
     },
   })
 
   useEffect(() => {
     const requestMSToken = () => {
-      if (!isMSAuthenticated) {
-        Cookies.remove('csrftoken')
-        // logout
-        setUser({ ...initialUserInfo, isReady: true, isAuthenticated: false })
+      if (!isMSAuthenticated && inProgress === InteractionStatus.None) {
         return
       }
       if (accounts.length) {
@@ -98,26 +82,26 @@ export const AuthProvider = ({ children }: IAuthProps) => {
     }
     requestMSToken()
     if (Cookies.get('csrftoken')) {
-      setUser({ ...initialUserInfo, isReady: true, isAuthenticated: true })
+      setAuth({ ...initialUserInfo, isReady: true, isAuthenticated: true })
     }
-  }, [accounts, MSRefreshToken, isMSAuthenticated])
+  }, [accounts, MSRefreshToken, isMSAuthenticated, inProgress])
 
   useEffect(() => {
     const csrftoken = Cookies.get('csrftoken')
     if (!!csrftoken) return
-    if (!!MSRefreshToken) {
+    if (!!MSRefreshToken && isMSAuthenticated) {
       mutateAsync({ token: MSRefreshToken })
     } else {
-      setUser({
+      setAuth({
         name: '',
         isAuthenticated: false,
         isReady: true,
       })
     }
-  }, [MSRefreshToken, mutateAsync, router])
+  }, [MSRefreshToken, mutateAsync, router, isMSAuthenticated])
 
   return (
-    <AuthContext.Provider value={{ user, setUser }}>
+    <AuthContext.Provider value={{ auth, setAuth }}>
       {children}
     </AuthContext.Provider>
   )

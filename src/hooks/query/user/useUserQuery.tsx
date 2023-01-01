@@ -2,6 +2,7 @@ import { useQuery } from 'react-query'
 import apiClient from 'src/api'
 import { AxiosError } from 'axios'
 import Cookies from 'js-cookie'
+import { useIsAuthenticated } from '@azure/msal-react'
 
 export interface IUserResponse {
   bankAccount: string
@@ -18,15 +19,16 @@ const fetchUserInfo = async () => {
     const { data } = await apiClient.get<IUserResponse>('users/me')
     return data
   } catch (error) {
-    return Promise.reject((error as AxiosError).message)
+    return Promise.reject(error as AxiosError)
   }
 }
 
 export const useUserQuery = () => {
   const csrf = Cookies.get('csrftoken')
+  const isMSAuthenticated = useIsAuthenticated()
   return useQuery({
-    queryKey: ['user', csrf],
-    enabled: !!csrf,
+    queryKey: ['user'],
+    enabled: !!csrf && isMSAuthenticated,
     queryFn: fetchUserInfo,
   })
 }

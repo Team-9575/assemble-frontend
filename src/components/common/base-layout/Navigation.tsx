@@ -8,6 +8,8 @@ import route from 'src/constants/route'
 import { useRouter } from 'next/router'
 import CircleImage from '../circle-image'
 import { useUserQuery } from '@hooks/query/user/useUserQuery'
+import { logout } from 'src/pages/_app'
+import Cookies from 'js-cookie'
 
 interface INavigationProps {
   width: string
@@ -33,7 +35,9 @@ const Navigation = ({ width, maxWidth }: INavigationProps) => {
   const router = useRouter()
   const { instance } = useMsal()
   const { data: user } = useUserQuery()
-  const handleLogout = () => {
+  const handleMsLogout = async () => {
+    await logout()
+    console.log('logout - user logout button')
     instance.logoutRedirect({
       postLogoutRedirectUri: '/',
     })
@@ -62,12 +66,19 @@ const Navigation = ({ width, maxWidth }: INavigationProps) => {
         <Button
           sx={{ margin: '0 auto', color: '#757575', fontWeight: '600' }}
           onClick={() => {
-            handleLogout()
+            Cookies.remove('csrftoken')
+          }}
+        >
+          지우기
+        </Button>
+        <Button
+          sx={{ margin: '0 auto', color: '#757575', fontWeight: '600' }}
+          onClick={() => {
+            handleMsLogout()
           }}
         >
           로그아웃
         </Button>
-        {/* TODO: theme */}
       </VStack>
     </Container>
   )

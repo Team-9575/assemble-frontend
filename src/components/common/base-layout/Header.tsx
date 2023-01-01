@@ -18,7 +18,7 @@ const Header = ({
   hasBackButton,
   hasLogo,
 }: IHeaderProps) => {
-  const { user } = useAuth()
+  const { auth } = useAuth()
   const router = useRouter()
   const [isDrawerOpen, setDrawerOpen] = useState(false)
 
@@ -55,7 +55,7 @@ const Header = ({
             </Icon>
           </IconButton>
         )}
-        {hasHamburgerButton && user.isReady && user.isAuthenticated && (
+        {hasHamburgerButton && auth.isReady && auth.isAuthenticated && (
           <IconButton
             aria-label="navigation"
             onClick={() => {
@@ -71,7 +71,7 @@ const Header = ({
           </IconButton>
         )}
       </ButtonWrapper>
-      {user.isReady && user.isAuthenticated && (
+      {auth.isReady && auth.isAuthenticated && (
         <Drawer
           anchor="right"
           variant="persistent"

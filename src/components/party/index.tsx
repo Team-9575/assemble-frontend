@@ -6,13 +6,17 @@ import useAuth from '@hooks/context/useAuth'
 import { theme } from '@styles/theme'
 import PartyCard from './Card'
 import { loginRequest } from '@config/auth'
-import { useMsal } from '@azure/msal-react'
+import { useIsAuthenticated, useMsal } from '@azure/msal-react'
 import { usePartyListQuery } from '@hooks/query/party/usePartyListQuery'
 import { MealType } from './modal/Options'
+import { InteractionStatus } from '@azure/msal-browser'
+import { useUserQuery } from '@hooks/query/user/useUserQuery'
 
 const PartyList = () => {
-  const { user } = useAuth()
-  const { instance } = useMsal()
+  const { auth } = useAuth()
+  const { data: user } = useUserQuery()
+  const isMSAuthenticated = useIsAuthenticated()
+  const { instance, inProgress } = useMsal()
   const { data: partyList, isLoading } = usePartyListQuery()
   const handleLogin = () => {
     instance.loginRedirect(loginRequest).catch((e) => {
@@ -23,13 +27,15 @@ const PartyList = () => {
   return (
     <Container>
       <MyPartyContainer>
-        <Title>00님! 같이 먹고, 쉽게 나눠요!</Title>
+        <Title>{user?.fullName}님! 같이 먹고, 쉽게 나눠요!</Title>
         <Description>
           방을 직접 만드시거나, 마음에 드는 방에 참여해보세요!
         </Description>
-        {user.isReady && !user.isAuthenticated && (
-          <Button text="Teams 로그인" onClick={() => handleLogin()} />
-        )}
+        {!isMSAuthenticated &&
+          !auth.isAuthenticated &&
+          inProgress === InteractionStatus.None && (
+            <Button text="Teams 로그인" onClick={() => handleLogin()} />
+          )}
       </MyPartyContainer>
       <PartyListContainer>
         {(isLoading ||

@@ -1,6 +1,7 @@
 import { useMutation } from 'react-query'
 import apiClient from 'src/api'
 import { AxiosError } from 'axios'
+import { logout } from 'src/pages/_app'
 
 export type AuthResponseType = {
   accessToken: string
@@ -19,7 +20,8 @@ const tryLogin = async (accountInfo: AuthRequestType) => {
     )
     return data
   } catch (error) {
-    // logout
+    logout()
+    console.log('logout - trylogin - error')
     return Promise.reject(error as AxiosError)
   }
 }

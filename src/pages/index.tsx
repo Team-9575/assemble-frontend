@@ -1,4 +1,3 @@
-import type { GetServerSideProps } from 'next'
 import styled from '@emotion/styled'
 import PartyList from '@components/party'
 import Button from '@components/common/button'
@@ -9,17 +8,17 @@ import NewPartyModal from '@components/party/modal'
 import { useState } from 'react'
 import useAuth from '@hooks/context/useAuth'
 import CircleImage from '@components/common/circle-image'
-import { usePartyListQuery } from '@hooks/query/party/usePartyListQuery'
+import { useUserQuery } from '@hooks/query/user/useUserQuery'
 
 const Home = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const { user } = useAuth()
+  const { auth } = useAuth()
 
   return (
     <BaseLayout>
-      <Container hasFooter={user.isAuthenticated}>
+      <Container hasFooter={auth.isAuthenticated}>
         <PartyList />
-        {user.isAuthenticated && (
+        {auth.isAuthenticated && (
           <Footer>
             <HStack padding="0.25rem 0" justifyContent="center">
               <CircleImage

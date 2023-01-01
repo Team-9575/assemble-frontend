@@ -1,5 +1,6 @@
 import axios, { AxiosResponse, AxiosError, AxiosRequestConfig } from 'axios'
 import camelcaseKeys from 'camelcase-keys'
+import Cookies from 'js-cookie'
 import snakecaseKeys from 'snakecase-keys'
 
 export enum HttpStatusCode {
@@ -37,6 +38,8 @@ const getSnakeCaseRequest = (requestConfig: AxiosRequestConfig) => {
 }
 
 const setRequestConfig = (requestConfig: AxiosRequestConfig) => {
+  apiClient.defaults.headers.common['X-CSRFTOKEN'] =
+    Cookies.get('csrftoken') || ''
   const snakeCaseConfig = getSnakeCaseRequest(requestConfig)
   return snakeCaseConfig
 }
