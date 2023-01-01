@@ -16,6 +16,7 @@ import { useRouter } from 'next/router'
 import { add } from 'date-fns'
 import { InteractionStatus, InteractionType } from '@azure/msal-browser'
 import { loginRequest } from '@config/auth'
+import { dummyCsrftoken } from 'src/constants/local'
 
 interface IAuthProps {
   children: ReactNode
@@ -58,7 +59,7 @@ export const AuthProvider = ({ children }: IAuthProps) => {
       })
       const isLocal = window.document.location.href.includes('localhost')
       if (isLocal) {
-        Cookies.set('csrftoken', process.env.NEXT_PUBLIC_CSRF_TOKEN || '', {
+        Cookies.set('csrftoken', dummyCsrftoken || '', {
           expires: add(new Date(), { days: 1 }),
         })
       }
