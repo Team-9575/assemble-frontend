@@ -8,7 +8,6 @@ import NewPartyModal from '@components/party/modal'
 import { useState } from 'react'
 import useAuth from '@hooks/context/useAuth'
 import CircleImage from '@components/common/circle-image'
-import { useUserQuery } from '@hooks/query/user/useUserQuery'
 
 const Home = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)

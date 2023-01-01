@@ -1,5 +1,6 @@
 import styled from '@emotion/styled'
 import useAuth from '@hooks/context/useAuth'
+import { useUserQuery } from '@hooks/query/user/useUserQuery'
 import { Drawer, IconButton } from '@mui/material'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
@@ -21,6 +22,7 @@ const Header = ({
   const { auth } = useAuth()
   const router = useRouter()
   const [isDrawerOpen, setDrawerOpen] = useState(false)
+  const { data: user } = useUserQuery()
 
   return (
     <Container>
@@ -86,7 +88,11 @@ const Header = ({
           }}
         >
           <NavigationContainer>
-            <Navigation width="calc(50vw - 22rem)" maxWidth="16rem" />
+            <Navigation
+              width="calc(50vw - 22rem)"
+              maxWidth="16rem"
+              user={user}
+            />
           </NavigationContainer>
         </Drawer>
       )}
@@ -104,7 +110,7 @@ const Header = ({
           },
         }}
       >
-        <Navigation width="80vw" maxWidth="20rem" />
+        <Navigation width="80vw" maxWidth="20rem" user={user} />
       </Drawer>
     </Container>
   )

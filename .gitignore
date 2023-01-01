@@ -36,3 +36,6 @@ next-env.d.ts
 # serverless
 .serverless/*
 .serverless_nextjs/*
+
+#local
+src/constants/local/*
