@@ -21,7 +21,6 @@ const tryLogin = async (accountInfo: AuthRequestType) => {
     return data
   } catch (error) {
     logout()
-    console.log('logout - trylogin - error')
     return Promise.reject(error as AxiosError)
   }
 }

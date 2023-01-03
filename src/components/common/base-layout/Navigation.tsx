@@ -37,7 +37,6 @@ const Navigation = ({ width, maxWidth, user }: INavigationProps) => {
   const { instance } = useMsal()
   const handleMsLogout = async () => {
     await logout()
-    console.log('logout - user logout button')
     instance.logoutRedirect({
       postLogoutRedirectUri: '/',
     })
@@ -63,14 +62,6 @@ const Navigation = ({ width, maxWidth, user }: INavigationProps) => {
             ))}
           </VStack>
         </VStack>
-        <Button
-          sx={{ margin: '0 auto', color: '#757575', fontWeight: '600' }}
-          onClick={() => {
-            Cookies.remove('csrftoken')
-          }}
-        >
-          지우기
-        </Button>
         <Button
           sx={{ margin: '0 auto', color: '#757575', fontWeight: '600' }}
           onClick={() => {
