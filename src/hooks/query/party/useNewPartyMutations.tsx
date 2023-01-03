@@ -1,10 +1,17 @@
-import { useMutation } from 'react-query'
+import { useMutation, useQueryClient } from 'react-query'
 import apiClient from 'src/api'
 import { AxiosError } from 'axios'
 import { MealType } from '@components/party/modal/Options'
 
 export interface INewPartyResponse {
-  //TODO: define type
+  description: string
+  gatherClosedAt: string
+  host: number
+  id: number
+  maxUserCount: 0
+  mealType: 1
+  name: string
+  tags: { name: string; id: number }[]
 }
 
 export interface INewPartyRequest {
