@@ -57,6 +57,10 @@ export const AuthProvider = ({ children }: IAuthProps) => {
         isAuthenticated: true,
         isReady: true,
       })
+      const csrf = Cookies.get('csrftoken')
+      if (!csrf) {
+        router.reload()
+      }
       const isLocal = window.document.location.href.includes('localhost')
       if (isLocal) {
         Cookies.set('csrftoken', dummyCsrftoken || '', {
@@ -70,6 +74,7 @@ export const AuthProvider = ({ children }: IAuthProps) => {
   })
 
   useEffect(() => {
+    console.log('inprogress', inProgress)
     const requestMSToken = () => {
       if (!isMSAuthenticated && inProgress === InteractionStatus.None) {
         return

@@ -8,16 +8,16 @@ import { msalConfig } from '@config/auth'
 import { AuthProvider } from '@hooks/context/useAuth'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import Head from 'next/head'
-import axios, { AxiosError } from 'axios'
+import { AxiosError } from 'axios'
 import apiClient, { HttpStatusCode } from 'src/api'
 import { AuthResponseType } from '@hooks/query/auth/useAuthMutation'
 import Cookies from 'js-cookie'
+import { ReactQueryDevtools } from 'react-query/devtools'
 
 export const msalInstance = new PublicClientApplication(msalConfig)
 
 export const logout = async () => {
   Cookies.remove('csrftoken')
-  console.log('logout!!')
   await apiClient.post('/logout')
 }
 
@@ -50,11 +50,6 @@ const Components = ({ Component, pageProps }: any) => {
     }
     if (!token) {
       // logout()
-      // console.log(
-      //   'logout - refreshToken - no ms token',
-      //   isMSAuthenticated,
-      //   inProgress
-      // )
       return
     }
     try {
@@ -64,7 +59,6 @@ const Components = ({ Component, pageProps }: any) => {
       return data
     } catch (error) {
       logout()
-      console.log('refreshToken - axios error')
       return Promise.reject(error as AxiosError)
     }
   }
@@ -84,7 +78,6 @@ const Components = ({ Component, pageProps }: any) => {
     defaultOptions: {
       queries: {
         refetchOnWindowFocus: false,
-        refetchOnMount: false,
         retry: handleRetry,
       },
       mutations: {
@@ -102,6 +95,7 @@ const Components = ({ Component, pageProps }: any) => {
           </AuthProvider>
         </MUIThemeProvider>
       </ThemeProvider>
+      {/* <ReactQueryDevtools /> */}
     </QueryClientProvider>
   )
 }
