@@ -19,7 +19,7 @@ interface IMenuDrawerProps {
 const initialValues = {
   name: '',
   description: '',
-  price: null,
+  price: '',
   payType: null,
 }
 
@@ -119,7 +119,7 @@ const MenuDrawer = ({ onClose, partyId }: IMenuDrawerProps) => {
                     await mutateAsync({
                       menu: {
                         ...values,
-                        price: Number(values.price),
+                        price: Number(values.price.split(',').join('')),
                       },
                       partyId,
                     })
