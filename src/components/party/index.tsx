@@ -15,7 +15,7 @@ import { useUserQuery } from '@hooks/query/user/useUserQuery'
 const PartyList = () => {
   const { auth } = useAuth()
   const { data: user } = useUserQuery()
-  const isMSAuthenticated = useIsAuthenticated()
+  const isMsAuthenticated = useIsAuthenticated()
   const { instance, inProgress } = useMsal()
   const { data: partyList, isLoading } = usePartyListQuery()
   const handleLogin = () => {
@@ -31,7 +31,7 @@ const PartyList = () => {
         <Description>
           방을 직접 만드시거나, 마음에 드는 방에 참여해보세요!
         </Description>
-        {!isMSAuthenticated &&
+        {!isMsAuthenticated &&
           !auth.isAuthenticated &&
           inProgress === InteractionStatus.None && (
             <Button text="Teams 로그인" onClick={() => handleLogin()} />

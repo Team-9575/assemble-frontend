@@ -44,9 +44,9 @@ const AuthContext = createContext(initialState)
 
 export const AuthProvider = ({ children }: IAuthProps) => {
   const router = useRouter()
-  const isMSAuthenticated = useIsAuthenticated()
+  const isMsAuthenticated = useIsAuthenticated()
   const { accounts, inProgress } = useMsal()
-  const [MSRefreshToken, setMSRefreshToken] = useState<string | null>(null)
+  const [msRefreshToken, setMsRefreshToken] = useState<string | null>(null)
   const [auth, setAuth] = useState<IAuth>(initialUserInfo)
   useMsalAuthentication(InteractionType.Silent, loginRequest)
 
@@ -76,27 +76,27 @@ export const AuthProvider = ({ children }: IAuthProps) => {
   useEffect(() => {
     console.log('inprogress', inProgress)
     const requestMSToken = () => {
-      if (!isMSAuthenticated && inProgress === InteractionStatus.None) {
+      if (!isMsAuthenticated && inProgress === InteractionStatus.None) {
         return
       }
       if (accounts.length) {
         const { homeAccountId, environment, idTokenClaims } = accounts[0]
         const sessionKey = `${homeAccountId}-${environment}-refreshtoken-${idTokenClaims?.aud}----`
         const sessionValue = sessionStorage.getItem(sessionKey)
-        setMSRefreshToken(sessionValue && JSON.parse(sessionValue).secret)
+        setMsRefreshToken(sessionValue && JSON.parse(sessionValue).secret)
       }
     }
     requestMSToken()
     if (Cookies.get('csrftoken')) {
       setAuth({ ...initialUserInfo, isReady: true, isAuthenticated: true })
     }
-  }, [accounts, MSRefreshToken, isMSAuthenticated, inProgress])
+  }, [accounts, msRefreshToken, isMsAuthenticated, inProgress])
 
   useEffect(() => {
     const csrftoken = Cookies.get('csrftoken')
     if (!!csrftoken) return
-    if (!!MSRefreshToken && isMSAuthenticated) {
-      mutateAsync({ token: MSRefreshToken })
+    if (!!msRefreshToken && isMsAuthenticated) {
+      mutateAsync({ token: msRefreshToken })
     } else {
       setAuth({
         name: '',
@@ -104,7 +104,7 @@ export const AuthProvider = ({ children }: IAuthProps) => {
         isReady: true,
       })
     }
-  }, [MSRefreshToken, mutateAsync, router, isMSAuthenticated])
+  }, [msRefreshToken, mutateAsync, router, isMsAuthenticated])
 
   return (
     <AuthContext.Provider value={{ auth, setAuth }}>

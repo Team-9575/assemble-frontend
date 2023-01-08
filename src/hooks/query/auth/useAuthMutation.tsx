@@ -1,7 +1,7 @@
 import { useMutation } from 'react-query'
 import apiClient from 'src/api'
 import { AxiosError } from 'axios'
-import { logout } from 'src/pages/_app'
+import { logout } from '..'
 
 export type AuthResponseType = {
   accessToken: string

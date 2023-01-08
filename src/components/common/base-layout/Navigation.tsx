@@ -8,8 +8,7 @@ import route from 'src/constants/route'
 import { useRouter } from 'next/router'
 import CircleImage from '../circle-image'
 import { IUserResponse } from '@hooks/query/user/useUserQuery'
-import { logout } from 'src/pages/_app'
-import Cookies from 'js-cookie'
+import { logout } from '@hooks/query'
 
 interface INavigationProps {
   width: string

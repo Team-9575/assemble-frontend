@@ -2,6 +2,8 @@ import { useMutation, useQueryClient } from 'react-query'
 import apiClient from 'src/api'
 import { AxiosError } from 'axios'
 import { MealType } from '@components/party/modal/Options'
+import { handleRetry } from '..'
+import { useIsAuthenticated, useMsal } from '@azure/msal-react'
 
 export interface INewPartyResponse {
   description: string
@@ -37,5 +39,22 @@ const postNewParty = async (newPartyInfo: INewPartyRequest) => {
 }
 
 export const useNewPartyMutation = () => {
-  return useMutation('new-party', postNewParty, {})
+  const { inProgress, accounts } = useMsal()
+  const isMsAuthenticated = useIsAuthenticated()
+  const queryClient = useQueryClient()
+  return useMutation('newParty', postNewParty, {
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['partyList'],
+      })
+    },
+    retry: (failureCount, error) =>
+      handleRetry({
+        failureCount,
+        error,
+        inProgress,
+        accounts,
+        isMsAuthenticated,
+      }),
+  })
 }
