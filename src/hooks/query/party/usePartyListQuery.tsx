@@ -1,7 +1,9 @@
-import { useQuery } from 'react-query'
+import { useQuery, useQueryClient } from 'react-query'
 import apiClient from 'src/api'
 import { AxiosError } from 'axios'
 import { MealType } from '@components/party/modal/Options'
+import { handleRetry } from '..'
+import { useIsAuthenticated, useMsal } from '@azure/msal-react'
 
 export interface IParty {
   id: number
@@ -25,8 +27,20 @@ const fetchPartyList = async () => {
 }
 
 export const usePartyListQuery = () => {
+  const { inProgress, accounts } = useMsal()
+  const isMsAuthenticated = useIsAuthenticated()
   return useQuery({
     queryKey: ['partyList'],
+    staleTime: 10,
+    cacheTime: 20,
+    retry: (failureCount, error) =>
+      handleRetry({
+        failureCount,
+        error,
+        inProgress,
+        accounts,
+        isMsAuthenticated,
+      }),
     queryFn: fetchPartyList,
   })
 }

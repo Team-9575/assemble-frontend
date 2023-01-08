@@ -8,106 +8,40 @@ import { msalConfig } from '@config/auth'
 import { AuthProvider } from '@hooks/context/useAuth'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import Head from 'next/head'
-import { AxiosError } from 'axios'
-import apiClient, { HttpStatusCode } from 'src/api'
-import { AuthResponseType } from '@hooks/query/auth/useAuthMutation'
-import Cookies from 'js-cookie'
 import { ReactQueryDevtools } from 'react-query/devtools'
 
 export const msalInstance = new PublicClientApplication(msalConfig)
 
-export const logout = async () => {
-  Cookies.remove('csrftoken')
-  await apiClient.post('/logout')
-}
-
-const Components = ({ Component, pageProps }: any) => {
-  const isMSAuthenticated = useIsAuthenticated()
-  const { accounts, inProgress } = useMsal()
-
+const MyApp = ({ Component, pageProps }: AppProps) => {
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        refetchOnWindowFocus: false,
+      },
+      mutations: {},
+    },
+  })
   const muiTheme = createTheme({
     typography: {
       fontFamily: 'Pretendard',
     },
   })
-
-  const refreshToken = async (error: any) => {
-    if (!isMSAuthenticated && inProgress === InteractionStatus.None) {
-      logout()
-      console.log(
-        'logout - refreshToken - !isMSAuthenticated',
-        isMSAuthenticated,
-        inProgress
-      )
-      return
-    }
-    let token = null
-    if (accounts.length) {
-      const { homeAccountId, environment, idTokenClaims } = accounts[0]
-      const sessionKey = `${homeAccountId}-${environment}-refreshtoken-${idTokenClaims?.aud}----`
-      const sessionValue = sessionStorage.getItem(sessionKey)
-      token = sessionValue && JSON.parse(sessionValue).secret
-    }
-    if (!token) {
-      // logout()
-      return
-    }
-    try {
-      const { data } = await apiClient.post<AuthResponseType>('/token/ms', {
-        token,
-      })
-      return data
-    } catch (error) {
-      logout()
-      return Promise.reject(error as AxiosError)
-    }
-  }
-
-  const handleRetry = (failureCount: number, error: any) => {
-    if (
-      failureCount < 3 &&
-      error?.response?.status === HttpStatusCode.Unauthorized
-    ) {
-      refreshToken(error)
-      return true
-    }
-    return false
-  }
-
-  const queryClient = new QueryClient({
-    defaultOptions: {
-      queries: {
-        refetchOnWindowFocus: false,
-        retry: handleRetry,
-      },
-      mutations: {
-        retry: handleRetry,
-      },
-    },
-  })
-
-  return (
-    <QueryClientProvider client={queryClient}>
-      <ThemeProvider>
-        <MUIThemeProvider theme={muiTheme}>
-          <AuthProvider>
-            <Component {...pageProps} />
-          </AuthProvider>
-        </MUIThemeProvider>
-      </ThemeProvider>
-      {/* <ReactQueryDevtools /> */}
-    </QueryClientProvider>
-  )
-}
-
-function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
       <Head>
         <title>Assembler</title>
       </Head>
       <MsalProvider instance={msalInstance}>
-        <Components Component={Component} pageProps={pageProps} />
+        <QueryClientProvider client={queryClient}>
+          <ThemeProvider>
+            <MUIThemeProvider theme={muiTheme}>
+              <AuthProvider>
+                <Component {...pageProps} />
+              </AuthProvider>
+            </MUIThemeProvider>
+          </ThemeProvider>
+          <ReactQueryDevtools />
+        </QueryClientProvider>
       </MsalProvider>
     </>
   )

@@ -1,6 +1,8 @@
 import { useMutation } from 'react-query'
 import apiClient from 'src/api'
 import { AxiosError } from 'axios'
+import { handleRetry } from '..'
+import { useIsAuthenticated, useMsal } from '@azure/msal-react'
 
 export interface IUserInfoResponse {
   message: string
@@ -24,5 +26,16 @@ const putUserInfo = async (userInfo: IUserInfoRequest) => {
 }
 
 export const useUserMutation = () => {
-  return useMutation('bankAccount', putUserInfo, {})
+  const { inProgress, accounts } = useMsal()
+  const isMsAuthenticated = useIsAuthenticated()
+  return useMutation('bankAccount', putUserInfo, {
+    retry: (failureCount, error) =>
+      handleRetry({
+        failureCount,
+        error,
+        inProgress,
+        accounts,
+        isMsAuthenticated,
+      }),
+  })
 }

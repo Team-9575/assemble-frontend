@@ -26,7 +26,6 @@ const NewPartyModal = ({ isOpen, onClose }: NewPartyModalProps) => {
   const endOfToday = endOfDay(new Date())
   const [currentStep, setCurrentStep] = useState<Step>(Step.Category)
   const { mutateAsync } = useNewPartyMutation()
-  const queryClient = useQueryClient()
   const [requiredValues, setRequiredValues] = useState<IRequiredInputs>({
     name: PartyNameOptions[0].value as string,
     customName: '',
@@ -98,9 +97,6 @@ const NewPartyModal = ({ isOpen, onClose }: NewPartyModalProps) => {
                   isPrivate,
                 }
                 await mutateAsync(payload)
-                queryClient.invalidateQueries({
-                  queryKey: ['partyList'],
-                })
                 onClose()
               }}
             />
