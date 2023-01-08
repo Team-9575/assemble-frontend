@@ -1,9 +1,9 @@
+import ClosedPartyList from '@components/closed-parties/ClosedPartyList'
 import BaseLayout from '@components/common/base-layout'
 import Tabs from '@components/common/tabs'
 import { useClosedPartiesQuery } from '@hooks/query/party/useClosedPartiesQuery'
 import { useUserQuery } from '@hooks/query/user/useUserQuery'
 import { useState } from 'react'
-import ClosedPartyList from './ClosedPartyList'
 
 export enum ClosedPartyTab {
   Join = 'join',
