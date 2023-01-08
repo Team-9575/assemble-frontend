@@ -87,6 +87,7 @@ const CategorySelect = ({ setCurrentStep }: ICategorySelectProps) => {
               {categories.map((category, index) => (
                 <Category
                   key={`category-${index}`}
+                  type="button"
                   hasSelectedCategory={!!selectedCategory}
                   onClick={() => {
                     setSelectedCategory(
@@ -127,7 +128,7 @@ const CategoryContainer = styled.div`
   grid-template-columns: 1fr 1fr 1fr;
   margin: 1.75rem 0 0.5rem 0;
 `
-const Category = styled.div<{
+const Category = styled.button<{
   hasSelectedCategory: boolean
   isSelected: boolean
 }>`
@@ -141,7 +142,6 @@ const Category = styled.div<{
   border-radius: 8px;
   box-shadow: ${({ isSelected }) =>
     isSelected && '0px 0px 8px rgba(0, 0, 0, 0.16)'};
-  cursor: pointer;
   opacity: ${({ hasSelectedCategory, isSelected }) =>
     hasSelectedCategory && !isSelected ? 0.5 : 1};
 `
