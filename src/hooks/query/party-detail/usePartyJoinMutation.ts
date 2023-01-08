@@ -4,7 +4,9 @@ import { useMutation, useQueryClient } from 'react-query'
 import apiClient from 'src/api'
 import { handleRetry } from '..'
 
-export interface IJoinResponse {}
+export interface IJoinResponse {
+  message: string
+}
 
 const joinParty = async ({ partyId }: { partyId?: number }) => {
   try {
