@@ -2,19 +2,18 @@ import Button from '@components/common/button'
 import InputFormik from '@components/common/formik/InputFormik'
 import VStack from '@components/common/stack/VStack'
 import styled from '@emotion/styled'
+import {
+  PayType,
+  useNewPartyMutation,
+} from '@hooks/query/party-detail/useNewMenuMutation'
 import { Drawer } from '@mui/material'
 import { theme } from '@styles/theme'
 import { Form, Formik } from 'formik'
 import * as Yup from 'yup'
 
-export enum PayType {
-  Individual,
-  All,
-  Group,
-}
-
 interface IMenuDrawerProps {
   onClose: () => void
+  partyId: number
 }
 
 const initialValues = {
@@ -49,7 +48,9 @@ const payType = [
   },
 ]
 
-const MenuDrawer = ({ onClose }: IMenuDrawerProps) => {
+const MenuDrawer = ({ onClose, partyId }: IMenuDrawerProps) => {
+  const { mutateAsync } = useNewPartyMutation()
+
   return (
     <Drawer
       anchor="bottom"
@@ -113,8 +114,17 @@ const MenuDrawer = ({ onClose }: IMenuDrawerProps) => {
                 <Button
                   text="완료"
                   isDisabled={!isValid}
-                  onClick={() => {}}
                   type="submit"
+                  onClick={async () => {
+                    await mutateAsync({
+                      menu: {
+                        ...values,
+                        price: Number(values.price),
+                      },
+                      partyId,
+                    })
+                    onClose()
+                  }}
                 />
               </VStack>
             </Form>
