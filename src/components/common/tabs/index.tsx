@@ -2,17 +2,17 @@ import { Tab, Tabs as MuiTabs } from '@mui/material'
 import { Dispatch, SetStateAction } from 'react'
 
 interface ITabsProps {
-  tabIndex: number
-  setTabIndex: Dispatch<SetStateAction<number>>
-  labels: string[]
+  selectedTab: string
+  setSelectedTab: Dispatch<SetStateAction<string>>
+  labels: { name: string; value: string }[]
 }
 
-const Tabs = ({ tabIndex, setTabIndex, labels }: ITabsProps) => {
+const Tabs = ({ selectedTab, setSelectedTab, labels }: ITabsProps) => {
   return (
     <MuiTabs
-      value={tabIndex}
+      value={selectedTab}
       onChange={(event, newValue) => {
-        setTabIndex(newValue)
+        setSelectedTab(newValue)
       }}
       TabIndicatorProps={{
         style: {
@@ -22,13 +22,18 @@ const Tabs = ({ tabIndex, setTabIndex, labels }: ITabsProps) => {
       sx={{
         backgroundColor: '#ffffff',
         '& .Mui-selected': {
-          color: '#000000',
+          color: '#000000 !important',
           fontWeight: 'bold',
         },
       }}
     >
       {labels.map((label) => (
-        <Tab key={label} label={label} sx={{ width: '50%' }} />
+        <Tab
+          key={label.name}
+          label={label.name}
+          sx={{ width: '50%' }}
+          value={label.value}
+        />
       ))}
     </MuiTabs>
   )

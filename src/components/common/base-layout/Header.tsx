@@ -2,7 +2,7 @@ import styled from '@emotion/styled'
 import useAuth from '@hooks/context/useAuth'
 import { useUserQuery } from '@hooks/query/user/useUserQuery'
 import { Drawer, IconButton } from '@mui/material'
-import { useRouter } from 'next/router'
+import Router from 'next/router'
 import { useState } from 'react'
 import Navigation from './Navigation'
 
@@ -20,7 +20,6 @@ const Header = ({
   hasLogo,
 }: IHeaderProps) => {
   const { auth } = useAuth()
-  const router = useRouter()
   const [isDrawerOpen, setDrawerOpen] = useState(false)
   const { data: user } = useUserQuery()
 
@@ -30,7 +29,7 @@ const Header = ({
       {hasLogo && (
         <IconButton
           onClick={() => {
-            router.push('/')
+            Router.push('/')
           }}
           sx={{
             position: 'absolute',
@@ -45,7 +44,7 @@ const Header = ({
           <IconButton
             aria-label="navigation"
             onClick={() => {
-              router.back()
+              Router.back()
             }}
             sx={{
               position: 'absolute',

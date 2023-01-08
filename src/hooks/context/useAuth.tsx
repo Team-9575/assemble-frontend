@@ -12,10 +12,10 @@ import {
 } from '@azure/msal-react'
 import { useAuthMutation } from '@hooks/query/auth/useAuthMutation'
 import Cookies from 'js-cookie'
-import { useRouter } from 'next/router'
 import { add } from 'date-fns'
 import { InteractionStatus, InteractionType } from '@azure/msal-browser'
 import { loginRequest } from '@config/auth'
+import Router from 'next/router'
 
 interface IAuthProps {
   children: ReactNode
@@ -42,7 +42,6 @@ const initialState = {
 const AuthContext = createContext(initialState)
 
 export const AuthProvider = ({ children }: IAuthProps) => {
-  const router = useRouter()
   const isMsAuthenticated = useIsAuthenticated()
   const { accounts, inProgress } = useMsal()
   const [msRefreshToken, setMsRefreshToken] = useState<string | null>(null)
@@ -58,7 +57,7 @@ export const AuthProvider = ({ children }: IAuthProps) => {
       })
       const csrf = Cookies.get('csrftoken')
       if (!csrf) {
-        router.reload()
+        Router.reload()
       }
       const isLocal = window.document.location.href.includes('localhost')
       if (isLocal) {
@@ -103,7 +102,7 @@ export const AuthProvider = ({ children }: IAuthProps) => {
         isReady: true,
       })
     }
-  }, [msRefreshToken, mutateAsync, router, isMsAuthenticated])
+  }, [msRefreshToken, mutateAsync, isMsAuthenticated])
 
   return (
     <AuthContext.Provider value={{ auth, setAuth }}>
