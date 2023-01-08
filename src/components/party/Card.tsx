@@ -6,22 +6,27 @@ import { IParty } from '@hooks/query/party/usePartyListQuery'
 import { Skeleton } from '@mui/material'
 import { theme } from '@styles/theme'
 import { format, sub } from 'date-fns'
-import { useRouter } from 'next/router'
+import Router from 'next/router'
 import route from 'src/constants/route'
 
 interface PartyCardProps {
   party?: IParty
   isLoading?: boolean
   isLunch?: boolean
+  isClosed?: boolean
 }
 
-const PartyCard = ({ party, isLoading, isLunch = false }: PartyCardProps) => {
-  const router = useRouter()
+const PartyCard = ({
+  party,
+  isLoading,
+  isLunch = false,
+  isClosed = false,
+}: PartyCardProps) => {
   return (
     <Container
       isLunch={isLunch}
       onClick={() => {
-        if (!!party?.id) router.push(route.partyDetail(party.id))
+        if (!!party?.id) Router.push(route.partyDetail(party.id))
       }}
     >
       <HStack gap="0.5rem">
@@ -70,7 +75,7 @@ const PartyCard = ({ party, isLoading, isLunch = false }: PartyCardProps) => {
           ) : (
             format(
               sub(new Date(party?.gatherClosedAt), { hours: 9 }),
-              'b hh:mm까지'
+              isClosed ? 'yyyy.MM.dd' : 'b hh:mm까지'
             )
           )}
         </EndTime>

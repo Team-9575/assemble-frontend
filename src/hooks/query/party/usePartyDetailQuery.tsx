@@ -1,9 +1,9 @@
 import { useQuery } from 'react-query'
 import apiClient from 'src/api'
 import { AxiosError } from 'axios'
-import { useRouter } from 'next/router'
 import { handleRetry } from '..'
 import { useIsAuthenticated, useMsal } from '@azure/msal-react'
+import Router from 'next/router'
 
 export interface IPartyDetail {
   description: string
@@ -27,12 +27,11 @@ const fetchPartyDetail = async (id: number) => {
 }
 
 export const usePartyDetailQuery = () => {
-  const router = useRouter()
   const { inProgress, accounts } = useMsal()
   const isMsAuthenticated = useIsAuthenticated()
   return useQuery({
     queryKey: ['partyDetail'],
-    queryFn: () => fetchPartyDetail(Number(router.query.partyId)),
+    queryFn: () => fetchPartyDetail(Number(Router.query.partyId)),
     retry: (failureCount, error) =>
       handleRetry({
         failureCount,

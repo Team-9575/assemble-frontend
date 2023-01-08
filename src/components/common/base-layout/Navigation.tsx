@@ -5,10 +5,10 @@ import { theme } from '@styles/theme'
 import { useMsal } from '@azure/msal-react'
 import VStack from '../stack/VStack'
 import route from 'src/constants/route'
-import { useRouter } from 'next/router'
 import CircleImage from '../circle-image'
 import { IUserResponse } from '@hooks/query/user/useUserQuery'
 import { logout } from '@hooks/query'
+import Router from 'next/router'
 
 interface INavigationProps {
   width: string
@@ -19,7 +19,7 @@ interface INavigationProps {
 const menuItem = [
   {
     name: '지나간 파티 보기',
-    path: route.myParties,
+    path: route.closedParties,
   },
   {
     name: '나의 계좌',
@@ -32,7 +32,6 @@ const menuItem = [
 ]
 
 const Navigation = ({ width, maxWidth, user }: INavigationProps) => {
-  const router = useRouter()
   const { instance } = useMsal()
   const handleMsLogout = async () => {
     await logout()
@@ -53,7 +52,7 @@ const Navigation = ({ width, maxWidth, user }: INavigationProps) => {
               <Menu
                 key={menu.name}
                 onClick={() => {
-                  router.push(menu.path)
+                  Router.push(menu.path)
                 }}
               >
                 {menu.name}

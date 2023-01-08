@@ -26,12 +26,19 @@ const fetchClosedParties = async () => {
   }
 }
 
-export const useClosedPartiesQuery = () => {
+export const useClosedPartiesQuery = (userId?: number) => {
   const { inProgress, accounts } = useMsal()
   const isMsAuthenticated = useIsAuthenticated()
   return useQuery({
     queryKey: ['closedParty'],
     queryFn: fetchClosedParties,
+    select: (data) => {
+      return {
+        join: data.filter((party) => party.host !== userId),
+        create: data.filter((party) => party.host === userId),
+      }
+    },
+    enabled: !!userId,
     retry: (failureCount, error) =>
       handleRetry({
         failureCount,

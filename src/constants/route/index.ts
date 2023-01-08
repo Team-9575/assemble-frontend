@@ -1,7 +1,7 @@
 const route = {
   main: '/',
   partyDetail: (id: number) => `/party/${id}`,
-  myParties: '/parties',
+  closedParties: '/closed-parties',
   myBankAccount: '/bank-account',
   myReview: '/review',
   myProfile: '/profile',
