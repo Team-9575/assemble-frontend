@@ -16,14 +16,23 @@ export interface IMenu {
   users: { id: number; fullName: string; profile_pic: string }[]
 }
 
+export enum PartyStatus {
+  Active, // 활성화
+  GatherClosed, // 모집마감(참가만 불가함, 메뉴 선택 가능)
+  PartyClosed, // 파티종료(메뉴선택 불가능)
+  SettlementInProgress, // 정산중 (파티장이 영수증 확정했을 때)
+  SettlementCompleted, // 모두 정산 완료(모두 끝)
+}
 export interface IPartyDetail {
   description: string
   gatherClosedAt: string
   host: number
   id: number
+  isJoined: boolean
+  status: PartyStatus
   maxUserCount: number
   mealType: number
-  name: '같이 점심 드실 분?'
+  name: string
   partyMenus: IMenu[]
   tags: { id: number; name: string }[]
 }
