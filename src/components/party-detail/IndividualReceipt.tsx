@@ -63,7 +63,7 @@ const IndividualReceipt = ({ onClose, isOpen }: IIndividualReceiptProps) => {
 
 const Container = styled.div`
   max-height: 25rem;
-  overflow-y: scroll;
+  overflow-y: auto;
   position: relative;
   padding: 1rem;
   background-color: #ffffff;
