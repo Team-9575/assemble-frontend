@@ -6,7 +6,11 @@ import MenuCard from '@components/party-detail/MenuCard'
 import MenuDrawer from '@components/party-detail/MenuDrawer'
 import PartyDetailDrawer from '@components/party-detail/PartyDetailDrawer'
 import styled from '@emotion/styled'
-import { usePartyDetailQuery } from '@hooks/query/party-detail/usePartyDetailQuery'
+import {
+  PartyStatus,
+  usePartyDetailQuery,
+} from '@hooks/query/party-detail/usePartyDetailQuery'
+import { usePartyJoinMutation } from '@hooks/query/party-detail/usePartyJoinMutation'
 import { IconButton } from '@mui/material'
 import { theme } from '@styles/theme'
 import { GetServerSideProps } from 'next'
@@ -16,6 +20,7 @@ const PartyDetailPage = () => {
   const { data: party, isLoading } = usePartyDetailQuery()
   const [isMenuDrawerOpen, setIsMenuDrawerOpen] = useState(false)
   const [isPartyDrawerOpen, setIsPartyDrawerOpen] = useState(false)
+  const { mutateAsync: joinPartyMutateAsync } = usePartyJoinMutation()
   return (
     <BaseLayout title={party?.name} hasHambergerButton={false}>
       <>
@@ -40,15 +45,28 @@ const PartyDetailPage = () => {
               ))}
         </VStack>
         <ButtonContainer>
-          {/* <Button text="파티 참가하기" onClick={() => {}} /> */}
-          <TotalPrice>총 26,500원</TotalPrice>
-          <Button
-            text="메뉴 추가하기"
-            variant="outlined"
-            onClick={() => {
-              setIsMenuDrawerOpen(true)
-            }}
-          />
+          {!party?.isJoined && party?.status === PartyStatus.Active && (
+            <Button
+              text="파티 참가하기"
+              onClick={async () => {
+                await joinPartyMutateAsync({ partyId: party?.id })
+              }}
+            />
+          )}
+          {party?.isJoined &&
+            (party.status === PartyStatus.Active ||
+              party.status === PartyStatus.GatherClosed) && (
+              <>
+                <TotalPrice>총 26,500원(TODO)</TotalPrice>
+                <Button
+                  text="메뉴 추가하기"
+                  variant="outlined"
+                  onClick={() => {
+                    setIsMenuDrawerOpen(true)
+                  }}
+                />
+              </>
+            )}
         </ButtonContainer>
         {isPartyDrawerOpen && (
           <PartyDetailDrawer
