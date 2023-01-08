@@ -2,7 +2,7 @@ import VStack from '@components/common/stack/VStack'
 import PartyCard from '@components/party/Card'
 import styled from '@emotion/styled'
 import { IParty } from '@hooks/query/party/useClosedPartiesQuery'
-import { ClosedPartyTab } from '.'
+import { ClosedPartyTab } from 'src/pages/closed-parties'
 import FooterButton from './FooterButton'
 
 interface IClosedPartyListProps {
@@ -54,6 +54,7 @@ const ClosedPartyList = ({
     </>
   )
 }
+
 const EmptyText = styled.p`
   color: #757575;
   padding-top: 10rem;
