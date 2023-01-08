@@ -44,6 +44,9 @@ const EnabledButton = styled.button<{
   padding: 1rem;
   border-radius: 100px;
   box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2); // TODO: theme
+  &:hover {
+    opacity: 0.8;
+  }
 `
 const DisabledButton = styled.button`
   width: 100%;
