@@ -31,13 +31,17 @@ const PartyDetailPage = () => {
         </IconButton>
         <Members />
         <VStack padding="1rem 1rem 9rem" gap="0.75rem">
-          <MenuCard />
-          <MenuCard />
-          <MenuCard />
-          <MenuCard />
+          {isLoading
+            ? [1, 2, 3, 4, 5].map((menu) => (
+                <MenuCard key={`loading-menu-${menu}`} isLoading />
+              ))
+            : party?.partyMenus.map((menu) => (
+                <MenuCard key={menu.id} menu={menu} />
+              ))}
         </VStack>
         <ButtonContainer>
           {/* <Button text="파티 참가하기" onClick={() => {}} /> */}
+          <TotalPrice>총 26,500원</TotalPrice>
           <Button
             text="메뉴 추가하기"
             variant="outlined"
@@ -71,6 +75,10 @@ const ButtonContainer = styled.div`
 `
 const DetailModalIcon = styled.span`
   color: #757575;
+`
+const TotalPrice = styled.p`
+  font-weight: bold;
+  margin-bottom: 0.5rem;
 `
 
 export const getServerSideProps: GetServerSideProps = async (context) => {

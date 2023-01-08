@@ -4,6 +4,17 @@ import { AxiosError } from 'axios'
 import { handleRetry } from '..'
 import { useIsAuthenticated, useMsal } from '@azure/msal-react'
 import Router from 'next/router'
+import { PayType } from './useNewMenuMutation'
+
+export interface IMenu {
+  id: number
+  isJoined: boolean
+  name: string
+  party: number
+  payType: PayType
+  price: number
+  users: { id: number; fullName: string; profile_pic: string }[]
+}
 
 export interface IPartyDetail {
   description: string
@@ -13,7 +24,7 @@ export interface IPartyDetail {
   maxUserCount: number
   mealType: number
   name: '같이 점심 드실 분?'
-  partyMenus: any[]
+  partyMenus: IMenu[]
   tags: { id: number; name: string }[]
 }
 

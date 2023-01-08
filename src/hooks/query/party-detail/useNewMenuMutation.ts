@@ -10,7 +10,13 @@ export enum PayType {
   Group,
 }
 
-export interface IMenuResponse {}
+export interface IMenuResponse {
+  description: string
+  id: number
+  name: string
+  payType: PayType
+  price: number
+}
 
 export interface IMenuRequest {
   name: string
