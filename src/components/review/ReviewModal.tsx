@@ -73,5 +73,6 @@ const ReviewButton = styled.button<{ hasReview: boolean; isSelected: boolean }>`
   box-shadow: ${({ isSelected }) =>
     isSelected && '0 -2px 8px rgba(0, 0, 0, 0.2)'};
   border-radius: 10px;
+  text-align: left;
 `
 export default ReviewModal
