@@ -58,7 +58,7 @@ const FullReceipt = ({ onClose, isOpen }: IFullReceiptProps) => {
         {users.map((user) => (
           <div key={user.name}>
             <UserName>
-              Kelly Um <IndividualTotalPrice>9,500원</IndividualTotalPrice>
+              {user.name} <IndividualTotalPrice>9,500원</IndividualTotalPrice>
               <Chip>미정산</Chip>
             </UserName>
             <VStack alignItems="stretch" margin="1rem 0">
