@@ -8,6 +8,8 @@ interface BaseModalProps {
   children: JSX.Element
   width?: string
   height?: string
+  margin?: string
+  borderRadius?: string
 }
 
 // TODO: change default width, height to alert modal size
@@ -17,23 +19,36 @@ const BaseModal = ({
   children,
   width = '24rem',
   height = '16rem',
+  borderRadius = '0px',
+  margin,
 }: BaseModalProps) => {
-  const { themeName } = useTheme()
   return (
     <Modal open={isOpen} onClose={onClose}>
-      <Container width={width} height={height}>
+      <Container
+        width={width}
+        height={height}
+        margin={margin}
+        borderRadius={borderRadius}
+      >
         {children}
       </Container>
     </Modal>
   )
 }
 
-const Container = styled.div<{ width: string; height: string }>`
+const Container = styled.div<{
+  width: string
+  height: string
+  margin?: string
+  borderRadius: string
+}>`
   background-color: white; // TODO: theme
   width: ${({ width }) => width};
   max-width: 100vw;
   height: ${({ height }) => height};
-  margin: ${({ height }) => `calc(50vh - ${height} / 2) auto`};
+  margin: ${({ height, margin }) =>
+    margin ?? `calc(50vh - ${height} / 2) auto`};
+  border-radius: ${({ borderRadius }) => borderRadius};
 `
 
 export default BaseModal
