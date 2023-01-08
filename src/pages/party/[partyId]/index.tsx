@@ -6,18 +6,18 @@ import MenuCard from '@components/party-detail/MenuCard'
 import MenuDrawer from '@components/party-detail/MenuDrawer'
 import PartyDetailDrawer from '@components/party-detail/PartyDetailDrawer'
 import styled from '@emotion/styled'
-import { usePartyDetailQuery } from '@hooks/query/party/usePartyDetailQuery'
+import { usePartyDetailQuery } from '@hooks/query/party-detail/usePartyDetailQuery'
 import { IconButton } from '@mui/material'
 import { theme } from '@styles/theme'
 import { GetServerSideProps } from 'next'
 import { useState } from 'react'
 
 const PartyDetailPage = () => {
-  const { data, isLoading } = usePartyDetailQuery()
+  const { data: party, isLoading } = usePartyDetailQuery()
   const [isMenuDrawerOpen, setIsMenuDrawerOpen] = useState(false)
   const [isPartyDrawerOpen, setIsPartyDrawerOpen] = useState(false)
   return (
-    <BaseLayout title={data?.name} hasHambergerButton={false}>
+    <BaseLayout title={party?.name} hasHambergerButton={false}>
       <>
         <IconButton
           sx={{ position: 'absolute', right: '1rem', top: '0.5rem' }}
@@ -49,8 +49,11 @@ const PartyDetailPage = () => {
         {isPartyDrawerOpen && (
           <PartyDetailDrawer onClose={() => setIsPartyDrawerOpen(false)} />
         )}
-        {isMenuDrawerOpen && (
-          <MenuDrawer onClose={() => setIsMenuDrawerOpen(false)} />
+        {isMenuDrawerOpen && party?.id && (
+          <MenuDrawer
+            onClose={() => setIsMenuDrawerOpen(false)}
+            partyId={party.id}
+          />
         )}
       </>
     </BaseLayout>
