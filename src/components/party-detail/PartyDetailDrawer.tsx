@@ -2,17 +2,20 @@ import Button from '@components/common/button'
 import HStack from '@components/common/stack/HStack'
 import { MealType } from '@components/party/modal/Options'
 import styled from '@emotion/styled'
-import { usePartyDetailQuery } from '@hooks/query/party-detail/usePartyDetailQuery'
+import {
+  IPartyDetail,
+  usePartyDetailQuery,
+} from '@hooks/query/party-detail/usePartyDetailQuery'
 import { Drawer } from '@mui/material'
 import { theme } from '@styles/theme'
 import { format, sub } from 'date-fns'
 
 interface IMenuDrawerProps {
   onClose: () => void
+  party?: IPartyDetail
 }
 
-const PartyDetailDrawer = ({ onClose }: IMenuDrawerProps) => {
-  const { data: party } = usePartyDetailQuery()
+const PartyDetailDrawer = ({ onClose, party }: IMenuDrawerProps) => {
   return (
     <Drawer
       anchor="top"

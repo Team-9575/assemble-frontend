@@ -51,7 +51,10 @@ const PartyDetailPage = () => {
           />
         </ButtonContainer>
         {isPartyDrawerOpen && (
-          <PartyDetailDrawer onClose={() => setIsPartyDrawerOpen(false)} />
+          <PartyDetailDrawer
+            party={party}
+            onClose={() => setIsPartyDrawerOpen(false)}
+          />
         )}
         {isMenuDrawerOpen && party?.id && (
           <MenuDrawer
