@@ -14,6 +14,7 @@ import * as Yup from 'yup'
 interface IMenuDrawerProps {
   onClose: () => void
   partyId: number
+  isOpen: boolean
 }
 
 const initialValues = {
@@ -48,13 +49,13 @@ const payType = [
   },
 ]
 
-const MenuDrawer = ({ onClose, partyId }: IMenuDrawerProps) => {
+const MenuDrawer = ({ onClose, partyId, isOpen }: IMenuDrawerProps) => {
   const { mutateAsync } = useNewPartyMutation()
 
   return (
     <Drawer
       anchor="bottom"
-      open
+      open={isOpen}
       onClose={onClose}
       sx={{
         '& .MuiDrawer-paper': {

@@ -68,14 +68,14 @@ const PartyDetailPage = () => {
               </>
             )}
         </ButtonContainer>
-        {isPartyDrawerOpen && (
-          <PartyDetailDrawer
-            party={party}
-            onClose={() => setIsPartyDrawerOpen(false)}
-          />
-        )}
-        {isMenuDrawerOpen && party?.id && (
+        <PartyDetailDrawer
+          isOpen={isPartyDrawerOpen}
+          party={party}
+          onClose={() => setIsPartyDrawerOpen(false)}
+        />
+        {party?.id && (
           <MenuDrawer
+            isOpen={isMenuDrawerOpen}
             onClose={() => setIsMenuDrawerOpen(false)}
             partyId={party.id}
           />

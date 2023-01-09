@@ -11,15 +11,16 @@ import { theme } from '@styles/theme'
 import { format, sub } from 'date-fns'
 
 interface IMenuDrawerProps {
+  isOpen: boolean
   onClose: () => void
   party?: IPartyDetail
 }
 
-const PartyDetailDrawer = ({ onClose, party }: IMenuDrawerProps) => {
+const PartyDetailDrawer = ({ onClose, party, isOpen }: IMenuDrawerProps) => {
   return (
     <Drawer
       anchor="top"
-      open
+      open={isOpen}
       onClose={onClose}
       sx={{
         '& .MuiDrawer-paper': {
