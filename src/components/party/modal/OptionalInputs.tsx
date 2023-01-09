@@ -5,6 +5,7 @@ import { Dispatch, SetStateAction } from 'react'
 import { Description, ModalContainer, ModalFooter, Step, Title } from '.'
 import * as Yup from 'yup'
 import InputFormik from '@components/common/formik/InputFormik'
+import regex from 'src/constants/regex'
 
 export interface IOptionalInputs {
   keyword1: string
@@ -28,7 +29,9 @@ const OptionalInputs = ({
   return (
     <Formik
       initialValues={initialOptionalValues}
-      validationSchema={Yup.object({})}
+      validationSchema={Yup.object({
+        restaurantLink: Yup.string().matches(regex.url, 'url을 입력해주세요.'),
+      })}
       onSubmit={(values) => {}}
     >
       {({ errors, touched, values }) => (
@@ -42,7 +45,7 @@ const OptionalInputs = ({
             </HStack>
             <Title>식당 및 메뉴 관련 링크를 입력해주세요.</Title>
             <Description>(네이버지도, 배민 등)</Description>
-            <InputFormik name="restaurantLink" />
+            <InputFormik name="restaurantLink" hasErrorMessage />
           </ModalContainer>
           <ModalFooter>
             <Button
@@ -55,6 +58,8 @@ const OptionalInputs = ({
             />
             <Button
               text="완료"
+              type="submit"
+              isDisabled={!!errors.restaurantLink}
               onClick={() => {
                 handleComplete(values)
               }}

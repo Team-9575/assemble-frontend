@@ -59,7 +59,7 @@ export const handleRetry = ({
   accounts: any[]
 }) => {
   if (
-    failureCount < 3 &&
+    failureCount < 1 &&
     error?.response?.status === HttpStatusCode.Unauthorized
   ) {
     refreshToken({ error, isMsAuthenticated, inProgress, accounts })
