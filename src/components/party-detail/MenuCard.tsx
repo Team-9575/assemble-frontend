@@ -1,5 +1,6 @@
 import HStack from '@components/common/stack/HStack'
 import styled from '@emotion/styled'
+import { useMenuExitMutation } from '@hooks/query/menu/MenuExitMutation'
 import { useMenuJoinMutation } from '@hooks/query/menu/MenuJoinMutation'
 import { PayType } from '@hooks/query/party-detail/useNewMenuMutation'
 import { IMenu } from '@hooks/query/party-detail/usePartyDetailQuery'
@@ -28,7 +29,7 @@ interface IMenuCardProps {
 const MenuCard = ({ menu, isLoading = false }: IMenuCardProps) => {
   const router = useRouter()
   const { mutateAsync: joinMenu } = useMenuJoinMutation()
-  const { mutateAsync: exitMenu } = useMenuJoinMutation()
+  const { mutateAsync: exitMenu } = useMenuExitMutation()
   const payload = {
     partyId: Number(router.query.partyId?.toString()),
     menuId: menu?.id || 0,
