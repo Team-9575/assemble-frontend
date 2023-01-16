@@ -1,9 +1,12 @@
 import HStack from '@components/common/stack/HStack'
 import styled from '@emotion/styled'
+import { useMenuExitMutation } from '@hooks/query/menu/MenuExitMutation'
+import { useMenuJoinMutation } from '@hooks/query/menu/MenuJoinMutation'
 import { PayType } from '@hooks/query/party-detail/useNewMenuMutation'
 import { IMenu } from '@hooks/query/party-detail/usePartyDetailQuery'
 import { Skeleton } from '@mui/material'
 import { theme } from '@styles/theme'
+import { useRouter } from 'next/router'
 
 const getPayTypeInfo = (payType?: PayType) => {
   switch (payType) {
@@ -18,13 +21,19 @@ const getPayTypeInfo = (payType?: PayType) => {
   }
 }
 
-const MenuCard = ({
-  menu,
-  isLoading = false,
-}: {
+interface IMenuCardProps {
   menu?: IMenu
   isLoading?: boolean
-}) => {
+}
+
+const MenuCard = ({ menu, isLoading = false }: IMenuCardProps) => {
+  const router = useRouter()
+  const { mutateAsync: joinMenu } = useMenuJoinMutation()
+  const { mutateAsync: exitMenu } = useMenuExitMutation()
+  const payload = {
+    partyId: Number(router.query.partyId?.toString()),
+    menuId: menu?.id || 0,
+  }
   return (
     <Container>
       <MenuContainer>
@@ -48,6 +57,20 @@ const MenuCard = ({
         ) : (
           <Price>{menu?.price.toLocaleString()}원</Price>
         )}
+        {menu?.payType !== PayType.All && (
+          <JoinButton
+            color={getPayTypeInfo(menu?.payType).color}
+            onClick={async () => {
+              if (menu?.isJoined) {
+                await exitMenu(payload)
+              } else {
+                await joinMenu(payload)
+              }
+            }}
+          >
+            {menu?.isJoined ? '빠지기' : '참여'}
+          </JoinButton>
+        )}
       </MenuContainer>
     </Container>
   )
@@ -59,9 +82,10 @@ const Container = styled.div`
   border-radius: 10px;
   letter-spacing: -0.03px;
   overflow: hidden;
+  position: relative;
 `
 const MenuContainer = styled.div`
-  padding: 0.5rem;
+  padding: 0.75rem 0.5rem;
 `
 const Chip = styled.div<{ color: string }>`
   background-color: ${({ color }) => `${color}30`};
@@ -81,6 +105,17 @@ const MenuName = styled.p`
 const Price = styled.p`
   font-weight: 600;
   font-size: ${theme.fontSize.sm};
+`
+const JoinButton = styled.button<{ color: string }>`
+  background-color: ${({ color }) => color};
+  color: #ffffff;
+  position: absolute;
+  padding: 6px 12px;
+  font-size: ${theme.fontSize.sm};
+  border-radius: 6px;
+  font-weight: 600;
+  right: 1rem;
+  bottom: 0.75rem;
 `
 
 export default MenuCard

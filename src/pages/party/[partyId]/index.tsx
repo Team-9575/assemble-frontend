@@ -36,13 +36,27 @@ const PartyDetailPage = () => {
         </IconButton>
         <Members />
         <VStack padding="1rem 1rem 9rem" gap="0.75rem">
-          {isLoading
-            ? [1, 2, 3, 4, 5].map((menu) => (
-                <MenuCard key={`loading-menu-${menu}`} isLoading />
-              ))
-            : party?.partyMenus.map((menu) => (
-                <MenuCard key={menu.id} menu={menu} />
-              ))}
+          {isLoading &&
+            [1, 2, 3, 4, 5].map((menu) => (
+              <MenuCard key={`loading-menu-${menu}`} isLoading />
+            ))}
+          {!isLoading && (
+            <>
+              <Title>내가 참여 중인 메뉴</Title>
+              {party?.partyMenus
+                .filter((menu) => menu.isJoined)
+                .map((menu) => (
+                  <MenuCard key={menu.id} menu={menu} />
+                ))}
+              <Divider />
+              <Title>그 외 메뉴</Title>
+              {party?.partyMenus
+                .filter((menu) => !menu.isJoined)
+                .map((menu) => (
+                  <MenuCard key={menu.id} menu={menu} />
+                ))}
+            </>
+          )}
         </VStack>
         <ButtonContainer>
           {!party?.isJoined && party?.status === PartyStatus.Active && (
@@ -100,6 +114,16 @@ const DetailModalIcon = styled.span`
 const TotalPrice = styled.p`
   font-weight: bold;
   margin-bottom: 0.5rem;
+`
+const Title = styled.p`
+  font-weight: 500;
+  font-size: ${theme.fontSize.sm};
+`
+const Divider = styled.hr`
+  height: 1px;
+  border: none;
+  width: 100%;
+  background-color: #dbdbdb;
 `
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
