@@ -1,3 +1,4 @@
+import ConfirmModal from '@components/common/base-modal/ConfirmModal'
 import HStack from '@components/common/stack/HStack'
 import styled from '@emotion/styled'
 import { useMenuExitMutation } from '@hooks/query/menu/MenuExitMutation'
@@ -7,6 +8,7 @@ import { IMenu } from '@hooks/query/party-detail/usePartyDetailQuery'
 import { Skeleton } from '@mui/material'
 import { theme } from '@styles/theme'
 import { useRouter } from 'next/router'
+import { useState } from 'react'
 
 const getPayTypeInfo = (payType?: PayType) => {
   switch (payType) {
@@ -28,6 +30,8 @@ interface IMenuCardProps {
 
 const MenuCard = ({ menu, isLoading = false }: IMenuCardProps) => {
   const router = useRouter()
+  const [isJoinModalOpen, setIsJoinModalOpen] = useState(false)
+  const [isExitModalOpen, setIsExitModalOpen] = useState(false)
   const { mutateAsync: joinMenu } = useMenuJoinMutation()
   const { mutateAsync: exitMenu } = useMenuExitMutation()
   const payload = {
@@ -35,44 +39,68 @@ const MenuCard = ({ menu, isLoading = false }: IMenuCardProps) => {
     menuId: menu?.id || 0,
   }
   return (
-    <Container>
-      <MenuContainer>
-        <HStack justifyContent="space-between" alignItems="center">
+    <>
+      <Container>
+        <MenuContainer>
+          <HStack justifyContent="space-between" alignItems="center">
+            {isLoading ? (
+              <Skeleton width="2.25rem" height="1.5rem" />
+            ) : (
+              <Chip color={getPayTypeInfo(menu?.payType).color}>
+                {getPayTypeInfo(menu?.payType).text}
+              </Chip>
+            )}
+            <MoreButton className="material-icons md-20">more_vert</MoreButton>
+          </HStack>
           {isLoading ? (
-            <Skeleton width="2.25rem" height="1.5rem" />
+            <Skeleton width="7rem" />
           ) : (
-            <Chip color={getPayTypeInfo(menu?.payType).color}>
-              {getPayTypeInfo(menu?.payType).text}
-            </Chip>
+            <MenuName>{menu?.name}</MenuName>
           )}
-          <MoreButton className="material-icons md-20">more_vert</MoreButton>
-        </HStack>
-        {isLoading ? (
-          <Skeleton width="7rem" />
-        ) : (
-          <MenuName>{menu?.name}</MenuName>
-        )}
-        {isLoading ? (
-          <Skeleton width="7rem" />
-        ) : (
-          <Price>{menu?.price.toLocaleString()}원</Price>
-        )}
-        {menu?.payType !== PayType.All && (
-          <JoinButton
-            color={getPayTypeInfo(menu?.payType).color}
-            onClick={async () => {
-              if (menu?.isJoined) {
-                await exitMenu(payload)
-              } else {
-                await joinMenu(payload)
-              }
-            }}
-          >
-            {menu?.isJoined ? '빠지기' : '참여'}
-          </JoinButton>
-        )}
-      </MenuContainer>
-    </Container>
+          {isLoading ? (
+            <Skeleton width="7rem" />
+          ) : (
+            <Price>{menu?.price.toLocaleString()}원</Price>
+          )}
+          {menu?.payType !== PayType.All && (
+            <JoinButton
+              color={getPayTypeInfo(menu?.payType).color}
+              onClick={() => {
+                if (menu?.isJoined) {
+                  setIsExitModalOpen(true)
+                } else {
+                  setIsJoinModalOpen(true)
+                }
+              }}
+            >
+              {menu?.isJoined ? '빠지기' : '참여'}
+            </JoinButton>
+          )}
+        </MenuContainer>
+      </Container>
+      <ConfirmModal
+        isOpen={isJoinModalOpen}
+        onClose={() => {
+          setIsJoinModalOpen(false)
+        }}
+        onConfirm={async () => {
+          await joinMenu(payload)
+        }}
+        title="메뉴 참여"
+        description={`"${menu?.name}"에 참여하시겠습니까?`}
+      />
+      <ConfirmModal
+        isOpen={isExitModalOpen}
+        onClose={() => {
+          setIsExitModalOpen(false)
+        }}
+        onConfirm={async () => {
+          await exitMenu(payload)
+        }}
+        title="참여한 메뉴에서 빠지기"
+        description={`"${menu?.name}"에서 빠지시겠습니까?`}
+      />
+    </>
   )
 }
 
