@@ -14,13 +14,18 @@ import { usePartyJoinMutation } from '@hooks/query/party-detail/usePartyJoinMuta
 import { IconButton } from '@mui/material'
 import { theme } from '@styles/theme'
 import { GetServerSideProps } from 'next'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 
 const PartyDetailPage = () => {
   const { data: party, isLoading } = usePartyDetailQuery()
   const [isMenuDrawerOpen, setIsMenuDrawerOpen] = useState(false)
   const [isPartyDrawerOpen, setIsPartyDrawerOpen] = useState(false)
   const { mutateAsync: joinPartyMutateAsync } = usePartyJoinMutation()
+  const hasMyMenu = useMemo(
+    () => !!party?.partyMenus?.filter((menu) => menu.isJoined)?.length,
+    [party]
+  )
+
   return (
     <BaseLayout title={party?.name} hasHambergerButton={false}>
       <>
@@ -40,7 +45,7 @@ const PartyDetailPage = () => {
             [1, 2, 3, 4, 5].map((menu) => (
               <MenuCard key={`loading-menu-${menu}`} isLoading />
             ))}
-          {!isLoading && (
+          {!isLoading && hasMyMenu && (
             <>
               <Title>내가 참여 중인 메뉴</Title>
               {party?.partyMenus
@@ -56,6 +61,18 @@ const PartyDetailPage = () => {
                   <MenuCard key={menu.id} menu={menu} />
                 ))}
             </>
+          )}
+          {!isLoading &&
+            !hasMyMenu &&
+            party?.partyMenus.map((menu) => (
+              <MenuCard key={menu.id} menu={menu} />
+            ))}
+          {!isLoading && !party?.partyMenus.length && (
+            <EmptyMenuText>
+              현재 추가된 메뉴가 없습니다!
+              <br />
+              드시고 싶은 메뉴를 추가해보세요.
+            </EmptyMenuText>
           )}
         </VStack>
         <ButtonContainer>
@@ -124,6 +141,14 @@ const Divider = styled.hr`
   border: none;
   width: 100%;
   background-color: #dbdbdb;
+`
+
+const EmptyMenuText = styled.p`
+  font-size: ${theme.fontSize.sm};
+  color: #757575;
+  line-height: 24px;
+  margin: 10rem auto 0;
+  text-align: center;
 `
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
