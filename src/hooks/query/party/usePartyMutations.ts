@@ -37,12 +37,27 @@ const postNewParty = async (newPartyInfo: INewPartyRequest) => {
     return Promise.reject(error as AxiosError)
   }
 }
+const putParty = async (newPartyInfo: INewPartyRequest) => {
+  try {
+    const { data } = await apiClient.put<INewPartyResponse>(
+      '/parties',
+      newPartyInfo
+    )
+    return data
+  } catch (error) {
+    return Promise.reject(error as AxiosError)
+  }
+}
 
-export const useNewPartyMutation = () => {
+export const usePartyMutation = ({
+  isEditModal = false,
+}: {
+  isEditModal: boolean
+}) => {
   const { inProgress, accounts } = useMsal()
   const isMsAuthenticated = useIsAuthenticated()
   const queryClient = useQueryClient()
-  return useMutation('newParty', postNewParty, {
+  return useMutation('newParty', isEditModal ? putParty : postNewParty, {
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ['partyList'],

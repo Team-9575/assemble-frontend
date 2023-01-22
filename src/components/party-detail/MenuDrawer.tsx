@@ -4,7 +4,7 @@ import VStack from '@components/common/stack/VStack'
 import styled from '@emotion/styled'
 import {
   PayType,
-  useNewPartyMutation,
+  useNewMenuMutation,
 } from '@hooks/query/party-detail/useNewMenuMutation'
 import { Drawer } from '@mui/material'
 import { theme } from '@styles/theme'
@@ -50,7 +50,7 @@ const payType = [
 ]
 
 const MenuDrawer = ({ onClose, partyId, isOpen }: IMenuDrawerProps) => {
-  const { mutateAsync } = useNewPartyMutation()
+  const { mutateAsync } = useNewMenuMutation()
 
   return (
     <Drawer

@@ -1,6 +1,5 @@
 import { ISelectOption } from '@components/common/select'
 import { IToggleButton } from '@components/toggle-button'
-import { add, format } from 'date-fns'
 
 export const PartyNameOptions: ISelectOption[] = [
   { name: '같이 점심 드실 분?', value: '같이 점심 드실 분?' },
@@ -9,8 +8,6 @@ export const PartyNameOptions: ISelectOption[] = [
   { name: '제목2', value: '제목2' },
   { name: '직접입력', value: '직접입력' },
 ]
-
-const addHour = (hours: number) => add(new Date(), { hours })
 
 export const GatherClosedOptions: ISelectOption[] = [
   { name: '1시간 뒤', value: 1 },
