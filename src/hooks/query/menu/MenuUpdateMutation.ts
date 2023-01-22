@@ -17,6 +17,7 @@ interface Request {
 const updateMenu = async ({
   partyId,
   menuId,
+  menu,
 }: {
   partyId: number
   menuId: number
@@ -24,7 +25,8 @@ const updateMenu = async ({
 }) => {
   try {
     const { data } = await apiClient.put<Response>(
-      `/parties/${partyId}/menus/${menuId}`
+      `/parties/${partyId}/menus/${menuId}`,
+      menu
     )
     return data
   } catch (error) {
