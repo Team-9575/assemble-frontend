@@ -57,21 +57,29 @@ const PartyDetailPage = () => {
               {party?.partyMenus
                 .filter((menu) => menu.isJoined)
                 .map((menu) => (
-                  <MenuCard key={menu.id} menu={menu} />
+                  <MenuCard
+                    key={menu.id}
+                    menu={menu}
+                    isAssembler={isAssembler}
+                  />
                 ))}
               <Divider />
               <Title>그 외 메뉴</Title>
               {party?.partyMenus
                 .filter((menu) => !menu.isJoined)
                 .map((menu) => (
-                  <MenuCard key={menu.id} menu={menu} />
+                  <MenuCard
+                    key={menu.id}
+                    menu={menu}
+                    isAssembler={isAssembler}
+                  />
                 ))}
             </>
           )}
           {!isLoading &&
             !hasMyMenu &&
             party?.partyMenus.map((menu) => (
-              <MenuCard key={menu.id} menu={menu} />
+              <MenuCard key={menu.id} menu={menu} isAssembler={isAssembler} />
             ))}
           {!isLoading && !party?.partyMenus.length && (
             <EmptyMenuText>
