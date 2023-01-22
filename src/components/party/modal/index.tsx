@@ -1,9 +1,11 @@
 import BaseModal from '@components/common/base-modal'
 import styled from '@emotion/styled'
-import { usePartyMutation } from '@hooks/query/party/usePartyMutations'
+import { useNewPartyMutation } from '@hooks/query/party/useNewPartyMutation'
+import { usePartyEditMutation } from '@hooks/query/party/usePartyEditMutation'
 import { theme } from '@styles/theme'
 import { add, endOfDay, format } from 'date-fns'
-import { useState } from 'react'
+import Router from 'next/router'
+import { useCallback, useState } from 'react'
 import CategorySelect from './CategorySelect'
 import OptionalInputs, { IOptionalInputs } from './OptionalInputs'
 import { PartyNameOptions } from './Options'
@@ -33,7 +35,8 @@ const NewPartyModal = ({
   const afterOneHour = add(new Date(), { hours: 1 })
   const endOfToday = endOfDay(new Date())
   const [currentStep, setCurrentStep] = useState<Step>(Step.Category)
-  const { mutateAsync } = usePartyMutation({ isEditModal })
+  const { mutateAsync: createParty } = useNewPartyMutation()
+  const { mutateAsync: updateParty } = usePartyEditMutation()
   const [requiredValues, setRequiredValues] = useState<IRequiredInputs>(
     defaultRequiredInputs ?? {
       name: PartyNameOptions[0].value as string,
@@ -51,6 +54,44 @@ const NewPartyModal = ({
       keyword2: '',
       restaurantLink: '',
     }
+  )
+
+  const handleComplete = useCallback(
+    async (values: IOptionalInputs) => {
+      const {
+        name,
+        customName,
+        maxUserCount,
+        mealType,
+        gatherClosedAt,
+        isPrivate,
+      } = requiredValues
+      const { restaurantLink, keyword1, keyword2 } = values
+      const tags = []
+      if (!!keyword1) tags.push(keyword1)
+      if (!!keyword2) tags.push(keyword2)
+      const payload = {
+        name: name === '직접입력' ? customName?.toString() || '' : name,
+        maxUserCount,
+        mealType,
+        gatherClosedAt: format(gatherClosedAt, 'yyyy-MM-dd*kk:mm:ss')
+          .split('*')
+          .join('T'),
+        restaurantLink,
+        tags,
+        isPrivate,
+      }
+      if (isEditModal) {
+        await updateParty({
+          partyId: Number(Router.query.partyId?.toString() || 0),
+          partyInfo: payload,
+        })
+      } else {
+        await createParty(payload)
+      }
+      onClose()
+    },
+    [createParty, isEditModal, onClose, requiredValues, updateParty]
   )
 
   return (
@@ -83,34 +124,7 @@ const NewPartyModal = ({
               initialOptionalValues={optionalValues}
               setCurrentStep={setCurrentStep}
               setOptionalValues={setOptionalValues}
-              handleComplete={async (values) => {
-                const {
-                  name,
-                  customName,
-                  maxUserCount,
-                  mealType,
-                  gatherClosedAt,
-                  isPrivate,
-                } = requiredValues
-                const { restaurantLink, keyword1, keyword2 } = values
-                const tags = []
-                if (!!keyword1) tags.push(keyword1)
-                if (!!keyword2) tags.push(keyword2)
-                const payload = {
-                  name:
-                    name === '직접입력' ? customName?.toString() || '' : name,
-                  maxUserCount,
-                  mealType,
-                  gatherClosedAt: format(gatherClosedAt, 'yyyy-MM-dd*kk:mm:ss')
-                    .split('*')
-                    .join('T'),
-                  restaurantLink,
-                  tags,
-                  isPrivate,
-                }
-                await mutateAsync(payload)
-                onClose()
-              }}
+              handleComplete={handleComplete}
             />
           )}
         </ModalBody>
