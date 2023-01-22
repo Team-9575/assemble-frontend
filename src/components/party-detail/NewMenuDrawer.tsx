@@ -49,7 +49,7 @@ const payType = [
   },
 ]
 
-const MenuDrawer = ({ onClose, partyId, isOpen }: IMenuDrawerProps) => {
+const NewMenuDrawer = ({ onClose, partyId, isOpen }: IMenuDrawerProps) => {
   const { mutateAsync } = useNewMenuMutation()
 
   return (
@@ -161,4 +161,4 @@ const TypeDescription = styled.span`
   font-size: ${theme.fontSize.xs};
   font-weight: normal;
 `
-export default MenuDrawer
+export default NewMenuDrawer
