@@ -1,10 +1,11 @@
 import BaseModal from '@components/common/base-modal'
 import styled from '@emotion/styled'
-import { useNewPartyMutation } from '@hooks/query/party/useNewPartyMutations'
+import { useNewPartyMutation } from '@hooks/query/party/useNewPartyMutation'
+import { usePartyEditMutation } from '@hooks/query/party/usePartyEditMutation'
 import { theme } from '@styles/theme'
 import { add, endOfDay, format } from 'date-fns'
-import { useState } from 'react'
-import { useQueryClient } from 'react-query'
+import Router from 'next/router'
+import { useCallback, useState } from 'react'
 import CategorySelect from './CategorySelect'
 import OptionalInputs, { IOptionalInputs } from './OptionalInputs'
 import { PartyNameOptions } from './Options'
@@ -13,6 +14,9 @@ import RequiredInputs, { IRequiredInputs, MealType } from './RequiredInputs'
 interface NewPartyModalProps {
   isOpen: boolean
   onClose: () => void
+  isEditModal?: boolean
+  defaultRequiredInputs?: IRequiredInputs
+  defaultOptionalInputs?: IOptionalInputs
 }
 
 export enum Step {
@@ -21,25 +25,74 @@ export enum Step {
   Optional,
 }
 
-const NewPartyModal = ({ isOpen, onClose }: NewPartyModalProps) => {
+const NewPartyModal = ({
+  isOpen,
+  onClose,
+  isEditModal = false,
+  defaultRequiredInputs,
+  defaultOptionalInputs,
+}: NewPartyModalProps) => {
   const afterOneHour = add(new Date(), { hours: 1 })
   const endOfToday = endOfDay(new Date())
   const [currentStep, setCurrentStep] = useState<Step>(Step.Category)
-  const { mutateAsync } = useNewPartyMutation()
-  const [requiredValues, setRequiredValues] = useState<IRequiredInputs>({
-    name: PartyNameOptions[0].value as string,
-    customName: '',
-    mealType: MealType.Lunch,
-    gatherClosedAt: afterOneHour > endOfToday ? endOfToday : afterOneHour,
-    maxUserCount: 0, // Infinite = 0
-    isPrivate: false,
-  })
+  const { mutateAsync: createParty } = useNewPartyMutation()
+  const { mutateAsync: updateParty } = usePartyEditMutation()
+  const [requiredValues, setRequiredValues] = useState<IRequiredInputs>(
+    defaultRequiredInputs ?? {
+      name: PartyNameOptions[0].value as string,
+      customName: '',
+      mealType: MealType.Lunch,
+      gatherClosedAt: afterOneHour > endOfToday ? endOfToday : afterOneHour,
+      maxUserCount: 0, // Infinite = 0
+      isPrivate: false,
+    }
+  )
 
-  const [optionalValues, setOptionalValues] = useState<IOptionalInputs>({
-    keyword1: '',
-    keyword2: '',
-    restaurantLink: '',
-  })
+  const [optionalValues, setOptionalValues] = useState<IOptionalInputs>(
+    defaultOptionalInputs ?? {
+      keyword1: '',
+      keyword2: '',
+      restaurantLink: '',
+    }
+  )
+
+  const handleComplete = useCallback(
+    async (values: IOptionalInputs) => {
+      const {
+        name,
+        customName,
+        maxUserCount,
+        mealType,
+        gatherClosedAt,
+        isPrivate,
+      } = requiredValues
+      const { restaurantLink, keyword1, keyword2 } = values
+      const tags = []
+      if (!!keyword1) tags.push(keyword1)
+      if (!!keyword2) tags.push(keyword2)
+      const payload = {
+        name: name === '직접입력' ? customName?.toString() || '' : name,
+        maxUserCount,
+        mealType,
+        gatherClosedAt: format(gatherClosedAt, 'yyyy-MM-dd*kk:mm:ss')
+          .split('*')
+          .join('T'),
+        restaurantLink,
+        tags,
+        isPrivate,
+      }
+      if (isEditModal) {
+        await updateParty({
+          partyId: Number(Router.query.partyId?.toString() || 0),
+          partyInfo: payload,
+        })
+      } else {
+        await createParty(payload)
+      }
+      onClose()
+    },
+    [createParty, isEditModal, onClose, requiredValues, updateParty]
+  )
 
   return (
     <BaseModal
@@ -50,7 +103,7 @@ const NewPartyModal = ({ isOpen, onClose }: NewPartyModalProps) => {
     >
       <Container>
         <ModalHeader>
-          <span>파티 만들기</span>
+          <span>{isEditModal ? '파티 정보 수정하기' : '파티 만들기'}</span>
           <CloseButton className="material-icons md-20" onClick={onClose}>
             close
           </CloseButton>
@@ -71,34 +124,7 @@ const NewPartyModal = ({ isOpen, onClose }: NewPartyModalProps) => {
               initialOptionalValues={optionalValues}
               setCurrentStep={setCurrentStep}
               setOptionalValues={setOptionalValues}
-              handleComplete={async (values) => {
-                const {
-                  name,
-                  customName,
-                  maxUserCount,
-                  mealType,
-                  gatherClosedAt,
-                  isPrivate,
-                } = requiredValues
-                const { restaurantLink, keyword1, keyword2 } = values
-                const tags = []
-                if (!!keyword1) tags.push(keyword1)
-                if (!!keyword2) tags.push(keyword2)
-                const payload = {
-                  name:
-                    name === '직접입력' ? customName?.toString() || '' : name,
-                  maxUserCount,
-                  mealType,
-                  gatherClosedAt: format(gatherClosedAt, 'yyyy-MM-dd*kk:mm:ss')
-                    .split('*')
-                    .join('T'),
-                  restaurantLink,
-                  tags,
-                  isPrivate,
-                }
-                await mutateAsync(payload)
-                onClose()
-              }}
+              handleComplete={handleComplete}
             />
           )}
         </ModalBody>

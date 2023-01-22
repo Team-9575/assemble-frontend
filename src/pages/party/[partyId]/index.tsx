@@ -1,5 +1,6 @@
 import BaseLayout from '@components/common/base-layout'
 import Button from '@components/common/button'
+import HStack from '@components/common/stack/HStack'
 import VStack from '@components/common/stack/VStack'
 import Members from '@components/party-detail/Members'
 import MenuCard from '@components/party-detail/MenuCard'
@@ -11,6 +12,7 @@ import {
   usePartyDetailQuery,
 } from '@hooks/query/party-detail/usePartyDetailQuery'
 import { usePartyJoinMutation } from '@hooks/query/party-detail/usePartyJoinMutation'
+import { useUserQuery } from '@hooks/query/user/useUserQuery'
 import { IconButton } from '@mui/material'
 import { theme } from '@styles/theme'
 import { GetServerSideProps } from 'next'
@@ -18,6 +20,7 @@ import { useMemo, useState } from 'react'
 
 const PartyDetailPage = () => {
   const { data: party, isLoading } = usePartyDetailQuery()
+  const { data: user } = useUserQuery()
   const [isMenuDrawerOpen, setIsMenuDrawerOpen] = useState(false)
   const [isPartyDrawerOpen, setIsPartyDrawerOpen] = useState(false)
   const { mutateAsync: joinPartyMutateAsync } = usePartyJoinMutation()
@@ -25,20 +28,23 @@ const PartyDetailPage = () => {
     () => !!party?.partyMenus?.filter((menu) => menu.isJoined)?.length,
     [party]
   )
+  const isAssembler = useMemo(() => user?.id === party?.host, [user, party])
 
   return (
     <BaseLayout title={party?.name} hasHambergerButton={false}>
       <>
-        <IconButton
-          sx={{ position: 'absolute', right: '1rem', top: '0.5rem' }}
-          onClick={() => {
-            setIsPartyDrawerOpen(true)
-          }}
-        >
-          <DetailModalIcon className="material-icons-outlined md-16">
-            feed
-          </DetailModalIcon>
-        </IconButton>
+        {isAssembler && (
+          <IconButton
+            sx={{ position: 'absolute', right: '1rem', top: '0.5rem' }}
+            onClick={() => {
+              setIsPartyDrawerOpen(true)
+            }}
+          >
+            <DetailModalIcon className="material-icons-outlined md-16">
+              feed
+            </DetailModalIcon>
+          </IconButton>
+        )}
         <Members />
         <VStack padding="1rem 1rem 9rem" gap="0.75rem">
           {isLoading &&
@@ -89,13 +95,15 @@ const PartyDetailPage = () => {
               party.status === PartyStatus.GatherClosed) && (
               <>
                 <TotalPrice>총 26,500원(TODO)</TotalPrice>
-                <Button
-                  text="메뉴 추가하기"
-                  variant="outlined"
-                  onClick={() => {
-                    setIsMenuDrawerOpen(true)
-                  }}
-                />
+                <HStack>
+                  <Button
+                    text="메뉴 추가하기"
+                    variant="outlined"
+                    onClick={() => {
+                      setIsMenuDrawerOpen(true)
+                    }}
+                  />
+                </HStack>
               </>
             )}
         </ButtonContainer>

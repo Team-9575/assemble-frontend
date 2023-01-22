@@ -43,7 +43,7 @@ const postNewMenu = async ({
   }
 }
 
-export const useNewPartyMutation = () => {
+export const useNewMenuMutation = () => {
   const { inProgress, accounts } = useMsal()
   const isMsAuthenticated = useIsAuthenticated()
   const queryClient = useQueryClient()
