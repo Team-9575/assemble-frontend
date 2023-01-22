@@ -25,6 +25,7 @@ interface IMenuDrawerProps {
     payType: PayType
   }
   menuId?: number
+  handleComplete?: () => void
 }
 
 const initialValues = {
@@ -66,6 +67,7 @@ const NewMenuDrawer = ({
   isEditDrawer,
   defaultValue,
   menuId = 0,
+  handleComplete = () => {},
 }: IMenuDrawerProps) => {
   const { mutateAsync: createMenu } = useNewMenuMutation()
   const { mutateAsync: updateMenu } = useMenuUpdateMutation()
@@ -145,6 +147,7 @@ const NewMenuDrawer = ({
                         partyId,
                         menuId,
                       })
+                      handleComplete()
                     } else {
                       await createMenu({
                         menu: {

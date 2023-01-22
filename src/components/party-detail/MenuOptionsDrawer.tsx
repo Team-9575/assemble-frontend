@@ -79,6 +79,7 @@ const MenuOptionsDrawer = ({
           payType: menu?.payType || PayType.Individual,
         }}
         menuId={menu?.id}
+        handleComplete={onClose}
       />
     </>
   )
