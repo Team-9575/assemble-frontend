@@ -1,8 +1,10 @@
 import VStack from '@components/common/stack/VStack'
 import styled from '@emotion/styled'
+import { useMenuDeleteMutation } from '@hooks/query/menu/MenuDeleteMutation'
 import { IMenu } from '@hooks/query/party-detail/usePartyDetailQuery'
 import { Drawer, IconButton } from '@mui/material'
 import { theme } from '@styles/theme'
+import Router from 'next/router'
 
 interface IMenuOptionsDrawerProps {
   onClose: () => void
@@ -15,6 +17,7 @@ const MenuOptionsDrawer = ({
   isOpen,
   menu,
 }: IMenuOptionsDrawerProps) => {
+  const { mutateAsync: deleteMenu } = useMenuDeleteMutation()
   return (
     <Drawer
       anchor="bottom"
@@ -33,7 +36,17 @@ const MenuOptionsDrawer = ({
         <IconButton sx={{ position: 'absolute', top: '0.5rem', right: '1rem' }}>
           <span className="material-icons md-16">close</span>
         </IconButton>
-        <OptionButton hasBorderBottom>메뉴 삭제하기</OptionButton>
+        <OptionButton
+          hasBorderBottom
+          onClick={async () => {
+            await deleteMenu({
+              partyId: Number(Router.query.partyId?.toString() || 0),
+              menuId: menu?.id || 0,
+            })
+          }}
+        >
+          메뉴 삭제하기
+        </OptionButton>
         <OptionButton hasBorderBottom>메뉴 수정하기</OptionButton>
         <OptionButton>참여한 인원 보기</OptionButton>
       </VStack>
