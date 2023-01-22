@@ -4,7 +4,7 @@ import HStack from '@components/common/stack/HStack'
 import VStack from '@components/common/stack/VStack'
 import Members from '@components/party-detail/Members'
 import MenuCard from '@components/party-detail/MenuCard'
-import MenuDrawer from '@components/party-detail/MenuDrawer'
+import NewMenuDrawer from '@components/party-detail/NewMenuDrawer'
 import PartyDetailDrawer from '@components/party-detail/PartyDetailDrawer'
 import styled from '@emotion/styled'
 import {
@@ -113,7 +113,7 @@ const PartyDetailPage = () => {
           onClose={() => setIsPartyDrawerOpen(false)}
         />
         {party?.id && (
-          <MenuDrawer
+          <NewMenuDrawer
             isOpen={isMenuDrawerOpen}
             onClose={() => setIsMenuDrawerOpen(false)}
             partyId={party.id}

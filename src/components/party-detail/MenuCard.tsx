@@ -5,10 +5,11 @@ import { useMenuExitMutation } from '@hooks/query/menu/MenuExitMutation'
 import { useMenuJoinMutation } from '@hooks/query/menu/MenuJoinMutation'
 import { PayType } from '@hooks/query/party-detail/useNewMenuMutation'
 import { IMenu } from '@hooks/query/party-detail/usePartyDetailQuery'
-import { Skeleton } from '@mui/material'
+import { IconButton, Skeleton } from '@mui/material'
 import { theme } from '@styles/theme'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
+import MenuOptionsDrawer from './MenuOptionsDrawer'
 
 const getPayTypeInfo = (payType?: PayType) => {
   switch (payType) {
@@ -32,6 +33,7 @@ const MenuCard = ({ menu, isLoading = false }: IMenuCardProps) => {
   const router = useRouter()
   const [isJoinModalOpen, setIsJoinModalOpen] = useState(false)
   const [isExitModalOpen, setIsExitModalOpen] = useState(false)
+  const [isOptionsDrawerOpen, setIsOptionsDrawerOpen] = useState(false)
   const { mutateAsync: joinMenu } = useMenuJoinMutation()
   const { mutateAsync: exitMenu } = useMenuExitMutation()
   const payload = {
@@ -50,7 +52,15 @@ const MenuCard = ({ menu, isLoading = false }: IMenuCardProps) => {
                 {getPayTypeInfo(menu?.payType).text}
               </Chip>
             )}
-            <MoreButton className="material-icons md-20">more_vert</MoreButton>
+            {!isLoading && (
+              <IconButton
+                onClick={() => {
+                  setIsOptionsDrawerOpen(true)
+                }}
+              >
+                <MoreIcon className="material-icons md-20">more_vert</MoreIcon>
+              </IconButton>
+            )}
           </HStack>
           {isLoading ? (
             <Skeleton width="7rem" />
@@ -100,6 +110,13 @@ const MenuCard = ({ menu, isLoading = false }: IMenuCardProps) => {
         title="참여한 메뉴에서 빠지기"
         description={`"${menu?.name}"에서 빠지시겠습니까?`}
       />
+      <MenuOptionsDrawer
+        isOpen={isOptionsDrawerOpen}
+        menu={menu}
+        onClose={() => {
+          setIsOptionsDrawerOpen(false)
+        }}
+      />
     </>
   )
 }
@@ -123,7 +140,7 @@ const Chip = styled.div<{ color: string }>`
   font-size: ${theme.fontSize.xs};
   border-radius: 6px;
 `
-const MoreButton = styled.button`
+const MoreIcon = styled.span`
   color: #757575;
 `
 const MenuName = styled.p`
