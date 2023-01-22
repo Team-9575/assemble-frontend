@@ -8,7 +8,13 @@ const Members = () => {
       <CircleImage src="/images/profile.jpg" alt="profile" size="2rem" />
       <CircleImage src="/images/profile.jpg" alt="profile" size="2rem" />
       <CircleImage src="/images/profile.jpg" alt="profile" size="2rem" />
-      <AddButton>+</AddButton>
+      <AddButton
+        onClick={() => {
+          alert('TODO')
+        }}
+      >
+        +
+      </AddButton>
     </Container>
   )
 }

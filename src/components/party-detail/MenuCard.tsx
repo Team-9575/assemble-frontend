@@ -8,7 +8,7 @@ import { IMenu } from '@hooks/query/party-detail/usePartyDetailQuery'
 import { IconButton, Skeleton } from '@mui/material'
 import { theme } from '@styles/theme'
 import { useRouter } from 'next/router'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import MenuOptionsDrawer from './MenuOptionsDrawer'
 
 const getPayTypeInfo = (payType?: PayType) => {
@@ -27,9 +27,14 @@ const getPayTypeInfo = (payType?: PayType) => {
 interface IMenuCardProps {
   menu?: IMenu
   isLoading?: boolean
+  isAssembler?: boolean
 }
 
-const MenuCard = ({ menu, isLoading = false }: IMenuCardProps) => {
+const MenuCard = ({
+  menu,
+  isLoading = false,
+  isAssembler = false,
+}: IMenuCardProps) => {
   const router = useRouter()
   const [isJoinModalOpen, setIsJoinModalOpen] = useState(false)
   const [isExitModalOpen, setIsExitModalOpen] = useState(false)
@@ -40,6 +45,7 @@ const MenuCard = ({ menu, isLoading = false }: IMenuCardProps) => {
     partyId: Number(router.query.partyId?.toString()),
     menuId: menu?.id || 0,
   }
+
   return (
     <>
       <Container>
@@ -60,6 +66,26 @@ const MenuCard = ({ menu, isLoading = false }: IMenuCardProps) => {
               >
                 <MoreIcon className="material-icons md-20">more_vert</MoreIcon>
               </IconButton>
+            )}
+            {(menu?.payType === PayType.Individual ||
+              (menu?.payType === PayType.Group && isAssembler)) && (
+              <Counter>
+                <CounterButton
+                  onClick={() => {
+                    alert('TODO')
+                  }}
+                >
+                  +
+                </CounterButton>
+                <Quantity>1</Quantity>
+                <CounterButton
+                  onClick={() => {
+                    alert('TODO')
+                  }}
+                >
+                  -
+                </CounterButton>
+              </Counter>
             )}
           </HStack>
           {isLoading ? (
@@ -161,6 +187,33 @@ const JoinButton = styled.button<{ color: string }>`
   font-weight: 600;
   right: 1rem;
   bottom: 0.75rem;
+`
+const Counter = styled.div`
+  position: absolute;
+  right: 3rem;
+  height: 1.5rem;
+  display: flex;
+  border: 1px solid #f5f5f5;
+`
+const CounterButton = styled.button`
+  color: #757575;
+  width: 1.5rem;
+  height: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: 0.1rem;
+  &:hover {
+    background-color: #f5f5f5;
+  }
+`
+const Quantity = styled.div`
+  width: 1.5rem;
+  height: 1.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: ${theme.fontSize.xs};
 `
 
 export default MenuCard
