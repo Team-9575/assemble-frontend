@@ -2,7 +2,9 @@ import Button from '@components/common/button'
 import InputFormik from '@components/common/formik/InputFormik'
 import VStack from '@components/common/stack/VStack'
 import styled from '@emotion/styled'
+import { useMenuUpdateMutation } from '@hooks/query/menu/MenuUpdateMutation'
 import {
+  IMenuRequest,
   PayType,
   useNewMenuMutation,
 } from '@hooks/query/party-detail/useNewMenuMutation'
@@ -15,6 +17,14 @@ interface IMenuDrawerProps {
   onClose: () => void
   partyId: number
   isOpen: boolean
+  isEditDrawer?: boolean
+  defaultValue?: {
+    name: string
+    description: string
+    price: string
+    payType: PayType
+  }
+  menuId?: number
 }
 
 const initialValues = {
@@ -49,8 +59,16 @@ const payType = [
   },
 ]
 
-const NewMenuDrawer = ({ onClose, partyId, isOpen }: IMenuDrawerProps) => {
-  const { mutateAsync } = useNewMenuMutation()
+const NewMenuDrawer = ({
+  onClose,
+  partyId,
+  isOpen,
+  isEditDrawer,
+  defaultValue,
+  menuId = 0,
+}: IMenuDrawerProps) => {
+  const { mutateAsync: createMenu } = useNewMenuMutation()
+  const { mutateAsync: updateMenu } = useMenuUpdateMutation()
 
   return (
     <Drawer
@@ -67,7 +85,7 @@ const NewMenuDrawer = ({ onClose, partyId, isOpen }: IMenuDrawerProps) => {
     >
       <Container>
         <Formik
-          initialValues={initialValues}
+          initialValues={defaultValue ?? initialValues}
           validationSchema={validationSchema}
           onSubmit={(values) => {}}
           validateOnChange
@@ -117,13 +135,25 @@ const NewMenuDrawer = ({ onClose, partyId, isOpen }: IMenuDrawerProps) => {
                   isDisabled={!isValid}
                   type="submit"
                   onClick={async () => {
-                    await mutateAsync({
-                      menu: {
-                        ...values,
-                        price: Number(values.price.split(',').join('')),
-                      },
-                      partyId,
-                    })
+                    if (isEditDrawer) {
+                      await updateMenu({
+                        menu: {
+                          ...values,
+                          price: Number(values.price.split(',').join('')),
+                          quantity: 1, // TODO: fix
+                        },
+                        partyId,
+                        menuId,
+                      })
+                    } else {
+                      await createMenu({
+                        menu: {
+                          ...values,
+                          price: Number(values.price.split(',').join('')),
+                        },
+                        partyId,
+                      })
+                    }
                     onClose()
                   }}
                 />
