@@ -58,12 +58,16 @@ export const handleRetry = ({
   inProgress: InteractionStatus
   accounts: any[]
 }) => {
+  const status = error?.response?.status
   if (
     failureCount < 1 &&
-    error?.response?.status === HttpStatusCode.Unauthorized
+    (status === HttpStatusCode.Unauthorized ||
+      status === HttpStatusCode.Forbidden)
   ) {
     refreshToken({ error, isMsAuthenticated, inProgress, accounts })
     return true
+  } else {
+    alert('error' + status)
   }
   return false
 }
