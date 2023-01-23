@@ -8,7 +8,7 @@ import { IMenu } from '@hooks/query/party-detail/usePartyDetailQuery'
 import { IconButton, Skeleton } from '@mui/material'
 import { theme } from '@styles/theme'
 import { useRouter } from 'next/router'
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 import MenuOptionsDrawer from './MenuOptionsDrawer'
 
 const getPayTypeInfo = (payType?: PayType) => {

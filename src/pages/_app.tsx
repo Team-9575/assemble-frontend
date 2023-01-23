@@ -1,6 +1,5 @@
 import '@styles/globals.css'
 import type { AppProps } from 'next/app'
-import { ThemeProvider } from '@hooks/context/useTheme'
 import { ThemeProvider as MUIThemeProvider, createTheme } from '@mui/material'
 import { PublicClientApplication } from '@azure/msal-browser'
 import { MsalProvider } from '@azure/msal-react'
@@ -16,7 +15,7 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
   const queryClient = new QueryClient({
     defaultOptions: {
       queries: {
-        refetchOnWindowFocus: false,
+        // refetchOnWindowFocus: false,
       },
       mutations: {},
     },
@@ -33,13 +32,11 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
       </Head>
       <MsalProvider instance={msalInstance}>
         <QueryClientProvider client={queryClient}>
-          <ThemeProvider>
-            <MUIThemeProvider theme={muiTheme}>
-              <AuthProvider>
-                <Component {...pageProps} />
-              </AuthProvider>
-            </MUIThemeProvider>
-          </ThemeProvider>
+          <MUIThemeProvider theme={muiTheme}>
+            <AuthProvider>
+              <Component {...pageProps} />
+            </AuthProvider>
+          </MUIThemeProvider>
           <ReactQueryDevtools />
         </QueryClientProvider>
       </MsalProvider>
