@@ -1,10 +1,10 @@
 import BaseLayout from '@components/common/base-layout'
 import Button from '@components/common/button'
-import HStack from '@components/common/stack/HStack'
 import VStack from '@components/common/stack/VStack'
+import AssembleeFooter from '@components/party-detail/AssembleeFooter'
+import AssemblerFooter from '@components/party-detail/AssemblerFooter'
 import Members from '@components/party-detail/Members'
 import MenuCard from '@components/party-detail/MenuCard'
-import NewMenuDrawer from '@components/party-detail/NewMenuDrawer'
 import PartyDetailDrawer from '@components/party-detail/PartyDetailDrawer'
 import styled from '@emotion/styled'
 import {
@@ -21,14 +21,34 @@ import { useMemo, useState } from 'react'
 const PartyDetailPage = () => {
   const { data: party, isLoading } = usePartyDetailQuery()
   const { data: user } = useUserQuery()
-  const [isMenuDrawerOpen, setIsMenuDrawerOpen] = useState(false)
   const [isPartyDrawerOpen, setIsPartyDrawerOpen] = useState(false)
-  const { mutateAsync: joinPartyMutateAsync } = usePartyJoinMutation()
+  const { mutateAsync: joinParty } = usePartyJoinMutation()
   const hasMyMenu = useMemo(
     () => !!party?.partyMenus?.filter((menu) => menu.isJoined)?.length,
     [party]
   )
   const isAssembler = useMemo(() => user?.id === party?.host, [user, party])
+  const partyDetailFooter = useMemo(() => {
+    if (!party?.isJoined && party?.status === PartyStatus.Active) {
+      return (
+        <ButtonContainer>
+          <Button
+            text="파티 참가하기"
+            onClick={async () => {
+              await joinParty({ partyId: party?.id })
+            }}
+          />
+        </ButtonContainer>
+      )
+    }
+    if (party?.host === user?.id) {
+      return <AssemblerFooter party={party} />
+    }
+    if (party?.isJoined) {
+      return <AssembleeFooter party={party} />
+    }
+    return null
+  }, [party, joinParty, user])
 
   return (
     <BaseLayout title={party?.name} hasHambergerButton={false}>
@@ -89,44 +109,12 @@ const PartyDetailPage = () => {
             </EmptyMenuText>
           )}
         </VStack>
-        <ButtonContainer>
-          {!party?.isJoined && party?.status === PartyStatus.Active && (
-            <Button
-              text="파티 참가하기"
-              onClick={async () => {
-                await joinPartyMutateAsync({ partyId: party?.id })
-              }}
-            />
-          )}
-          {party?.isJoined &&
-            (party.status === PartyStatus.Active ||
-              party.status === PartyStatus.GatherClosed) && (
-              <>
-                <TotalPrice>총 26,500원(TODO)</TotalPrice>
-                <HStack>
-                  <Button
-                    text="메뉴 추가하기"
-                    variant="outlined"
-                    onClick={() => {
-                      setIsMenuDrawerOpen(true)
-                    }}
-                  />
-                </HStack>
-              </>
-            )}
-        </ButtonContainer>
+        {partyDetailFooter}
         <PartyDetailDrawer
           isOpen={isPartyDrawerOpen}
           party={party}
           onClose={() => setIsPartyDrawerOpen(false)}
         />
-        {party?.id && (
-          <NewMenuDrawer
-            isOpen={isMenuDrawerOpen}
-            onClose={() => setIsMenuDrawerOpen(false)}
-            partyId={party.id}
-          />
-        )}
       </>
     </BaseLayout>
   )
@@ -143,10 +131,6 @@ const ButtonContainer = styled.div`
 `
 const DetailModalIcon = styled.span`
   color: #757575;
-`
-const TotalPrice = styled.p`
-  font-weight: bold;
-  margin-bottom: 0.5rem;
 `
 const Title = styled.p`
   font-weight: 500;

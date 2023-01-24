@@ -1,36 +1,31 @@
-import { useQuery, useQueryClient } from 'react-query'
+import { useMutation, useQueryClient } from 'react-query'
 import apiClient from 'src/api'
 import { AxiosError } from 'axios'
 import { MealType } from '@components/party/modal/Options'
 import { handleRetry } from '..'
 import { useIsAuthenticated, useMsal } from '@azure/msal-react'
 
-export interface IParty {
-  id: number
-  name: string
-  maxUserCount: number // 0 은 무제한
-  mealType: MealType // 아침:0, 점심:1, 저녁:2
-  gatherClosedAt: string
-  tags: { id: number; name: string }[]
-  currentUserCount: number
-  host: number
-  isJoined: boolean
-}
+interface Response {}
 
-const fetchPartyList = async () => {
+const closeParty = async ({ partyId }: { partyId: number }) => {
   try {
-    const { data } = await apiClient.get<IParty[]>('/parties')
+    const { data } = await apiClient.post<Response>(`/parties/${partyId}/close`)
     return data
   } catch (error) {
     return Promise.reject(error as AxiosError)
   }
 }
 
-export const usePartyListQuery = () => {
+export const useClosePartyMutation = () => {
   const { inProgress, accounts } = useMsal()
   const isMsAuthenticated = useIsAuthenticated()
-  return useQuery({
-    queryKey: ['partyList'],
+  const queryClient = useQueryClient()
+  return useMutation('closeParty', closeParty, {
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['partyDetail'],
+      })
+    },
     retry: (failureCount, error) =>
       handleRetry({
         failureCount,
@@ -39,6 +34,5 @@ export const usePartyListQuery = () => {
         accounts,
         isMsAuthenticated,
       }),
-    queryFn: fetchPartyList,
   })
 }
