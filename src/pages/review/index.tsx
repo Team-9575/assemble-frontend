@@ -2,7 +2,7 @@ import BaseLayout from '@components/common/base-layout'
 import Button from '@components/common/button'
 import VStack from '@components/common/stack/VStack'
 import FullReceipt from '@components/party-detail/FullReceipt'
-import IndividualReceipt from '@components/party-detail/IndividualReceipt'
+import IndividualReceipt from '@components/party-detail/MyReceipt'
 import ReviewModal from '@components/review/ReviewModal'
 import { useState } from 'react'
 

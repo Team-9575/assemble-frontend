@@ -3,6 +3,7 @@ import Button from '@components/common/button'
 import HStack from '@components/common/stack/HStack'
 import VStack from '@components/common/stack/VStack'
 import styled from '@emotion/styled'
+import { useMyReceiptQuery } from '@hooks/query/party-detail/useMyReceiptQuery'
 
 const receipt = [
   {
@@ -19,12 +20,13 @@ const receipt = [
   },
 ]
 
-interface IIndividualReceiptProps {
+interface IMyReceiptProps {
   isOpen: boolean
   onClose: () => void
 }
 
-const IndividualReceipt = ({ onClose, isOpen }: IIndividualReceiptProps) => {
+const MyReceipt = ({ onClose, isOpen }: IMyReceiptProps) => {
+  const { data: receipt2, isLoading } = useMyReceiptQuery()
   return (
     <BaseModal
       isOpen={isOpen}
@@ -35,7 +37,7 @@ const IndividualReceipt = ({ onClose, isOpen }: IIndividualReceiptProps) => {
       borderRadius="10px"
     >
       <Container>
-        <Title>영수증</Title>
+        <Title>영수증(TODO)</Title>
         <CloseIcon className="material-icons md-16" onClick={onClose}>
           close
         </CloseIcon>
@@ -96,4 +98,4 @@ const AccountInfo = styled.p`
   font-weight: 500;
   margin-bottom: 0.25rem;
 `
-export default IndividualReceipt
+export default MyReceipt
