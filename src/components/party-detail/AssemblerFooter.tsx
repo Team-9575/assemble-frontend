@@ -9,6 +9,7 @@ import {
 } from '@hooks/query/party-detail/usePartyDetailQuery'
 import { theme } from '@styles/theme'
 import { useMemo, useState } from 'react'
+import FullReceipt from './FullReceipt'
 import NewMenuDrawer from './NewMenuDrawer'
 
 interface AssemblerFooterProps {
@@ -17,6 +18,7 @@ interface AssemblerFooterProps {
 
 const AssemblerFooter = ({ party }: AssemblerFooterProps) => {
   const [isMenuDrawerOpen, setIsMenuDrawerOpen] = useState(false)
+  const [isReceiptOpen, setIsReceiptOpen] = useState(false)
   const { mutateAsync: closeParty } = useClosePartyMutation()
 
   const FooterButtons = useMemo(() => {
@@ -43,7 +45,18 @@ const AssemblerFooter = ({ party }: AssemblerFooterProps) => {
             </HStack>
           </VStack>
         )
-      // case PartyStatus.PartyClosed:
+      case PartyStatus.PartyClosed:
+      case PartyStatus.SettlementInProgress:
+      case PartyStatus.SettlementCompleted:
+        return (
+          <Button
+            text="영수증 보기"
+            variant="outlined"
+            onClick={() => {
+              setIsReceiptOpen(true)
+            }}
+          />
+        )
     }
     return null
   }, [party, closeParty])
@@ -55,6 +68,15 @@ const AssemblerFooter = ({ party }: AssemblerFooterProps) => {
           isOpen={isMenuDrawerOpen}
           onClose={() => setIsMenuDrawerOpen(false)}
           partyId={party.id}
+        />
+      )}
+      {isReceiptOpen && (
+        <FullReceipt
+          isOpen={isReceiptOpen}
+          party={party}
+          onClose={() => {
+            setIsReceiptOpen(false)
+          }}
         />
       )}
     </>
