@@ -4,6 +4,8 @@ import { AxiosError } from 'axios'
 import { MealType } from '@components/party/modal/Options'
 import { handleRetry } from '..'
 import { useIsAuthenticated, useMsal } from '@azure/msal-react'
+import useTheme, { getTheme } from '@hooks/context/useTheme'
+import { useRouter } from 'next/router'
 
 export interface IParty {
   id: number
@@ -29,6 +31,8 @@ const fetchPartyList = async () => {
 export const usePartyListQuery = () => {
   const { inProgress, accounts } = useMsal()
   const isMsAuthenticated = useIsAuthenticated()
+  const router = useRouter()
+  const { setThemeName } = useTheme()
   return useQuery({
     queryKey: ['partyList'],
     retry: (failureCount, error) =>
@@ -40,5 +44,8 @@ export const usePartyListQuery = () => {
         isMsAuthenticated,
       }),
     queryFn: fetchPartyList,
+    onSuccess: () => {
+      setThemeName(getTheme(router.pathname))
+    },
   })
 }

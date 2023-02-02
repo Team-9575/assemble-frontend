@@ -8,56 +8,53 @@ import NewPartyModal from '@components/party/modal'
 import { useState } from 'react'
 import useAuth from '@hooks/context/useAuth'
 import CircleImage from '@components/common/circle-image'
-import { ThemeProvider } from '@hooks/context/useTheme'
 
 const Home = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const { auth } = useAuth()
 
   return (
-    <ThemeProvider>
-      <BaseLayout>
-        <Container hasFooter={auth.isAuthenticated}>
-          <PartyList />
-          {auth.isAuthenticated && (
-            <Footer>
-              <HStack padding="0.25rem 0" justifyContent="center">
-                <CircleImage
-                  src="/images/profile.jpg"
-                  alt="profile"
-                  size="1.375rem"
-                />
-                <CircleImage
-                  src="/images/profile.jpg"
-                  alt="profile"
-                  size="1.375rem"
-                />
-                <CircleImage
-                  src="/images/profile.jpg"
-                  alt="profile"
-                  size="1.375rem"
-                />
-              </HStack>
-              <Description>현재 8명이 파티를 고민하고 있어요</Description>
-              <Button
-                text="방 만들기"
-                onClick={() => {
-                  setIsModalOpen(true)
+    <BaseLayout>
+      <Container hasFooter={auth.isAuthenticated}>
+        <PartyList />
+        {auth.isAuthenticated && (
+          <Footer>
+            <HStack padding="0.25rem 0" justifyContent="center">
+              <CircleImage
+                src="/images/profile.jpg"
+                alt="profile"
+                size="1.375rem"
+              />
+              <CircleImage
+                src="/images/profile.jpg"
+                alt="profile"
+                size="1.375rem"
+              />
+              <CircleImage
+                src="/images/profile.jpg"
+                alt="profile"
+                size="1.375rem"
+              />
+            </HStack>
+            <Description>현재 8명이 파티를 고민하고 있어요</Description>
+            <Button
+              text="방 만들기"
+              onClick={() => {
+                setIsModalOpen(true)
+              }}
+            />
+            {isModalOpen && (
+              <NewPartyModal
+                isOpen={isModalOpen}
+                onClose={() => {
+                  setIsModalOpen(false)
                 }}
               />
-              {isModalOpen && (
-                <NewPartyModal
-                  isOpen={isModalOpen}
-                  onClose={() => {
-                    setIsModalOpen(false)
-                  }}
-                />
-              )}
-            </Footer>
-          )}
-        </Container>
-      </BaseLayout>
-    </ThemeProvider>
+            )}
+          </Footer>
+        )}
+      </Container>
+    </BaseLayout>
   )
 }
 const Container = styled.div<{ hasFooter: boolean }>`

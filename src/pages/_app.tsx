@@ -8,6 +8,7 @@ import { AuthProvider } from '@hooks/context/useAuth'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import Head from 'next/head'
 import { ReactQueryDevtools } from 'react-query/devtools'
+import { ThemeProvider } from '@hooks/context/useTheme'
 
 export const msalInstance = new PublicClientApplication(msalConfig)
 
@@ -32,11 +33,13 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
       </Head>
       <MsalProvider instance={msalInstance}>
         <QueryClientProvider client={queryClient}>
-          <MUIThemeProvider theme={muiTheme}>
-            <AuthProvider>
-              <Component {...pageProps} />
-            </AuthProvider>
-          </MUIThemeProvider>
+          <ThemeProvider>
+            <MUIThemeProvider theme={muiTheme}>
+              <AuthProvider>
+                <Component {...pageProps} />
+              </AuthProvider>
+            </MUIThemeProvider>
+          </ThemeProvider>
           <ReactQueryDevtools />
         </QueryClientProvider>
       </MsalProvider>
