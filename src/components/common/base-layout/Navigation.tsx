@@ -9,6 +9,7 @@ import CircleImage from '../circle-image'
 import { IUserResponse } from '@hooks/query/user/useUserQuery'
 import { logout } from '@hooks/query'
 import Router from 'next/router'
+import useTheme from '@hooks/context/useTheme'
 
 interface INavigationProps {
   width: string
@@ -33,6 +34,7 @@ const menuItem = [
 
 const Navigation = ({ width, maxWidth, user }: INavigationProps) => {
   const { instance } = useMsal()
+  const { themeName, setThemeName } = useTheme()
   const handleMsLogout = async () => {
     await logout()
     instance.logoutRedirect({
@@ -60,6 +62,14 @@ const Navigation = ({ width, maxWidth, user }: INavigationProps) => {
             ))}
           </VStack>
         </VStack>
+        <Button
+          sx={{ margin: '0 auto', color: '#757575', fontWeight: '600' }}
+          onClick={() => {
+            setThemeName(themeName === 'dark' ? 'light' : 'dark')
+          }}
+        >
+          {themeName}
+        </Button>
         <Button
           sx={{ margin: '0 auto', color: '#757575', fontWeight: '600' }}
           onClick={() => {
