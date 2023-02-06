@@ -8,13 +8,15 @@ import NewPartyModal from '@components/party/modal'
 import { useState } from 'react'
 import useAuth from '@hooks/context/useAuth'
 import CircleImage from '@components/common/circle-image'
+import useTheme from '@hooks/context/useTheme'
 
 const Home = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const { themeName } = useTheme()
   const { auth } = useAuth()
 
   return (
-    <BaseLayout>
+    <BaseLayout title={themeName}>
       <Container hasFooter={auth.isAuthenticated}>
         <PartyList />
         {auth.isAuthenticated && (
