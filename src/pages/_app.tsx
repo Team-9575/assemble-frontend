@@ -31,18 +31,18 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
       <Head>
         <title>Assembler</title>
       </Head>
-      <MsalProvider instance={msalInstance}>
-        <QueryClientProvider client={queryClient}>
-          <ThemeProvider>
+      <ThemeProvider>
+        <MsalProvider instance={msalInstance}>
+          <QueryClientProvider client={queryClient}>
             <MUIThemeProvider theme={muiTheme}>
               <AuthProvider>
                 <Component {...pageProps} />
               </AuthProvider>
             </MUIThemeProvider>
-          </ThemeProvider>
-          <ReactQueryDevtools />
-        </QueryClientProvider>
-      </MsalProvider>
+            <ReactQueryDevtools />
+          </QueryClientProvider>
+        </MsalProvider>
+      </ThemeProvider>
     </>
   )
 }
